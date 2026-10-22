@@ -158,6 +158,24 @@ function bindWords(node) {
   node.children.forEach(bindWords);
 }
 
+/* ---------- both: wrap each h2 and its content in <section class="cs-section"> ---------- */
+// Lets the case-study layout put the heading in a left column and the text on the right.
+function wrapSections(root) {
+  const out = [];
+  let current = null;
+  for (const node of root.children) {
+    if (node.type === 'element' && node.tagName === 'h2') {
+      current = { type: 'element', tagName: 'section', properties: { className: ['cs-section'] }, children: [node] };
+      out.push(current);
+    } else if (current) {
+      current.children.push(node);
+    } else {
+      out.push(node);
+    }
+  }
+  root.children = out;
+}
+
 export default function rehypeTodo(options = {}) {
   // `astro build` → production. Detected here so astro.config.mjs needs no change.
   const prod = options.prod ?? (process.argv.includes('build') || process.env.NODE_ENV === 'production');
@@ -165,10 +183,12 @@ export default function rehypeTodo(options = {}) {
     if (!prod) {
       bindWords(tree);
       highlight(tree);
+      wrapSections(tree);
       return;
     }
     strip(tree);
     dropEmptySections(tree);
     bindWords(tree);
+    wrapSections(tree);
   };
 }

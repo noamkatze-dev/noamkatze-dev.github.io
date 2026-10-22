@@ -3,7 +3,6 @@
 
 (function () {
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   /* ---------- Header: hairline after scrolling + reading progress ---------- */
   var header = document.querySelector('.site-header');
@@ -23,7 +22,7 @@
 
   /* ---------- Scroll reveal (once; only for content below the fold) ---------- */
   if (!reduceMotion && 'IntersectionObserver' in window) {
-    var selector = '.cards > li, .prose > *, .section, .row, .next, .band-steps > li, .flow-item, .screens, .pair';
+    var selector = '.projects > li, .split, .cs-section, .row, .next, .flow-item, .screens, .pair, .process';
     var items = Array.prototype.slice.call(document.querySelectorAll(selector));
     var below = items.filter(function (el) {
       return el.getBoundingClientRect().top > window.innerHeight * 0.95;
@@ -47,22 +46,6 @@
     );
     below.forEach(function (el) {
       io.observe(el);
-    });
-  }
-
-  /* ---------- "View" label that follows the cursor over project cards ---------- */
-  var cursor = document.querySelector('.cursor-label');
-  if (cursor && finePointer && !reduceMotion) {
-    document.querySelectorAll('.card').forEach(function (card) {
-      card.addEventListener('mouseenter', function () {
-        cursor.classList.add('is-on');
-      });
-      card.addEventListener('mouseleave', function () {
-        cursor.classList.remove('is-on');
-      });
-      card.addEventListener('mousemove', function (e) {
-        cursor.style.transform = 'translate(' + e.clientX + 'px, ' + e.clientY + 'px)';
-      });
     });
   }
 

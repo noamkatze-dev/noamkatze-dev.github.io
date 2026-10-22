@@ -29,6 +29,7 @@ const projects = defineCollection({
     team: z.string(),
     tools: z.array(z.string()),
     tags: z.array(z.string()).default([]),
+    discipline: z.string().optional(), // short label under the project title on Home, e.g. "UX/UI"
     order: z.number(),
     cover: z.string(),
     coverAlt: z.string(),

@@ -1,13 +1,13 @@
 ---
 /**
- * Primary user, as plain text and lists.
- * <Persona title="Data Analyst" background="..." workflow={[...]} goals={[...]} jobs={[...]} />
+ * Primary user: optional round photo, name and background, then lists side by side.
+ * <Persona title="Data Analyst" photo="slug/persona.jpg" photoAlt="..." background="..." workflow={[...]} goals={[...]} jobs={[...]} />
  */
 import TodoText from '../TodoText.astro';
+import Media from '../Media.astro';
 
 interface Props {
   title: string;
-  /** Kept for compatibility; persona photos are not shown in this design. */
   photo?: string;
   photoAlt?: string;
   background?: string;
@@ -15,32 +15,44 @@ interface Props {
   goals?: string[];
   jobs?: string[];
 }
-const { title, background, workflow = [], goals = [], jobs = [] } = Astro.props;
+const { title, photo, photoAlt = '', background, workflow = [], goals = [], jobs = [] } = Astro.props;
 const lists = [
   { label: 'Daily workflow', items: workflow },
   { label: 'Goals', items: goals },
   { label: 'Jobs to be done', items: jobs },
-].filter((l) => l.items.length);
+].filter((l) => l.items.length > 0);
+const hasPhoto = Boolean(photo);
+const photoFile = photo ?? '';
 ---
 
 <div class="persona">
-  <div>
-    <span class="label">Primary user</span>
-    <h3>{title}</h3>
-    {background && <p><TodoText text={background} /></p>}
+  <div class="persona-head">
+    {
+      hasPhoto && (
+        <div class="persona-photo">
+          <Media file={photoFile} alt={photoAlt} ratio="1 / 1" sizes="220px" />
+        </div>
+      )
+    }
+    <div>
+      <h3>{title}</h3>
+      {background && <p><TodoText text={background} /></p>}
+    </div>
   </div>
-  {
-    lists.map((l) => (
-      <div>
-        <span class="label">{l.label}</span>
-        <ul>
-          {l.items.map((i) => (
-            <li>
-              <TodoText text={i} />
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))
-  }
+  <div class="persona-lists">
+    {
+      lists.map((l) => (
+        <div>
+          <p class="persona-label">{l.label}</p>
+          <ul>
+            {l.items.map((i) => (
+              <li>
+                <TodoText text={i} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
 </div>

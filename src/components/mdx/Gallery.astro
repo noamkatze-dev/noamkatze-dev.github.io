@@ -1,10 +1,11 @@
 ---
 /**
  * Collapsed gallery on native <details>: keyboard operable, images load only
- * when opened (loading="lazy") and open in the lightbox. Omitted when empty.
+ * when opened and open in the lightbox. Wireframe galleries sit on a black band.
+ * Omitted when it has no images.
  *
- * <Gallery title="All other app screens">
- *   <Figure thumb file="..." alt="..." caption="..." />
+ * <Gallery title="Wireframes">
+ *   <Figure thumb phone file="..." alt="..." caption="..." />
  * </Gallery>
  */
 interface Props {
@@ -18,11 +19,12 @@ const count = html.split('<figure').length - 1;
 const isWireframes = title.toLowerCase().includes('wireframe');
 const label = isWireframes ? 'Show wireframes' : 'Show all screens';
 const summary = label + ' (' + count + ')';
+const wrapClass = isWireframes ? 'gallery gallery-dark' : 'gallery';
 ---
 
 {
   count > 0 && (
-    <details class="gallery">
+    <details class={wrapClass}>
       <summary>
         {summary}
         <span class="visually-hidden">: {title}</span>

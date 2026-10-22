@@ -10,8 +10,8 @@ const { progress = false } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname.replace(base, '') || '/';
 const nav = [
-  { href: url('/#work'), label: 'Work', current: path.startsWith('/work') },
   { href: url('/about/'), label: 'About', current: path.startsWith('/about') },
+  { href: url('/#work'), label: 'Projects', current: path.startsWith('/work') },
   { href: '#contact', label: 'Contact', current: false },
 ];
 ---

@@ -8,7 +8,7 @@ import TodoText from '../../components/TodoText.astro';
 import { mdxComponents } from '../../components/mdx';
 import { url } from '../../lib/url';
 import { findImage } from '../../lib/images';
-import { isTodoOnly } from '../../lib/todo.mjs';
+import { isTodoOnly, stripTodo } from '../../lib/todo.mjs';
 
 export const getStaticPaths = (async () => {
   const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
@@ -44,13 +44,14 @@ const links = ordered.map((l, i) => ({
   filled: i === 0,
 }));
 const visibleLinks = links.filter((l) => !l.todo || !prod);
-const tools = d.tools.filter((t) => shown(t));
+const tools = d.tools.filter((t) => shown(t)).map((t) => stripTodo(t));
+const toolsText = prod ? tools.join(', ') : d.tools.join(', ');
+const deliverablesText = (d.deliverables ?? []).join(', ');
 const meta = [
   { label: 'Role', value: d.role },
   { label: 'Team', value: d.team },
   { label: 'Timeframe', value: d.duration },
 ].filter((m) => shown(m.value));
-const number = index < 10 ? '0' + index : String(index);
 const nextHref = next ? url('/work/' + next.id + '/') : '';
 const showNext = Boolean(next) && next.id !== project.id;
 ---
@@ -58,72 +59,76 @@ const showNext = Boolean(next) && next.id !== project.id;
 <Base title={d.title} description={d.summary} image={ogImage} imageAlt={d.coverAlt} type="article" progress>
   <article>
     <header class="cs-head wrap">
-      <p class="label">{number} · <TodoText text={d.context} /> · {d.year}</p>
       <h1>{d.title}</h1>
-      {d.tagline && <p class="lead">{d.tagline}</p>}
-      <p class="lead muted"><TodoText text={d.summary} /></p>
-
-      {
-        visibleLinks.length > 0 && (
-          <div class="buttons">
-            {visibleLinks.map((l) =>
-              l.todo ? (
-                <span class="btn btn-outline" aria-disabled="true">
-                  {l.label}: <mark class="todo">{l.url}</mark>
-                </span>
-              ) : (
-                <a class={l.filled ? 'btn' : 'btn btn-outline'} href={l.url} target="_blank" rel="noopener noreferrer">
-                  {l.label}
-                  <span class="visually-hidden"> (opens in a new tab)</span>
-                  <span class="arrow" aria-hidden="true">→</span>
-                </a>
-              ),
-            )}
-          </div>
-        )
-      }
-
-      <dl class="meta">
-        {
-          meta.map((m) => (
-            <div>
-              <dt>{m.label}</dt>
-              <dd>
-                <TodoText text={m.value} />
-              </dd>
-            </div>
-          ))
-        }
-        {
-          tools.length > 0 && (
-            <div>
-              <dt>Tools</dt>
-              <dd>
-                <ul>
-                  {tools.map((t) => (
-                    <li>
-                      <TodoText text={t} />
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
-          )
-        }
-        {
-          d.deliverables && (
-            <div class="meta-full">
-              <dt>Deliverables</dt>
-              <dd>{d.deliverables.join(', ')}</dd>
-            </div>
-          )
-        }
-      </dl>
-
+      {d.tagline && <p class="cs-tagline">{d.tagline}</p>}
+      <a class="scroll-cue" href="#overview">
+        <span class="visually-hidden">Scroll to overview</span>
+        <svg width="28" height="14" viewBox="0 0 28 14" fill="none" aria-hidden="true"><path d="M1 1l13 12L27 1" stroke="currentColor" stroke-width="1.2"></path></svg>
+      </a>
       <figure class="cs-cover">
         <Media file={d.cover} alt={d.coverAlt} note={d.coverNote} ratio="16 / 9" eager zoom />
       </figure>
     </header>
+
+    <section class="wrap split cs-intro" id="overview" aria-labelledby="overview-title">
+      <h2 id="overview-title" class="split-label"><TodoText text={d.context} /></h2>
+      <div class="split-body">
+        <p class="lead"><TodoText text={d.summary} /></p>
+
+        <dl class="meta">
+          {
+            meta.map((m) => (
+              <div>
+                <dt>{m.label}</dt>
+                <dd>
+                  <TodoText text={m.value} />
+                </dd>
+              </div>
+            ))
+          }
+          {
+            tools.length > 0 && (
+              <div>
+                <dt>Tools</dt>
+                <dd>{toolsText}</dd>
+              </div>
+            )
+          }
+          {
+            d.deliverables && (
+              <div>
+                <dt>Deliverables</dt>
+                <dd>{deliverablesText}</dd>
+              </div>
+            )
+          }
+          <div>
+            <dt>Year</dt>
+            <dd>{d.year}</dd>
+          </div>
+        </dl>
+
+        {
+          visibleLinks.length > 0 && (
+            <div class="buttons">
+              {visibleLinks.map((l) =>
+                l.todo ? (
+                  <span class="btn btn-outline" aria-disabled="true">
+                    {l.label}: <mark class="todo">{l.url}</mark>
+                  </span>
+                ) : (
+                  <a class={l.filled ? 'btn' : 'btn btn-outline'} href={l.url} target="_blank" rel="noopener noreferrer">
+                    {l.label}
+                    <span class="visually-hidden"> (opens in a new tab)</span>
+                    <span class="arrow" aria-hidden="true">→</span>
+                  </a>
+                ),
+              )}
+            </div>
+          )
+        }
+      </div>
+    </section>
 
     <div class="wrap prose">
       <Content components={mdxComponents} />
