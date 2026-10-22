@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Media from './Media.astro';
+import TodoText from './TodoText.astro';
+import { url } from '../lib/url';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  featured?: boolean;
+  headingLevel?: 'h2' | 'h3';
+}
+const { project, featured = false } = Astro.props;
+const d = project.data;
+const sizes = featured
+  ? '(min-width: 80rem) 78rem, calc(100vw - 2rem)'
+  : '(min-width: 72rem) 38rem, (min-width: 48rem) 50vw, calc(100vw - 2rem)';
+---
+
+<article class="card" data-reveal>
+  <div class="card-media">
+    <Media file={d.cover} alt={d.coverAlt} note={d.coverNote} ratio={featured ? '16 / 8' : '4 / 3'} sizes={sizes} eager={featured} />
+  </div>
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="label">{d.context.split(',')[0]}</span>
+      <span class="label">{d.year}</span>
+    </div>
+    <h3><a href={url(`/work/${project.id}/`)}>{d.title}</a></h3>
+    <p><TodoText text={d.summary} /></p>
+    {
+      d.tags.length > 0 && (
+        <ul class="tags" aria-label="Tags">
+          {d.tags.map((t) => (
+            <li>{t}</li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</article>

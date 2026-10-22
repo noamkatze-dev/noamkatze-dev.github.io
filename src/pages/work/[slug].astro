@@ -1,0 +1,141 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, render } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Media from '../../components/Media.astro';
+import TodoText from '../../components/TodoText.astro';
+import Toc from '../../components/Toc.astro';
+import { mdxComponents } from '../../components/mdx';
+import { url, isTodo } from '../../lib/url';
+
+export const getStaticPaths = (async () => {
+  const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}) satisfies GetStaticPaths;
+
+const { project, next } = Astro.props;
+const d = project.data;
+const { Content, headings } = await render(project);
+
+// Social image: the project cover if it exists, otherwise the site default.
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/**/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG}');
+const stem = (p: string) => p.replace(/\.[^/.]+$/, '').toLowerCase();
+const coverKey = Object.keys(images).find((k) => stem(k) === stem(`/src/assets/images/${d.cover}`));
+let ogImage: string | undefined;
+if (coverKey) {
+  const src = (await images[coverKey]()).default;
+  const og = await getImage({ src, width: 1200, height: 630, format: 'jpg', fit: 'cover' });
+  ogImage = og.src;
+}
+
+const primaryLinks = d.links.filter((l) => l.primary);
+const otherLinks = d.links.filter((l) => !l.primary);
+---
+
+<Base title={d.title} description={d.summary} image={ogImage} imageAlt={d.coverAlt} type="article">
+  <article>
+    <header class="cs-header container">
+      <a class="back" href={url('/#work')}><span aria-hidden="true">←</span> All work</a>
+      <p class="label cs-context"><TodoText text={d.context} /> · {d.year}</p>
+      <h1>{d.title}</h1>
+      {d.tagline && <p class="cs-tagline">{d.tagline}</p>}
+      <p class="lede cs-summary"><TodoText text={d.summary} /></p>
+
+      {
+        d.links.length > 0 && (
+          <div class="cs-links">
+            {[...primaryLinks, ...otherLinks].map((l) =>
+              isTodo(l.url) ? (
+                <span class={`btn btn--disabled`} aria-disabled="true">
+                  {l.label}: <mark class="todo">{l.url}</mark>
+                </span>
+              ) : (
+                <a class={`btn ${l.primary ? 'btn--primary' : ''}`} href={l.url} target="_blank" rel="noopener noreferrer">
+                  {l.label}
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                  <span class="arrow" aria-hidden="true">↗</span>
+                </a>
+              ),
+            )}
+          </div>
+        )
+      }
+
+      <dl class="meta">
+        <div class="meta-role">
+          <dt class="label">My role</dt>
+          <dd><TodoText text={d.role} /></dd>
+        </div>
+        <div>
+          <dt class="label">Team</dt>
+          <dd><TodoText text={d.team} /></dd>
+        </div>
+        <div>
+          <dt class="label">Timeframe</dt>
+          <dd><TodoText text={d.duration} /></dd>
+        </div>
+        <div>
+          <dt class="label">Tools</dt>
+          <dd>
+            <ul>
+              {
+                d.tools.map((t) => (
+                  <li>
+                    <TodoText text={t} />
+                  </li>
+                ))
+              }
+            </ul>
+          </dd>
+        </div>
+        {
+          d.deliverables && (
+            <div>
+              <dt class="label">Deliverables</dt>
+              <dd>{d.deliverables.join(', ')}</dd>
+            </div>
+          )
+        }
+      </dl>
+
+      <div class="cs-cover figure-media">
+        <Media
+          file={d.cover}
+          alt={d.coverAlt}
+          note={d.coverNote}
+          ratio="16 / 8"
+          eager
+          sizes="(min-width: 80rem) 78rem, calc(100vw - 2rem)"
+        />
+      </div>
+    </header>
+
+    <div class="cs-body container">
+      <Toc headings={headings} />
+      <div class="prose">
+        <Content components={mdxComponents} />
+      </div>
+    </div>
+  </article>
+
+  {
+    next && next.id !== project.id && (
+      <nav class="next-project container" aria-label="Next project">
+        <a href={url(`/work/${next.id}/`)}>
+          <span class="label">Next project</span>
+          <span class="title">
+            {next.data.title} <span class="arrow" aria-hidden="true">→</span>
+          </span>
+          <p>
+            <TodoText text={next.data.summary} />
+          </p>
+        </a>
+      </nav>
+    )
+  }
+</Base>

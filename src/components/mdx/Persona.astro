@@ -1,0 +1,56 @@
+---
+/**
+ * Compact user/persona card.
+ * <Persona title="Data Analyst" background="..." workflow={[...]} goals={[...]} jobs={[...]} />
+ */
+import TodoText from '../TodoText.astro';
+import Media from '../Media.astro';
+
+interface Props {
+  title: string;
+  /** Optional image under src/assets/images/ */
+  photo?: string;
+  photoAlt?: string;
+  background?: string;
+  workflow?: string[];
+  goals?: string[];
+  jobs?: string[];
+}
+const { title, photo, photoAlt = '', background, workflow = [], goals = [], jobs = [] } = Astro.props;
+const lists = [
+  { label: 'Daily workflow', items: workflow },
+  { label: 'Goals', items: goals },
+  { label: 'Jobs to be done', items: jobs },
+].filter((l) => l.items.length);
+---
+
+<div class="personas" data-reveal>
+  <article class="persona">
+    <header class:list={[{ 'has-photo': photo }]}>
+      {photo && (
+        <div class="persona-photo">
+          <Media file={photo} alt={photoAlt} ratio="1 / 1" sizes="7rem" />
+        </div>
+      )}
+      <div>
+      <p class="label">Primary user</p>
+      <h3>{title}</h3>
+      {background && <p><TodoText text={background} /></p>}
+      </div>
+    </header>
+    {
+      lists.map((l) => (
+        <div>
+          <span class="label">{l.label}</span>
+          <ul>
+            {l.items.map((i) => (
+              <li>
+                <TodoText text={i} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </article>
+</div>

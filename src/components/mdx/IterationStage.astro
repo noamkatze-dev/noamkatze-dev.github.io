@@ -1,0 +1,54 @@
+---
+/**
+ * One version in the iteration timeline.
+ * `why` and `gaveUp` are the most valuable lines on the page — keep them honest.
+ *
+ * <IterationStage n={1} title="Ethical Insights" file="..." alt="..." why="..." gaveUp="...">
+ *   What this version was, in Markdown.
+ * </IterationStage>
+ */
+import Media from '../Media.astro';
+import VideoMedia from '../VideoMedia.astro';
+import TodoText from '../TodoText.astro';
+
+interface Props {
+  n: number;
+  title: string;
+  /** Image path under src/assets/images/ … */
+  file?: string;
+  /** …or a video under public/videos/ (no extension). */
+  video?: string;
+  alt: string;
+  note?: string;
+  why?: string;
+  gaveUp?: string;
+}
+const { n, title, file, video, alt, note, why, gaveUp } = Astro.props;
+---
+
+<li class="iter-stage" data-n={n} data-reveal>
+  <div class="iter-text">
+    <p class="label">Version {n}</p>
+    <h3>{title}</h3>
+    <slot />
+    {
+      (why || gaveUp) && (
+        <div class="iter-why">
+          {why && (
+            <p>
+              <strong>Why I changed it:</strong> <TodoText text={why} />
+            </p>
+          )}
+          {gaveUp && (
+            <p>
+              <strong>What I gave up:</strong> <TodoText text={gaveUp} />
+            </p>
+          )}
+        </div>
+      )
+    }
+  </div>
+  <div class="figure-media">
+    {video ? <VideoMedia src={video} label={alt} /> : <Media file={file ?? ''} alt={alt} note={note} sizes="(min-width: 80rem) 34rem, (min-width: 64rem) 45vw, 100vw" />}
+  </div>
+</li>

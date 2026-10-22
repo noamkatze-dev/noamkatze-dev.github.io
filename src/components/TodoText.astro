@@ -1,0 +1,10 @@
+---
+/** Renders a plain string, highlighting any "[TODO ...]" marker. */
+interface Props {
+  text?: string;
+}
+const { text = '' } = Astro.props;
+const parts = text.split(/(\[TODO[^\]]*\])/g).filter(Boolean);
+---
+
+{parts.map((p) => (p.startsWith('[TODO') ? <mark class="todo">{p}</mark> : p))}

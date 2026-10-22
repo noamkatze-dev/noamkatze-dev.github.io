@@ -1,0 +1,34 @@
+---
+/**
+ * One step of the main flow: text on the left, its screen on the right.
+ * <FlowStep n={1} title="Dashboard" file="slug/flow-1.png" alt="..." note="...">
+ *   Text written as normal Markdown.
+ * </FlowStep>
+ */
+import Media from '../Media.astro';
+import VideoMedia from '../VideoMedia.astro';
+
+interface Props {
+  n: number;
+  title: string;
+  /** Image path under src/assets/images/ … */
+  file?: string;
+  /** …or a video under public/videos/ (no extension). */
+  video?: string;
+  alt: string;
+  note?: string;
+  ratio?: string;
+}
+const { n, title, file, video, alt, note, ratio } = Astro.props;
+---
+
+<li class="flow-step" data-reveal>
+  <div class="flow-text">
+    <span class="flow-num" aria-hidden="true">{String(n).padStart(2, '0')}</span>
+    <h3><span class="visually-hidden">Step {n}: </span>{title}</h3>
+    <slot />
+  </div>
+  <div class="figure-media">
+    {video ? <VideoMedia src={video} label={alt} /> : <Media file={file ?? ''} alt={alt} note={note} ratio={ratio} sizes="(min-width: 80rem) 38rem, (min-width: 56rem) 55vw, 100vw" />}
+  </div>
+</li>

@@ -1,0 +1,30 @@
+---
+import { site } from '../data/site';
+import { url } from '../lib/url';
+
+const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
+const nav = [
+  { href: '/#work', label: 'Work', match: (p: string) => p.startsWith('/work') },
+  { href: '/about/', label: 'About', match: (p: string) => p.startsWith('/about') },
+  { href: '#contact', label: 'Contact', match: () => false },
+];
+---
+
+<header class="site-header">
+  <div class="container">
+    <a class="wordmark" href={url('/')}>{site.name}<span> · {site.role}</span></a>
+    <nav class="nav" aria-label="Main">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href.startsWith('#') ? item.href : url(item.href)} aria-current={item.match(path) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

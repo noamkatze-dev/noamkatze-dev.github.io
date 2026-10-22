@@ -1,0 +1,247 @@
+---
+title: Dark Pattern Detection for Microsoft Clarity
+summary: An automated layer for Microsoft Clarity that flags manipulative UI patterns in the behavioral data teams already collect, so analysts can weigh performance and ethics in the same view.
+context: Academic project, University of Haifa
+year: 2025
+duration: Oct 2024 – Jan 2025
+role: "[TODO: my specific contributions, e.g. which flows and screens I designed, which research parts I led, which tests I ran]"
+team: "[TODO: team size and disciplines]"
+tools:
+  - Figma
+  - Base44 (live prototype)
+  - "[TODO: confirm other prototype or research tools]"
+tags: [B2B analytics, Data-heavy dashboard, AI insights, Ethics]
+order: 1
+cover: dark-pattern-detection/cover.png
+coverAlt: The Dark Patterns widget in the Microsoft Clarity dashboard, with sessions affected by dark patterns, a severity bar, an affected-sessions-over-time chart, and a recording tip about sneaking.
+coverNote: Hero shot of the final Dark Patterns dashboard (session impact view), 2400×1200.
+links:
+  - label: Try the live prototype
+    url: https://clarity-dashboard-521382ae.base44.app/
+    kind: prototype
+    primary: true
+---
+
+## Context
+
+Microsoft Clarity gives product teams heatmaps and session recordings. This project adds an automated layer on top: it flags manipulative UI patterns, known as dark patterns, in the behavioral data teams already collect.
+
+It was an academic team project at the University of Haifa. We worked together across research, design, data analysis and presentation. [TODO: one sentence on how work was split and which part was mine]
+
+## The problem
+
+Optimizing on behavioral data can push teams toward experiences that exploit users' emotional or cognitive patterns, often unintentionally.
+
+Spotting this today means manually combing through session recordings for rage clicks, repeated interactions and abandoned flows, across fragmented tools.
+
+## Goal
+
+Detect dark patterns early, at the analysis and decision stage, and reduce users' exposure to manipulative experiences.
+
+## Users
+
+<Persona
+  title="Data Analyst"
+  photo="dark-pattern-detection/persona-analyst.jpg"
+  photoAlt="Persona image: an analyst working at a desk with dashboards on screen."
+  background="Bachelor's in Data Science. Works closely with UX designers and product managers to document insights and share findings with stakeholders."
+  workflow={[
+    "Reviews dashboard metrics",
+    "Identifies anomalies and behavioral outliers",
+    "Analyzes findings and extracts insights",
+    "Communicates results to product and UX teams",
+  ]}
+  goals={[
+    "Quickly identify interface friction and user frustration",
+    "Improve the experience without compromising trust",
+    "Make responsible, data-driven decisions",
+  ]}
+  jobs={[
+    "Understand the nature and context of each detected pattern",
+    "Prioritize by severity and decide what needs immediate action",
+    "Quickly spot problematic behavior patterns",
+    "Receive actionable insights, not just charts",
+    "Shorten analysis time to support efficient decisions",
+  ]}
+/>
+
+## Research
+
+**Interviews.** We interviewed [TODO: number] UX practitioners and analyzed industry workflows. Teams rely heavily on behavioral data to find usability issues, but investigating frustration signals is manual, time-consuming and fragmented. That pointed to the opportunity: centralize and automate detection inside Clarity, where the data already lives.
+
+**Literature review.** We reviewed academic research that classifies dark patterns by category, severity and frequency, and translated it into measurable behavioral indicators that Clarity's existing capabilities can capture.
+
+[TODO: 1 to 2 concrete insights from the interviews, ideally with a short paraphrased quote]
+
+## Key decisions and trade-offs
+
+<Decisions>
+  <Decision
+    title="Build on signals Clarity already captures"
+    choice="Translate the academic dark-pattern taxonomy into behavioral indicators that Clarity can already measure, instead of designing new tracking."
+    why="Research showed that investigating frustration signals was manual and fragmented across tools. Detecting patterns inside Clarity, on data teams already collect, addresses that directly."
+    tradeoff="[TODO: what this ruled out, e.g. patterns that can't be detected from behavior alone]"
+  />
+  <Decision
+    title="Every pattern links straight to its recordings"
+    choice="Each detected pattern opens the exact recordings where it happened, filtered and annotated."
+    why="Research showed the slowest part of the job is manually combing through recordings. Removing that step is the core value."
+    tradeoff="[TODO: what it cost, e.g. more density on the pattern screen]"
+  />
+  <Decision
+    title="One dashboard instead of a dashboard plus an internal page"
+    choice="Removed the separate internal page and moved severity sorting, recordings and heatmaps into a single dashboard."
+    why="Splitting the feature across two places created fragmentation and navigation friction."
+    tradeoff="[TODO: what I gave up, e.g. space for deeper explanations of the severity logic]"
+  />
+  <Decision
+    title="Measure impact, not just detection"
+    choice="Each pattern shows how many sessions it affected, with filtering, comparison and a graph of impact over time."
+    why="Analysts need to prioritize what needs immediate action. Showing impact over time links detection to business insight."
+    tradeoff="[TODO: what this added or removed]"
+  />
+</Decisions>
+
+## Solution
+
+The final design is a five-step flow, from a glance at the dashboard to a fix recommendation inside a recording.
+
+<Steps
+  items={[
+    "Dashboard widget",
+    "Session impact overview",
+    "Quick session access",
+    "Affected sessions",
+    "Detection and recommendation",
+  ]}
+/>
+
+<Flow>
+  <FlowStep
+    n={1}
+    title="Dark Patterns dashboard"
+    file="dark-pattern-detection/flow-1-dashboard.png"
+    alt="Clarity dashboard with the Dark Patterns widget: 1,960 sessions affected, a critical versus non-critical bar, and a list of detected patterns."
+  >
+    A widget in Clarity's dashboard shows total sessions, affected sessions and critical cases at a glance.
+  </FlowStep>
+  <FlowStep
+    n={2}
+    title="Session impact overview"
+    video="dark-pattern-detection/flow-2-session-impact"
+    alt="Screen recording: sorting and filtering the Dark Patterns widget, hovering the severity bar and pattern info tooltips."
+  >
+    Detected patterns are classified by severity and impact, with their effect on sessions visualized.
+  </FlowStep>
+  <FlowStep
+    n={3}
+    title="Quick session access"
+    video="dark-pattern-detection/flow-3-quick-access"
+    alt="Screen recording: zooming into the Dark Patterns widget and the recording icon next to each pattern."
+  >
+    Each pattern links straight to the relevant recordings. No manual searching.
+  </FlowStep>
+  <FlowStep
+    n={4}
+    title="Affected sessions"
+    video="dark-pattern-detection/flow-4-affected-sessions"
+    alt="Screen recording: the recordings list filtered to Dark Pattern: Sneaking, with an AI key summary and per-session duration, clicks and user details."
+  >
+    Recordings filtered for one pattern, with AI insights, session duration and user details.
+  </FlowStep>
+  <FlowStep
+    n={5}
+    title="Detection and recommendation"
+    video="dark-pattern-detection/flow-5-recommendation"
+    alt="Screen recording: a session replay on a shop page with dark-pattern markers on the timeline, a fix tip on hover, and the AI session insights panel."
+  >
+    Timeline markers highlight the pattern in the recording. Hovering shows fix tips, and a side panel gives the full AI behavior analysis.
+  </FlowStep>
+</Flow>
+
+<Embed
+  url="https://clarity-dashboard-521382ae.base44.app/"
+  title="Dark Patterns dashboard, live prototype"
+  ratio="16 / 10"
+  description="Explore the working prototype right here, or open it full screen."
+  caption="Interactive prototype built with Base44."
+/>
+
+<Gallery title="Wireframes" count={3}>
+  <Figure thumb file="dark-pattern-detection/wireframe-01.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export. Add or remove Figure lines as needed]" />
+  <Figure thumb file="dark-pattern-detection/wireframe-02.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export]" />
+  <Figure thumb file="dark-pattern-detection/wireframe-03.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export]" />
+</Gallery>
+
+## Iteration
+
+The feature went through four versions, from a score inside an existing dashboard tab to a dashboard built around session impact.
+
+<Iteration>
+  <IterationStage
+    n={1}
+    title="“Ethical Insights”"
+    video="dark-pattern-detection/iteration-1-ethical-insights"
+    alt="Screen recording of version 1: the Ethical Insights tab inside the dashboard with total ethical flags, average ethical score, critical criteria and transparency index, then the internal page with risk distribution and ethical criteria assessment."
+    why="[TODO: why this version was the starting point, 1 sentence]"
+    gaveUp="[TODO: 1 sentence]"
+  >
+    The widget lived inside an existing dashboard tab, with the count of detected patterns, an overall score and a severity breakdown, plus a dedicated internal page for deeper graphs.
+  </IterationStage>
+  <IterationStage
+    n={2}
+    title="“DP Detect”"
+    video="dark-pattern-detection/iteration-2-dp-detect"
+    alt="Screen recording of version 2: the DP Detect widget listing patterns like Leaving cart and CTA rejection, then the internal page explaining the 1 to 3 severity scale and listing every pattern with recordings and heatmaps."
+    why="[TODO: why the move to its own tab, 1 to 2 sentences]"
+    gaveUp="[TODO: what I gave up, 1 sentence]"
+  >
+    Moved to its own tab to gain presence. The dashboard highlighted user actions triggered by patterns and detections per location. An internal page explained the severity logic and listed all patterns with recordings and heatmaps.
+  </IterationStage>
+  <IterationStage
+    n={3}
+    title="Centralized “Dark Patterns” dashboard"
+    video="dark-pattern-detection/iteration-3-centralized"
+    alt="Screen recording of version 3: a single Dark Patterns widget with total and critical counts, a severity bar, sorting by most critical, and a severity levels legend."
+    why="Removing the internal page reduced fragmentation and navigation friction. [TODO: what triggered it, e.g. feedback or a test]"
+    gaveUp="[TODO: what I gave up, 1 sentence]"
+  >
+    Removed the internal page. Everything lives in the dashboard, with sorting by severity and contextual recordings and heatmaps.
+  </IterationStage>
+  <IterationStage
+    n={4}
+    title="Session impact focus"
+    video="dark-pattern-detection/iteration-4-session-impact"
+    alt="Screen recording of version 4: sessions affected by dark patterns, filtering patterns on and off, and the affected-sessions-over-time chart with a per-pattern tooltip."
+    why="Shifted from detecting to measuring real impact, linking detection to business insight. [TODO: what triggered it]"
+    gaveUp="[TODO: what I gave up, 1 sentence]"
+  >
+    Each pattern shows its affected sessions, with filtering and comparison, and a graph of impact over time.
+  </IterationStage>
+</Iteration>
+
+## Testing and learnings
+
+After the wireframes, we ran a usability test with [TODO: number of participants, be honest if it was one].
+
+**What worked**
+
+- The participant understood the feature's purpose immediately.
+- They navigated from the dashboard to pattern details and recordings without help.
+- They valued the AI-generated summaries.
+
+**What didn't**
+
+- Improvement tips lacked visual emphasis and were buried in the side panel.
+- The participant expected explanations when hovering over pattern names.
+- There was no way to hide patterns the user consciously chooses to ignore.
+
+**What I changed:** [TODO: which of these changes I made, and how]
+
+## Outcome and reflection
+
+[TODO: what I learned]
+
+[TODO: what I would do differently]
+
+[TODO: what I would test next]

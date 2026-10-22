@@ -1,0 +1,92 @@
+{
+  "250ms/analysis-modes": {
+    "width": 1600,
+    "height": 900,
+    "duration": 8.4,
+    "audio": false
+  },
+  "250ms/calibration": {
+    "width": 1600,
+    "height": 900,
+    "duration": 13.6,
+    "audio": false
+  },
+  "250ms/landing": {
+    "width": 1600,
+    "height": 900,
+    "duration": 12.0,
+    "audio": false
+  },
+  "250ms/political-arc": {
+    "width": 1600,
+    "height": 900,
+    "duration": 3.8,
+    "audio": false
+  },
+  "250ms/viewing-session": {
+    "width": 1600,
+    "height": 900,
+    "duration": 12.0,
+    "audio": false
+  },
+  "calcalist-next/app-walkthrough": {
+    "width": 390,
+    "height": 850,
+    "duration": 86.9,
+    "audio": true
+  },
+  "calcalist-next/website-walkthrough": {
+    "width": 1430,
+    "height": 902,
+    "duration": 24.7,
+    "audio": true
+  },
+  "dark-pattern-detection/flow-2-session-impact": {
+    "width": 1600,
+    "height": 900,
+    "duration": 34.4,
+    "audio": false
+  },
+  "dark-pattern-detection/flow-3-quick-access": {
+    "width": 1600,
+    "height": 900,
+    "duration": 4.7,
+    "audio": false
+  },
+  "dark-pattern-detection/flow-4-affected-sessions": {
+    "width": 1600,
+    "height": 900,
+    "duration": 7.1,
+    "audio": false
+  },
+  "dark-pattern-detection/flow-5-recommendation": {
+    "width": 1600,
+    "height": 900,
+    "duration": 6.8,
+    "audio": false
+  },
+  "dark-pattern-detection/iteration-1-ethical-insights": {
+    "width": 1438,
+    "height": 992,
+    "duration": 14.2,
+    "audio": false
+  },
+  "dark-pattern-detection/iteration-2-dp-detect": {
+    "width": 1438,
+    "height": 990,
+    "duration": 37.2,
+    "audio": false
+  },
+  "dark-pattern-detection/iteration-3-centralized": {
+    "width": 1440,
+    "height": 994,
+    "duration": 15.9,
+    "audio": false
+  },
+  "dark-pattern-detection/iteration-4-session-impact": {
+    "width": 1600,
+    "height": 898,
+    "duration": 22.0,
+    "audio": false
+  }
+}

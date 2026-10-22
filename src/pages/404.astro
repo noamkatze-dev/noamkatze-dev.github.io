@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+---
+
+<Base title="Page not found" description="This page doesn't exist." noindex>
+  <section class="hero container">
+    <p class="label hero-eyebrow">404</p>
+    <h1>This page doesn't exist.</h1>
+    <p class="lede">The link may be old, or the page moved.</p>
+    <div class="hero-actions">
+      <a class="btn btn--primary" href={url('/')}>Back to home</a>
+      <a class="btn" href={url('/#work')}>See selected work</a>
+    </div>
+  </section>
+</Base>

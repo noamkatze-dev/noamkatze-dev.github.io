@@ -1,0 +1,29 @@
+---
+/**
+ * <Video src="250ms/calibration" label="What the clip shows" caption="Short caption" />
+ * <Video src="calcalist-next/app-walkthrough" mode="player" phone label="..." />
+ * Files live in public/videos/<src>.mp4 with a <src>.jpg poster.
+ */
+import VideoMedia from '../VideoMedia.astro';
+import TodoText from '../TodoText.astro';
+
+interface Props {
+  src: string;
+  label: string;
+  caption?: string;
+  mode?: 'loop' | 'player';
+  phone?: boolean;
+}
+const { src, label, caption, mode, phone } = Astro.props;
+---
+
+<figure data-reveal>
+  <VideoMedia src={src} label={label} mode={mode} phone={phone} />
+  {
+    caption && (
+      <figcaption>
+        <TodoText text={caption} />
+      </figcaption>
+    )
+  }
+</figure>

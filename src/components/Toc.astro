@@ -1,0 +1,66 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+const items = Astro.props.headings.filter((h) => h.depth === 2);
+---
+
+{
+  items.length > 1 && (
+    <nav class="toc" aria-labelledby="toc-title">
+      <div class="toc-inner">
+        <h2 class="label" id="toc-title">On this page</h2>
+        <ol>
+          {items.map((h) => (
+            <li>
+              <a href={`#${h.slug}`} data-toc-link={h.slug}>
+                {h.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </nav>
+  )
+}
+
+<script>
+  // Highlight the section currently being read.
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+  const sections = links
+    .map((a) => document.getElementById(a.dataset.tocLink!))
+    .filter((el): el is HTMLElement => Boolean(el));
+
+  if (links.length && sections.length) {
+    const setActive = (id: string) =>
+      links.forEach((a) => (a.dataset.tocLink === id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+
+    const update = () => {
+      const line = window.innerHeight * 0.3;
+      let current = sections[0].id;
+      for (const s of sections) {
+        if (s.getBoundingClientRect().top - line <= 0) current = s.id;
+        else break;
+      }
+      setActive(current);
+    };
+
+    let ticking = false;
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            update();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
+    update();
+  }
+</script>

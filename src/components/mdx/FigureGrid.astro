@@ -1,0 +1,9 @@
+---
+/** Lays out <Figure> children in a responsive 2- or 3-column grid. */
+interface Props {
+  cols?: 2 | 3;
+}
+const { cols = 2 } = Astro.props;
+---
+
+<div class="figure-grid" data-cols={cols}><slot /></div>

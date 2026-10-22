@@ -1,0 +1,35 @@
+---
+/**
+ * <Figure file="slug/name.png" alt="..." caption="..." note="what it should show" />
+ * Caption can also be written as children (supports **bold** and links).
+ */
+import Media from '../Media.astro';
+import TodoText from '../TodoText.astro';
+
+interface Props {
+  file: string;
+  alt: string;
+  caption?: string;
+  note?: string;
+  ratio?: string;
+  /** Use inside galleries/grids so smaller image sizes are requested. */
+  thumb?: boolean;
+  eager?: boolean;
+}
+const { file, alt, caption, note, ratio, thumb = false, eager = false } = Astro.props;
+const hasSlot = Astro.slots.has('default');
+const sizes = thumb ? '(min-width: 64rem) 22rem, (min-width: 40rem) 45vw, 100vw' : undefined;
+---
+
+<figure data-reveal>
+  <div class="figure-media">
+    <Media file={file} alt={alt} note={note} ratio={ratio} sizes={sizes} eager={eager} />
+  </div>
+  {
+    (caption || hasSlot) && (
+      <figcaption>
+        {caption ? <TodoText text={caption} /> : <slot />}
+      </figcaption>
+    )
+  }
+</figure>

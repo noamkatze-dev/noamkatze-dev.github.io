@@ -1,0 +1,33 @@
+---
+/**
+ * A key decision card. Wrap several in <Decisions>.
+ * <Decision title="..." choice="What I decided" why="Why" tradeoff="What it cost" />
+ */
+import TodoText from '../TodoText.astro';
+
+interface Props {
+  title: string;
+  choice: string;
+  why: string;
+  tradeoff: string;
+}
+const { title, choice, why, tradeoff } = Astro.props;
+---
+
+<article class="decision" data-reveal>
+  <h3><TodoText text={title} /></h3>
+  <dl>
+    <div>
+      <dt class="label">Decision</dt>
+      <dd><TodoText text={choice} /></dd>
+    </div>
+    <div>
+      <dt class="label">Why</dt>
+      <dd><TodoText text={why} /></dd>
+    </div>
+    <div>
+      <dt class="label">Trade-off</dt>
+      <dd><TodoText text={tradeoff} /></dd>
+    </div>
+  </dl>
+</article>

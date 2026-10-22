@@ -1,0 +1,50 @@
+---
+/** Color swatches: <Swatches colors={[{ hex: '#003BAB', name: 'Calcalist blue' }]} /> */
+interface Props {
+  colors: { hex: string; name?: string }[];
+}
+const { colors } = Astro.props;
+---
+
+<ul class="swatches" data-reveal>
+  {
+    colors.map((c) => (
+      <li>
+        <span class="swatch" style={`background: ${c.hex}`} aria-hidden="true" />
+        <span class="swatch-hex">{c.hex}</span>
+        {c.name && <span class="swatch-name">{c.name}</span>}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .swatches {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    gap: var(--space-s);
+    margin-block: var(--space-m) !important;
+    max-width: none !important;
+  }
+  .swatches li {
+    margin: 0 !important;
+    display: grid;
+    gap: 0.15rem;
+    font-size: var(--step--1);
+  }
+  .swatch {
+    display: block;
+    aspect-ratio: 3 / 2;
+    border-radius: var(--radius-s);
+    border: 1px solid var(--color-line);
+    margin-bottom: var(--space-2xs);
+  }
+  .swatch-hex {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  }
+  .swatch-name {
+    color: var(--color-muted);
+  }
+</style>

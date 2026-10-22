@@ -1,0 +1,24 @@
+---
+/** Row of figures: <Stats items={[{ value: '16', label: 'images per session' }]} /> */
+import TodoText from '../TodoText.astro';
+
+interface Props {
+  items: { value: string; label: string }[];
+}
+const { items } = Astro.props;
+---
+
+<ul class="stats" data-reveal>
+  {
+    items.map((s) => (
+      <li>
+        <strong>
+          <TodoText text={s.value} />
+        </strong>
+        <span>
+          <TodoText text={s.label} />
+        </span>
+      </li>
+    ))
+  }
+</ul>
