@@ -14,7 +14,7 @@ tools:
   - "[TODO: Figma or other design tools]"
 tags: [Research tool, Data visualization, Computer vision, Code prototype]
 order: 2
-cover: 250ms/cover.jpg
+cover: 250ms/cover-16x10.jpg
 coverAlt: The 250ms landing screen, a red Hebrew headline over a sky backdrop crossed by a thin red grid.
 links:
   - label: Try it live
@@ -117,9 +117,9 @@ Every design decision here was also a research decision.
 
 Before data collection, the viewer completes a 9-point calibration, holding their gaze on each point while the system builds a personal mapping between iris position and screen coordinates.
 
-<Video
-  src="250ms/calibration"
-  label="Calibration: a red target moves between points on the sky backdrop while the viewer follows it with their eyes."
+<Figure
+  file="250ms/calibration.jpg"
+  alt="Calibration screen: a blurred sky with one red target ring for the viewer to fix their gaze on, and a point counter in the corner."
   caption="9-point calibration builds a personal map from iris position to screen."
 />
 
@@ -129,7 +129,7 @@ The session records fixations, scanpaths, first glance and attention density. Ag
 
 <Video
   src="250ms/viewing-session"
-  label="Viewing session: political photographs appear one after another, with gaze points recorded over them."
+  label="Screen recording of a viewing session: political photographs appear one after another over the sky backdrop, with small red markers on screen."
   caption="Each image shows for 3 seconds while gaze is recorded."
 />
 
@@ -137,11 +137,11 @@ The session records fixations, scanpaths, first glance and attention density. Ag
 
 The system reconstructs the same session in several ways: fixations, saccades, scanpath, heatmap and first fixation. [TODO: the original text said six modes but listed five; confirm the sixth or correct the count]
 
-<Video
-  src="250ms/analysis-modes"
-  label="Analysis view: the same session redrawn as gaze points, a scanpath line and a contour heatmap over one photograph."
-  caption="One session, several readings: points, path and density. The interface is in Hebrew."
-/>
+<FigureGrid cols={3}>
+  <Figure thumb file="250ms/mode-points.jpg" alt="Red dots marking where one viewer looked, over a photograph of two politicians embracing." caption="Points: where the eye landed." />
+  <Figure thumb file="250ms/mode-lines.jpg" alt="Red lines tracing how the eye moved across the same photograph." caption="Path: how the eye moved." />
+  <Figure thumb file="250ms/mode-contours.jpg" alt="Red contour lines around the areas looked at most, over the same photograph." caption="Density: where attention gathered." />
+</FigureGrid>
 
 ### The political arc
 
@@ -153,9 +153,9 @@ This is deliberately presented as an artistic, conceptual interpretation, not a 
 
 </Callout>
 
-<Video
-  src="250ms/political-arc"
-  label="The political arc: a red semicircle on the sky backdrop with a marker showing where one viewer's attention landed."
+<Figure
+  file="250ms/political-arc.jpg"
+  alt="The political arc screen: a red semicircle over a sky backdrop with tick marks and one marker on the left of the arc, under a red Hebrew title."
   caption="The political arc: an interpretation, labeled as one."
 />
 
@@ -171,7 +171,7 @@ A comparison view filters multiple sessions side by side by gender, age range or
   caption="The Data view: every image with its gaze data, filterable by gender, age range and location. [TODO: add a screenshot of the Compare view and the aggregate dashboard if you have them]"
 />
 
-<Gallery title="Wireframes" count={3}>
+<Gallery title="Wireframes">
   <Figure thumb file="250ms/wireframe-01.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export. Add or remove Figure lines as needed]" />
   <Figure thumb file="250ms/wireframe-02.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export]" />
   <Figure thumb file="250ms/wireframe-03.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export]" />
@@ -183,18 +183,11 @@ The sky is where the eye rests between charged images. Clouds ask nothing of you
 
 Over that calm backdrop sits a thin red grid and deep red typography, the visual language of surveillance and lab instruments.
 
-<FigureGrid>
-  <Figure
-    file="250ms/logo.png"
-    alt="The 250ms wordmark in a blocky red display face on black."
-    caption="The wordmark: blocky, red, instrument-like."
-  />
-  <Video
-    src="250ms/landing"
-    label="The landing screen: drifting clouds behind a thin red grid and a red Hebrew headline."
-    caption="The landing screen: calm sky, clinical red grid."
-  />
-</FigureGrid>
+<Figure
+  file="250ms/logo.png"
+  alt="The 250ms wordmark in a blocky red display face on black."
+  caption="The wordmark: blocky, red, instrument-like."
+/>
 
 ## Iteration
 

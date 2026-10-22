@@ -1,27 +1,14 @@
 ---
 import { site } from '../data/site';
-import { url } from '../lib/url';
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer" id="contact">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <h2 class="label">Contact</h2>
-        <p class="footer-cta">
-          Hiring for a product design role? <a href={`mailto:${site.email}`}>{site.email}</a>
-        </p>
-      </div>
-      <ul class="footer-links">
-        <li><a href={site.linkedin} rel="me noopener" target="_blank">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span> ↗</a></li>
-        <li><a href={`mailto:${site.email}`}>Email</a></li>
-        <li><a href={url(site.cv)} download>Download CV (PDF)</a></li>
-      </ul>
-    </div>
-    <div class="footer-meta">
-      <p>© {year} {site.name}</p>
-      <p>Built with Astro. Hosted on GitHub Pages.</p>
-    </div>
+  <div class="wrap">
+    <p>
+      <a href={`mailto:${site.email}`}>{site.email}</a> · <a href={site.linkedin} rel="me noopener" target="_blank"
+        >LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a
+      > · © {year}
+    </p>
   </div>
 </footer>

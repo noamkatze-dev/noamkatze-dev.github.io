@@ -1,14 +1,14 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import { getCollection, render } from 'astro:content';
-import type { ImageMetadata } from 'astro';
 import { getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Media from '../../components/Media.astro';
 import TodoText from '../../components/TodoText.astro';
-import Toc from '../../components/Toc.astro';
 import { mdxComponents } from '../../components/mdx';
-import { url, isTodo } from '../../lib/url';
+import { url } from '../../lib/url';
+import { findImage } from '../../lib/images';
+import { isTodoOnly } from '../../lib/todo.mjs';
 
 export const getStaticPaths = (async () => {
   const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
@@ -20,45 +20,44 @@ export const getStaticPaths = (async () => {
 
 const { project, next } = Astro.props;
 const d = project.data;
-const { Content, headings } = await render(project);
+const { Content } = await render(project);
+const prod = import.meta.env.PROD;
+const shown = (v?: string) => Boolean(v) && (!prod || !isTodoOnly(v));
 
-// Social image: the project cover if it exists, otherwise the site default.
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/**/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG}');
-const stem = (p: string) => p.replace(/\.[^/.]+$/, '').toLowerCase();
-const coverKey = Object.keys(images).find((k) => stem(k) === stem(`/src/assets/images/${d.cover}`));
-let ogImage: string | undefined;
-if (coverKey) {
-  const src = (await images[coverKey]()).default;
-  const og = await getImage({ src, width: 1200, height: 630, format: 'jpg', fit: 'cover' });
-  ogImage = og.src;
-}
+// Social image: the cover, cropped to 1200×630.
+const coverImg = await findImage(d.cover);
+const ogImage = coverImg ? (await getImage({ src: coverImg, width: 1200, height: 630, format: 'jpg', fit: 'cover' })).src : undefined;
 
-const primaryLinks = d.links.filter((l) => l.primary);
-const otherLinks = d.links.filter((l) => !l.primary);
+const links = [...d.links.filter((l) => l.primary), ...d.links.filter((l) => !l.primary)];
+const tools = d.tools.filter((t) => shown(t));
+const meta = [
+  { label: 'Role', value: d.role },
+  { label: 'Team', value: d.team },
+  { label: 'Timeframe', value: d.duration },
+].filter((m) => shown(m.value));
 ---
 
 <Base title={d.title} description={d.summary} image={ogImage} imageAlt={d.coverAlt} type="article">
   <article>
-    <header class="cs-header container">
-      <a class="back" href={url('/#work')}><span aria-hidden="true">←</span> All work</a>
-      <p class="label cs-context"><TodoText text={d.context} /> · {d.year}</p>
+    <header class="cs-head wrap">
+      <p class="small muted"><TodoText text={d.context} /> · {d.year}</p>
       <h1>{d.title}</h1>
-      {d.tagline && <p class="cs-tagline">{d.tagline}</p>}
-      <p class="lede cs-summary"><TodoText text={d.summary} /></p>
+      {d.tagline && <p class="lead">{d.tagline}</p>}
+      <p class="lead muted"><TodoText text={d.summary} /></p>
 
       {
-        d.links.length > 0 && (
-          <div class="cs-links">
-            {[...primaryLinks, ...otherLinks].map((l) =>
-              isTodo(l.url) ? (
-                <span class={`btn btn--disabled`} aria-disabled="true">
-                  {l.label}: <mark class="todo">{l.url}</mark>
-                </span>
+        links.some((l) => shown(l.url)) && (
+          <div class="buttons">
+            {links.map((l) =>
+              isTodoOnly(l.url) ? (
+                !prod && (
+                  <span class="button" aria-disabled="true">
+                    {l.label}: <mark class="todo">{l.url}</mark>
+                  </span>
+                )
               ) : (
-                <a class={`btn ${l.primary ? 'btn--primary' : ''}`} href={l.url} target="_blank" rel="noopener noreferrer">
-                  {l.label}
-                  <span class="visually-hidden"> (opens in a new tab)</span>
-                  <span class="arrow" aria-hidden="true">↗</span>
+                <a class="button" href={l.url} target="_blank" rel="noopener noreferrer">
+                  {l.label} ↗<span class="visually-hidden"> (opens in a new tab)</span>
                 </a>
               ),
             )}
@@ -67,74 +66,57 @@ const otherLinks = d.links.filter((l) => !l.primary);
       }
 
       <dl class="meta">
-        <div class="meta-role">
-          <dt class="label">My role</dt>
-          <dd><TodoText text={d.role} /></dd>
-        </div>
-        <div>
-          <dt class="label">Team</dt>
-          <dd><TodoText text={d.team} /></dd>
-        </div>
-        <div>
-          <dt class="label">Timeframe</dt>
-          <dd><TodoText text={d.duration} /></dd>
-        </div>
-        <div>
-          <dt class="label">Tools</dt>
-          <dd>
-            <ul>
-              {
-                d.tools.map((t) => (
-                  <li>
-                    <TodoText text={t} />
-                  </li>
-                ))
-              }
-            </ul>
-          </dd>
-        </div>
+        {
+          meta.map((m) => (
+            <div>
+              <dt>{m.label}</dt>
+              <dd>
+                <TodoText text={m.value} />
+              </dd>
+            </div>
+          ))
+        }
+        {
+          tools.length > 0 && (
+            <div>
+              <dt>Tools</dt>
+              <dd>
+                <ul>
+                  {tools.map((t) => (
+                    <li>
+                      <TodoText text={t} />
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+          )
+        }
         {
           d.deliverables && (
-            <div>
-              <dt class="label">Deliverables</dt>
+            <div class="meta-full">
+              <dt>Deliverables</dt>
               <dd>{d.deliverables.join(', ')}</dd>
             </div>
           )
         }
       </dl>
 
-      <div class="cs-cover figure-media">
-        <Media
-          file={d.cover}
-          alt={d.coverAlt}
-          note={d.coverNote}
-          ratio="16 / 8"
-          eager
-          sizes="(min-width: 80rem) 78rem, calc(100vw - 2rem)"
-        />
-      </div>
+      <figure class="cs-cover">
+        <Media file={d.cover} alt={d.coverAlt} note={d.coverNote} ratio="16 / 9" eager />
+      </figure>
     </header>
 
-    <div class="cs-body container">
-      <Toc headings={headings} />
-      <div class="prose">
-        <Content components={mdxComponents} />
-      </div>
+    <div class="wrap prose">
+      <Content components={mdxComponents} />
     </div>
   </article>
 
   {
     next && next.id !== project.id && (
-      <nav class="next-project container" aria-label="Next project">
-        <a href={url(`/work/${next.id}/`)}>
-          <span class="label">Next project</span>
-          <span class="title">
-            {next.data.title} <span class="arrow" aria-hidden="true">→</span>
-          </span>
-          <p>
-            <TodoText text={next.data.summary} />
-          </p>
-        </a>
+      <nav class="wrap next" aria-label="Next project">
+        <p class="small muted">Next project</p>
+        <a href={url(`/work/${next.id}/`)}>{next.data.title} →</a>
       </nav>
     )
   }

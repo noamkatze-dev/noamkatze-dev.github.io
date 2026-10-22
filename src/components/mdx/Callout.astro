@@ -1,12 +1,12 @@
 ---
-/** Emphasised note with a small label: <Callout label="Framing">Markdown text</Callout> */
+/** A short note with a small gray label: <Callout label="Framing">Markdown text</Callout> */
 interface Props {
   label: string;
 }
 const { label } = Astro.props;
 ---
 
-<aside class="callout" data-reveal>
+<aside class="callout">
   <span class="label">{label}</span>
   <slot />
 </aside>

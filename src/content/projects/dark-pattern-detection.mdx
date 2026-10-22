@@ -42,8 +42,6 @@ Detect dark patterns early, at the analysis and decision stage, and reduce users
 
 <Persona
   title="Data Analyst"
-  photo="dark-pattern-detection/persona-analyst.jpg"
-  photoAlt="Persona image: an analyst working at a desk with dashboards on screen."
   background="Bachelor's in Data Science. Works closely with UX designers and product managers to document insights and share findings with stakeholders."
   workflow={[
     "Reviews dashboard metrics",
@@ -136,24 +134,24 @@ The final design is a five-step flow, from a glance at the dashboard to a fix re
   <FlowStep
     n={3}
     title="Quick session access"
-    video="dark-pattern-detection/flow-3-quick-access"
-    alt="Screen recording: zooming into the Dark Patterns widget and the recording icon next to each pattern."
+    file="dark-pattern-detection/flow-3-quick-access.png"
+    alt="Close-up of the Dark Patterns widget: 1,960 sessions affected, a critical versus non-critical bar, and each pattern with its page, session count and recording and heatmap icons, beside an affected-sessions-over-time chart."
   >
     Each pattern links straight to the relevant recordings. No manual searching.
   </FlowStep>
   <FlowStep
     n={4}
     title="Affected sessions"
-    video="dark-pattern-detection/flow-4-affected-sessions"
-    alt="Screen recording: the recordings list filtered to Dark Pattern: Sneaking, with an AI key summary and per-session duration, clicks and user details."
+    file="dark-pattern-detection/flow-4-affected-sessions.png"
+    alt="The Recordings tab filtered to Dark Pattern: Sneaking, with an AI key summary of the recordings above a list of 13 sessions showing date, entry and exit page, duration, clicks, pages and an anonymous user ID."
   >
     Recordings filtered for one pattern, with AI insights, session duration and user details.
   </FlowStep>
   <FlowStep
     n={5}
     title="Detection and recommendation"
-    video="dark-pattern-detection/flow-5-recommendation"
-    alt="Screen recording: a session replay on a shop page with dark-pattern markers on the timeline, a fix tip on hover, and the AI session insights panel."
+    file="dark-pattern-detection/flow-5-recommendation.png"
+    alt="Session replay of a shop product page. The left panel shows AI session insights describing an item added to the cart without the visitor's action, with a tip; markers sit on the replay timeline below."
   >
     Timeline markers highlight the pattern in the recording. Hovering shows fix tips, and a side panel gives the full AI behavior analysis.
   </FlowStep>
@@ -167,7 +165,7 @@ The final design is a five-step flow, from a glance at the dashboard to a fix re
   caption="Interactive prototype built with Base44."
 />
 
-<Gallery title="Wireframes" count={3}>
+<Gallery title="Wireframes">
   <Figure thumb file="dark-pattern-detection/wireframe-01.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export. Add or remove Figure lines as needed]" />
   <Figure thumb file="dark-pattern-detection/wireframe-02.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export]" />
   <Figure thumb file="dark-pattern-detection/wireframe-03.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export]" />
@@ -181,8 +179,8 @@ The feature went through four versions, from a score inside an existing dashboar
   <IterationStage
     n={1}
     title="“Ethical Insights”"
-    video="dark-pattern-detection/iteration-1-ethical-insights"
-    alt="Screen recording of version 1: the Ethical Insights tab inside the dashboard with total ethical flags, average ethical score, critical criteria and transparency index, then the internal page with risk distribution and ethical criteria assessment."
+    file="dark-pattern-detection/iteration-1-ethical-insights.png"
+    alt="Version 1: the Clarity dashboard with an Ethical Insights tab showing Total Ethical Flags 286, Average Ethical Score 52%, Critical Criteria 3 and Transparency Index 44%."
     why="[TODO: why this version was the starting point, 1 sentence]"
     gaveUp="[TODO: 1 sentence]"
   >
@@ -191,8 +189,8 @@ The feature went through four versions, from a score inside an existing dashboar
   <IterationStage
     n={2}
     title="“DP Detect”"
-    video="dark-pattern-detection/iteration-2-dp-detect"
-    alt="Screen recording of version 2: the DP Detect widget listing patterns like Leaving cart and CTA rejection, then the internal page explaining the 1 to 3 severity scale and listing every pattern with recordings and heatmaps."
+    file="dark-pattern-detection/iteration-2-dp-detect.png"
+    alt="Version 2: the Clarity dashboard with a DP Detect widget listing Leaving cart, CTA rejection, Flow break, Newsletter skip and Leaving form, and DP Detect links beside the rage click, dead click, excessive scrolling and quick back metrics."
     why="[TODO: why the move to its own tab, 1 to 2 sentences]"
     gaveUp="[TODO: what I gave up, 1 sentence]"
   >
@@ -201,8 +199,8 @@ The feature went through four versions, from a score inside an existing dashboar
   <IterationStage
     n={3}
     title="Centralized “Dark Patterns” dashboard"
-    video="dark-pattern-detection/iteration-3-centralized"
-    alt="Screen recording of version 3: a single Dark Patterns widget with total and critical counts, a severity bar, sorting by most critical, and a severity levels legend."
+    file="dark-pattern-detection/iteration-3-centralized.png"
+    alt="Version 3: a single Dark Patterns widget with 14 total and 6 critical dark patterns, a three-level severity bar, and the patterns sorted by most critical."
     why="Removing the internal page reduced fragmentation and navigation friction. [TODO: what triggered it, e.g. feedback or a test]"
     gaveUp="[TODO: what I gave up, 1 sentence]"
   >
@@ -211,8 +209,8 @@ The feature went through four versions, from a score inside an existing dashboar
   <IterationStage
     n={4}
     title="Session impact focus"
-    video="dark-pattern-detection/iteration-4-session-impact"
-    alt="Screen recording of version 4: sessions affected by dark patterns, filtering patterns on and off, and the affected-sessions-over-time chart with a per-pattern tooltip."
+    file="dark-pattern-detection/iteration-4-session-impact.png"
+    alt="Version 4: the Dark Patterns widget with 1,960 affected sessions, a checkbox per pattern, and an affected-sessions-over-time line chart with one line per pattern."
     why="Shifted from detecting to measuring real impact, linking detection to business insight. [TODO: what triggered it]"
     gaveUp="[TODO: what I gave up, 1 sentence]"
   >

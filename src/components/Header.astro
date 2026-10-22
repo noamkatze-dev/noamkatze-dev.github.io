@@ -2,23 +2,24 @@
 import { site } from '../data/site';
 import { url } from '../lib/url';
 
-const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = Astro.url.pathname.replace(base, '') || '/';
 const nav = [
-  { href: '/#work', label: 'Work', match: (p: string) => p.startsWith('/work') },
-  { href: '/about/', label: 'About', match: (p: string) => p.startsWith('/about') },
-  { href: '#contact', label: 'Contact', match: () => false },
+  { href: url('/#work'), label: 'Work', current: path.startsWith('/work') },
+  { href: url('/about/'), label: 'About', current: path.startsWith('/about') },
+  { href: '#contact', label: 'Contact', current: false },
 ];
 ---
 
 <header class="site-header">
-  <div class="container">
-    <a class="wordmark" href={url('/')}>{site.name}<span> · {site.role}</span></a>
-    <nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="name" href={url('/')}>{site.name}</a>
+    <nav aria-label="Main">
       <ul>
         {
           nav.map((item) => (
             <li>
-              <a href={item.href.startsWith('#') ? item.href : url(item.href)} aria-current={item.match(path) ? 'page' : undefined}>
+              <a href={item.href} aria-current={item.current ? 'page' : undefined}>
                 {item.label}
               </a>
             </li>

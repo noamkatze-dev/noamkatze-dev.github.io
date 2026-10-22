@@ -1,10 +1,16 @@
 ---
-/** Renders a plain string, highlighting any "[TODO ...]" marker. */
+/**
+ * Renders a plain string. "[TODO ...]" markers are highlighted in dev and
+ * removed (with their sentence) in production builds.
+ */
+import { stripTodo } from '../lib/todo.mjs';
+
 interface Props {
   text?: string;
 }
 const { text = '' } = Astro.props;
+const dev = !import.meta.env.PROD;
 const parts = text.split(/(\[TODO[^\]]*\])/g).filter(Boolean);
 ---
 
-{parts.map((p) => (p.startsWith('[TODO') ? <mark class="todo">{p}</mark> : p))}
+{dev ? parts.map((p) => (p.startsWith('[TODO') ? <mark class="todo">{p}</mark> : p)) : stripTodo(text)}

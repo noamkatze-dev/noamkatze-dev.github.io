@@ -1,12 +1,11 @@
 ---
-/** A simple numbered process row: <Steps items={['Research', 'Wireframes', 'Prototype']} /> */
+/** A plain numbered list: <Steps items={['Research', 'Wireframes', 'Prototype']} /> */
 interface Props {
   items: string[];
 }
 const { items } = Astro.props;
-const cols = Math.min(items.length, items.length > 6 ? 4 : items.length);
 ---
 
-<ol class="steps" style={`--cols: ${cols}`} data-reveal>
+<ol class="steps">
   {items.map((item) => <li>{item}</li>)}
 </ol>

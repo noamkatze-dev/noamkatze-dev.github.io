@@ -1,9 +1,7 @@
 ---
 /**
- * One step of the main flow: text on the left, its screen on the right.
- * <FlowStep n={1} title="Dashboard" file="slug/flow-1.png" alt="..." note="...">
- *   Text written as normal Markdown.
- * </FlowStep>
+ * One step of the main flow: numbered title, short text, then its image (or video).
+ * <FlowStep n={1} title="Dashboard" file="slug/flow-1.png" alt="...">Markdown text</FlowStep>
  */
 import Media from '../Media.astro';
 import VideoMedia from '../VideoMedia.astro';
@@ -11,24 +9,25 @@ import VideoMedia from '../VideoMedia.astro';
 interface Props {
   n: number;
   title: string;
-  /** Image path under src/assets/images/ … */
+  /** Image under src/assets/images/ … */
   file?: string;
   /** …or a video under public/videos/ (no extension). */
   video?: string;
   alt: string;
+  caption?: string;
   note?: string;
   ratio?: string;
 }
-const { n, title, file, video, alt, note, ratio } = Astro.props;
+const { title, file, video, alt, caption, note, ratio } = Astro.props;
 ---
 
-<li class="flow-step" data-reveal>
-  <div class="flow-text">
-    <span class="flow-num" aria-hidden="true">{String(n).padStart(2, '0')}</span>
-    <h3><span class="visually-hidden">Step {n}: </span>{title}</h3>
+<li>
+  <div class="text">
+    <h3>{title}</h3>
     <slot />
   </div>
-  <div class="figure-media">
-    {video ? <VideoMedia src={video} label={alt} /> : <Media file={file ?? ''} alt={alt} note={note} ratio={ratio} sizes="(min-width: 80rem) 38rem, (min-width: 56rem) 55vw, 100vw" />}
-  </div>
+  <figure>
+    {video ? <VideoMedia src={video} label={alt} /> : <Media file={file ?? ''} alt={alt} note={note} ratio={ratio} />}
+    {caption && <figcaption>{caption}</figcaption>}
+  </figure>
 </li>

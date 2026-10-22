@@ -1,10 +1,13 @@
 ---
 /**
- * <Figure file="slug/name.png" alt="..." caption="..." note="what it should show" />
+ * <Figure file="slug/name.png" alt="What is on screen" caption="Optional caption" />
  * Caption can also be written as children (supports **bold** and links).
+ * In production a figure whose image doesn't exist renders nothing.
  */
 import Media from '../Media.astro';
 import TodoText from '../TodoText.astro';
+import { findImage } from '../../lib/images';
+import { isTodoOnly } from '../../lib/todo.mjs';
 
 interface Props {
   file: string;
@@ -12,24 +15,23 @@ interface Props {
   caption?: string;
   note?: string;
   ratio?: string;
-  /** Use inside galleries/grids so smaller image sizes are requested. */
+  /** Inside galleries and grids: request smaller image sizes. */
   thumb?: boolean;
   eager?: boolean;
 }
 const { file, alt, caption, note, ratio, thumb = false, eager = false } = Astro.props;
+const exists = Boolean(await findImage(file));
+const prod = import.meta.env.PROD;
 const hasSlot = Astro.slots.has('default');
-const sizes = thumb ? '(min-width: 64rem) 22rem, (min-width: 40rem) 45vw, 100vw' : undefined;
+const showCaption = hasSlot || (caption && (!prod || !isTodoOnly(caption)));
+const sizes = thumb ? '(min-width: 768px) 280px, 50vw' : undefined;
 ---
 
-<figure data-reveal>
-  <div class="figure-media">
-    <Media file={file} alt={alt} note={note} ratio={ratio} sizes={sizes} eager={eager} />
-  </div>
-  {
-    (caption || hasSlot) && (
-      <figcaption>
-        {caption ? <TodoText text={caption} /> : <slot />}
-      </figcaption>
-    )
-  }
-</figure>
+{
+  (exists || !prod) && (
+    <figure>
+      <Media file={file} alt={alt} note={note} ratio={ratio} sizes={sizes} eager={eager} />
+      {showCaption && <figcaption>{caption ? <TodoText text={caption} /> : <slot />}</figcaption>}
+    </figure>
+  )
+}

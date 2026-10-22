@@ -1,5 +1,6 @@
 ---
-/** Wrapper for <Decision> cards. */
+/** Wrapper for <Decision> items. Omitted when none of them has content. */
+const html = await Astro.slots.render('default');
 ---
 
-<div class="decisions"><slot /></div>
+{/class="decision"/.test(html) && <div class="decisions" set:html={html} />}

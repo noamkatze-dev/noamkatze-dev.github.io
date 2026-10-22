@@ -1,7 +1,7 @@
 ---
 /**
- * <Video src="250ms/calibration" label="What the clip shows" caption="Short caption" />
- * <Video src="calcalist-next/app-walkthrough" mode="player" phone label="..." />
+ * <Video src="250ms/viewing-session" label="What the clip shows" caption="Short caption" />
+ * Click-to-load: poster only, preload="none", never autoplays.
  * Files live in public/videos/<src>.mp4 with a <src>.jpg poster.
  */
 import VideoMedia from '../VideoMedia.astro';
@@ -11,14 +11,15 @@ interface Props {
   src: string;
   label: string;
   caption?: string;
+  /** Kept for compatibility; every video now uses the click-to-play player. */
   mode?: 'loop' | 'player';
   phone?: boolean;
 }
-const { src, label, caption, mode, phone } = Astro.props;
+const { src, label, caption, phone } = Astro.props;
 ---
 
-<figure data-reveal>
-  <VideoMedia src={src} label={label} mode={mode} phone={phone} />
+<figure>
+  <VideoMedia src={src} label={label} phone={phone} />
   {
     caption && (
       <figcaption>

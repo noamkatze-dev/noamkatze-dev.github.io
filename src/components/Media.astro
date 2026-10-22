@@ -1,24 +1,21 @@
 ---
 /**
- * Optimized image OR a labelled placeholder frame.
- *
- * `file` is a path relative to src/assets/images/, e.g. "250ms/calibration.png".
- * The extension is ignored when matching, so exporting "calibration.jpg" instead
- * of ".png" still works. Drop the file in and the placeholder is replaced
- * automatically by a responsive AVIF/WebP <picture>.
+ * Optimized image (AVIF/WebP via <Picture>, width/height set, lazy unless `eager`).
+ * `file` is a path under src/assets/images/. If the file doesn't exist, a labelled
+ * placeholder is shown in dev only; production renders nothing.
  */
 import { Picture } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
+import { findImage } from '../lib/images';
+import { stripTodo } from '../lib/todo.mjs';
 
 interface Props {
   file: string;
   alt: string;
-  /** What the image should show (only used by the placeholder). */
   note?: string;
-  /** Placeholder aspect ratio, e.g. "16 / 10" (desktop) or "9 / 19.5" (phone). */
   ratio?: string;
   sizes?: string;
   eager?: boolean;
+  class?: string;
 }
 
 const {
@@ -26,40 +23,37 @@ const {
   alt,
   note,
   ratio = '16 / 10',
-  sizes = '(min-width: 80rem) 62rem, (min-width: 64rem) calc(100vw - 20rem), calc(100vw - 2rem)',
+  sizes = '(min-width: 1216px) 1120px, calc(100vw - 48px)',
   eager = false,
+  class: className,
 } = Astro.props;
 
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/images/**/*.{png,jpg,jpeg,webp,avif,gif,PNG,JPG,JPEG,WEBP}',
-);
-const stem = (p: string) => p.replace(/\.[^/.]+$/, '').toLowerCase();
-const wanted = stem(`/src/assets/images/${file}`);
-const key = Object.keys(images).find((k) => stem(k) === wanted);
-const img = key ? (await images[key]()).default : null;
-
+const img = await findImage(file);
 const widths = img
-  ? [...new Set([480, 800, 1200, 1600, 2000].filter((w) => w < img.width).concat(Math.min(img.width, 2400)))]
+  ? [...new Set([480, 800, 1120, 1600, 2240].filter((w) => w < img.width).concat(Math.min(img.width, 2400)))]
   : [];
-const cleanAlt = alt.replace(/\[TODO[^\]]*\]/g, '').trim();
+const cleanAlt = stripTodo(alt);
 ---
 
 {
   img ? (
     <Picture
       src={img}
-      alt={cleanAlt || alt}
+      alt={cleanAlt}
       formats={['avif', 'webp']}
       widths={widths}
       sizes={sizes}
       loading={eager ? 'eager' : 'lazy'}
       decoding={eager ? 'sync' : 'async'}
       fetchpriority={eager ? 'high' : 'auto'}
+      class={className}
     />
   ) : (
-    <div class="placeholder" style={`aspect-ratio: ${ratio}`} role="img" aria-label={`Image placeholder: ${alt}`}>
-      <code>src/assets/images/{file}</code>
-      {note && <span>{note}</span>}
-    </div>
+    !import.meta.env.PROD && (
+      <div class="placeholder" style={`aspect-ratio: ${ratio}`} role="img" aria-label={`Image placeholder: ${alt}`}>
+        <code>src/assets/images/{file}</code>
+        {note && <span>{note}</span>}
+      </div>
+    )
   )
 }

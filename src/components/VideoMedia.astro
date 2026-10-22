@@ -1,11 +1,8 @@
 ---
 /**
- * Self-hosted video from public/videos/<src>.mp4 (+ <src>.jpg poster).
- * Width/height/duration for each clip are listed in src/data/videos.json (add a line per new video).
- *
- * mode="loop"   short silent UI clip: plays only while on screen, pause button,
- *               never autoplays under prefers-reduced-motion (shows controls instead).
- * mode="player" longer walkthrough with sound: normal controls, nothing loads until play.
+ * Self-hosted video, click-to-load: only the poster loads (preload="none"),
+ * nothing plays until the visitor presses play. Never autoplays.
+ * Files: public/videos/<src>.mp4 + <src>.jpg poster; sizes in src/data/videos.json.
  */
 import videos from '../data/videos.json';
 import { url } from '../lib/url';
@@ -14,101 +11,24 @@ interface Props {
   src: string;
   /** Accessible description of what the clip shows. */
   label: string;
-  mode?: 'loop' | 'player';
-  /** Narrow phone-shaped frame (for mobile app recordings). */
+  /** Narrow frame for phone recordings. */
   phone?: boolean;
 }
 
-const { src, label, mode = 'loop', phone = false } = Astro.props;
+const { src, label, phone = false } = Astro.props;
 const meta = (videos as Record<string, { width: number; height: number; duration: number; audio: boolean }>)[src];
 if (!meta) throw new Error(`Video "${src}" is not in src/data/videos.json`);
-const file = url(`/videos/${src}.mp4`);
-const poster = url(`/videos/${src}.jpg`);
 ---
 
-<div class:list={['video', { 'video--phone': phone }]} data-video={mode}>
-  {
-    mode === 'loop' ? (
-      <video
-        src={file}
-        poster={poster}
-        width={meta.width}
-        height={meta.height}
-        muted
-        loop
-        playsinline
-        preload="none"
-        aria-label={label}
-      />
-    ) : (
-      <video
-        src={file}
-        poster={poster}
-        width={meta.width}
-        height={meta.height}
-        controls
-        playsinline
-        preload="none"
-        aria-label={label}
-      />
-    )
-  }
-  {
-    mode === 'loop' && (
-      <button type="button" class="video-toggle" data-video-toggle hidden aria-label={`Pause video: ${label}`}>
-        <svg class="i-pause" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 2h3v10H3zM8 2h3v10H8z" fill="currentColor" /></svg>
-        <svg class="i-play" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2v10l8.5-5z" fill="currentColor" /></svg>
-      </button>
-    )
-  }
+<div class:list={['video', { 'video--phone': phone }]}>
+  <video
+    src={url(`/videos/${src}.mp4`)}
+    poster={url(`/videos/${src}.jpg`)}
+    width={meta.width}
+    height={meta.height}
+    controls
+    playsinline
+    preload="none"
+    aria-label={label}
+  ></video>
 </div>
-
-<script>
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const loops = Array.from(document.querySelectorAll<HTMLElement>('[data-video="loop"]'));
-
-  loops.forEach((wrap) => {
-    const video = wrap.querySelector('video')!;
-    const btn = wrap.querySelector<HTMLButtonElement>('[data-video-toggle]')!;
-    const label = video.getAttribute('aria-label') ?? 'video';
-
-    if (reduce) {
-      // No autoplay: give the visitor normal controls instead.
-      video.controls = true;
-      return;
-    }
-
-    btn.hidden = false;
-    const sync = () => {
-      const paused = video.paused;
-      wrap.toggleAttribute('data-paused', paused);
-      btn.setAttribute('aria-label', `${paused ? 'Play' : 'Pause'} video: ${label}`);
-    };
-    video.addEventListener('play', sync);
-    video.addEventListener('pause', sync);
-    sync();
-
-    btn.addEventListener('click', () => {
-      if (video.paused) {
-        wrap.removeAttribute('data-user-paused');
-        video.play().catch(() => {});
-      } else {
-        wrap.setAttribute('data-user-paused', '');
-        video.pause();
-      }
-    });
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !wrap.hasAttribute('data-user-paused')) {
-          video.preload = 'auto';
-          video.play().catch(() => {});
-        } else if (!entry.isIntersecting && !video.paused) {
-          video.pause();
-        }
-      },
-      { threshold: 0.35 },
-    );
-    io.observe(wrap);
-  });
-</script>

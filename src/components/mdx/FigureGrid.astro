@@ -1,9 +1,11 @@
 ---
-/** Lays out <Figure> children in a responsive 2- or 3-column grid. */
+/** Lays out <Figure> children in a 2- or 3-column grid (1 column on mobile). */
 interface Props {
   cols?: 2 | 3;
 }
 const { cols = 2 } = Astro.props;
+const html = await Astro.slots.render('default');
+const hasMedia = /<(img|video|iframe)|class="(placeholder|embed)"/.test(html);
 ---
 
-<div class="figure-grid" data-cols={cols}><slot /></div>
+{hasMedia && <div class="figure-grid" data-cols={cols} set:html={html} />}
