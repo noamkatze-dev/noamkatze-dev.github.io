@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .bg{fill:#15171c}.fg{fill:#f6f5f1}.dot{fill:#ff8a5b}
+    @media (prefers-color-scheme: dark){.bg{fill:#eceae4}.fg{fill:#15171c}.dot{fill:#b83f12}}
+  </style>
+  <rect class="bg" width="64" height="64" rx="14"/>
+  <text class="fg" x="31" y="43" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-weight="700" font-size="29" letter-spacing="-1">NK</text>
+  <circle class="dot" cx="50" cy="14" r="4.5"/>
+</svg>
