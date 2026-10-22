@@ -55,9 +55,9 @@ export type TimelineItem = { period: string; title: string; org: string; detail?
 
 export const experience: TimelineItem[] = [
   {
-    period: '[TODO: dates]',
+    period: '2026 – present',
     title: 'Product Design',
-    org: '[TODO: studio name]',
+    org: 'creative +',
     detail: '[TODO: 2 to 3 lines of concrete work done]',
   },
   {
@@ -85,9 +85,16 @@ export const education: TimelineItem[] = [
   { period: '2020 – 2021', title: 'UX course', org: 'BEX College' },
 ];
 
-export const recognition = [
+export const recognition: { title: string; detail?: string }[] = [
+  {
+    title: 'Department Excellence Award, University of Haifa',
+    detail: '2023.',
+  },
   {
     title: '3rd place, MANARA Coexistence Competition',
     detail: "Abu Dhabi, 2025. A children's educational game, designed in a team of four.",
+  },
+  {
+    title: 'Participated in the Excellence Exhibition, first year of studies, University of Haifa',
   },
 ];

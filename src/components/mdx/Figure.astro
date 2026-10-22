@@ -1,8 +1,11 @@
 ---
 /**
  * <Figure file="slug/name.png" alt="What is on screen" caption="Optional caption" />
+ *   phone  → mobile screen styling (24px radius); use inside <Screens> rows
+ *   thumb  → small image inside a gallery or grid
  * Caption can also be written as children (supports **bold** and links).
- * In production a figure whose image doesn't exist renders nothing.
+ * Every figure image opens in the lightbox. In production a figure whose
+ * image doesn't exist renders nothing.
  */
 import Media from '../Media.astro';
 import TodoText from '../TodoText.astro';
@@ -15,23 +18,42 @@ interface Props {
   caption?: string;
   note?: string;
   ratio?: string;
-  /** Inside galleries and grids: request smaller image sizes. */
+  phone?: boolean;
   thumb?: boolean;
   eager?: boolean;
 }
-const { file, alt, caption, note, ratio, thumb = false, eager = false } = Astro.props;
+const { file, alt, caption, note, ratio, phone = false, thumb = false, eager = false } = Astro.props;
 const exists = Boolean(await findImage(file));
 const prod = import.meta.env.PROD;
+const render = exists || !prod;
 const hasSlot = Astro.slots.has('default');
-const showCaption = hasSlot || (caption && (!prod || !isTodoOnly(caption)));
-const sizes = thumb ? '(min-width: 768px) 280px, 50vw' : undefined;
+const captionText = caption ?? '';
+const showTextCaption = captionText !== '' && (!prod || !isTodoOnly(captionText));
+const showSlotCaption = !showTextCaption && hasSlot;
+
+let kind = 'shot';
+if (phone) kind = 'phone';
+if (thumb && !phone) kind = 'thumb';
+let sizes = '(min-width: 960px) 880px, calc(100vw - 48px)';
+if (phone) sizes = '(min-width: 700px) 260px, 70vw';
+if (thumb && !phone) sizes = '(min-width: 700px) 260px, 50vw';
+const phoneRatio = ratio ?? (phone ? '9 / 19.5' : undefined);
 ---
 
 {
-  (exists || !prod) && (
-    <figure>
-      <Media file={file} alt={alt} note={note} ratio={ratio} sizes={sizes} eager={eager} />
-      {showCaption && <figcaption>{caption ? <TodoText text={caption} /> : <slot />}</figcaption>}
+  render && (
+    <figure class={kind}>
+      <Media file={file} alt={alt} note={note} ratio={phoneRatio} sizes={sizes} eager={eager} zoom />
+      {showTextCaption && (
+        <figcaption>
+          <TodoText text={captionText} />
+        </figcaption>
+      )}
+      {showSlotCaption && (
+        <figcaption>
+          <slot />
+        </figcaption>
+      )}
     </figure>
   )
 }

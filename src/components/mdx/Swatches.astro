@@ -4,20 +4,16 @@ interface Props {
   colors: { hex: string; name?: string }[];
 }
 const { colors } = Astro.props;
+const items = colors.map((c) => ({ hex: c.hex, name: c.name ?? '', style: 'background: ' + c.hex }));
 ---
 
 <ul class="swatches">
   {
-    colors.map((c) => (
+    items.map((c) => (
       <li>
-        <span class="swatch" style={`background: ${c.hex}`} aria-hidden="true" />
-        {c.hex}
-        {c.name && (
-          <>
-            <br />
-            <span class="muted">{c.name}</span>
-          </>
-        )}
+        <span class="swatch" style={c.style} aria-hidden="true" />
+        <span class="swatch-hex">{c.hex}</span>
+        {c.name && <span class="muted">{c.name}</span>}
       </li>
     ))
   }

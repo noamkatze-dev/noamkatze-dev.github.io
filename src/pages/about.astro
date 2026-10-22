@@ -1,16 +1,22 @@
 ---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import Base from '../layouts/Base.astro';
 import TodoText from '../components/TodoText.astro';
-import Media from '../components/Media.astro';
 import { site, about, skills, experience, education, recognition } from '../data/site';
 import { url } from '../lib/url';
-import { isTodoOnly } from '../lib/todo.mjs';
+import { isTodoOnly, bindLast } from '../lib/todo.mjs';
 import type { TimelineItem } from '../data/site';
 
-// In production, drop entries that are still mostly placeholders.
-const ready = (items: TimelineItem[]) => (import.meta.env.PROD ? items.filter((i) => !isTodoOnly(i.org)) : items);
+const prod = import.meta.env.PROD;
+const hasCv = existsSync(join(process.cwd(), 'public', 'cv.pdf'));
 
-const groups: { id: string; title: string; intro?: string; items: TimelineItem[] }[] = [
+// In production, drop entries that are still placeholders.
+function ready(items: TimelineItem[]) {
+  return prod ? items.filter((i) => !isTodoOnly(i.org)) : items;
+}
+
+const groups = [
   {
     id: 'experience',
     title: 'Experience',
@@ -18,44 +24,44 @@ const groups: { id: string; title: string; intro?: string; items: TimelineItem[]
       'Five years of military service taught me to run complex systems with many stakeholders, under real constraints. It is the same muscle I use in product design.',
     items: ready(experience),
   },
-  { id: 'education', title: 'Education', items: ready(education) },
+  { id: 'education', title: 'Education', intro: '', items: ready(education) },
 ];
+const bio = about.map((p) => bindLast(p));
+const skillRows = skills.map((g) => ({ group: g.group, list: bindLast(g.items.join(', ')) }));
+const pageDescription = 'About ' + site.name + ': product designer, B.Des University of Haifa, former IDF procurement team leader. Skills, education and experience.';
 ---
 
-<Base
-  title="About"
-  description={`About ${site.name}: product designer, B.Des University of Haifa, former IDF procurement team leader. Skills, education and experience.`}
->
-  <section class="hero wrap" aria-labelledby="about-h1">
+<Base title="About" description={pageDescription}>
+  <section class="page-head wrap" aria-labelledby="about-h1">
+    <p class="label">About</p>
     <h1 id="about-h1">Clarity is the whole point.</h1>
   </section>
 
   <div class="wrap rows">
     <section class="row" aria-labelledby="bio-title">
-      <h2 id="bio-title">Background</h2>
+      <h2 id="bio-title" class="row-label">Background</h2>
       <div class="bio">
-        <div class="portrait">
-          <Media
-            file="about/portrait-crop.jpg"
-            alt={`Black-and-white portrait of ${site.name} in a dark blazer, arms folded, against a plain light wall.`}
-            ratio="4 / 5"
-            sizes="200px"
-            eager
-          />
-        </div>
-        {about.map((p) => <p>{p}</p>)}
-        <div class="buttons">
-          <a class="button" href={url(site.cv)} download>Download CV (PDF)</a>
-        </div>
+        {bio.map((p) => <p>{p}</p>)}
+        {
+          hasCv && (
+            <div class="buttons">
+              <a class="btn btn-outline" href={url(site.cv)} download>
+                Download CV <span class="arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          )
+        }
       </div>
     </section>
 
     {
       groups.map((g) => (
-        <section class="row section" aria-labelledby={`${g.id}-title`}>
-          <h2 id={`${g.id}-title`}>{g.title}</h2>
+        <section class="row" aria-labelledby={g.id + '-title'}>
+          <h2 id={g.id + '-title'} class="row-label">
+            {g.title}
+          </h2>
           <div>
-            {g.intro && <p style="margin-bottom: var(--s-3)">{g.intro}</p>}
+            {g.intro && <p class="row-intro">{bindLast(g.intro)}</p>}
             <ul class="entries">
               {g.items.map((item) => (
                 <li>
@@ -63,8 +69,7 @@ const groups: { id: string; title: string; intro?: string; items: TimelineItem[]
                     <TodoText text={item.period} />
                   </span>
                   <strong>{item.title}</strong>
-                  <br />
-                  <span class="muted">
+                  <span class="org">
                     <TodoText text={item.org} />
                   </span>
                   {item.detail && (
@@ -80,29 +85,28 @@ const groups: { id: string; title: string; intro?: string; items: TimelineItem[]
       ))
     }
 
-    <section class="row section" aria-labelledby="skills-title">
-      <h2 id="skills-title">Skills and tools</h2>
+    <section class="row" aria-labelledby="skills-title">
+      <h2 id="skills-title" class="row-label">Skills and tools</h2>
       <ul class="entries">
         {
-          skills.map((g) => (
+          skillRows.map((g) => (
             <li>
               <span class="period">{g.group}</span>
-              {g.items.join(', ')}
+              {g.list}
             </li>
           ))
         }
       </ul>
     </section>
 
-    <section class="row section" aria-labelledby="recognition-title">
-      <h2 id="recognition-title">Recognition</h2>
+    <section class="row" aria-labelledby="recognition-title">
+      <h2 id="recognition-title" class="row-label">Recognition</h2>
       <ul class="entries">
         {
           recognition.map((r) => (
             <li>
               <strong>{r.title}</strong>
-              <br />
-              <span class="muted">{r.detail}</span>
+              {r.detail && <span class="org">{r.detail}</span>}
             </li>
           ))
         }

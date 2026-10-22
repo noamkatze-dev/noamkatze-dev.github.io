@@ -11,14 +11,15 @@ interface Props {
   src: string;
   label: string;
   caption?: string;
-  /** Kept for compatibility; every video now uses the click-to-play player. */
+  /** Kept for compatibility; every video uses the click-to-play player. */
   mode?: 'loop' | 'player';
   phone?: boolean;
 }
-const { src, label, caption, phone } = Astro.props;
+const { src, label, caption, phone = false } = Astro.props;
+const kind = phone ? 'shot shot-phone' : 'shot';
 ---
 
-<figure>
+<figure class={kind}>
   <VideoMedia src={src} label={label} phone={phone} />
   {
     caption && (

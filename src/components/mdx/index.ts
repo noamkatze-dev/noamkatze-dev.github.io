@@ -18,10 +18,14 @@ import Callout from './Callout.astro';
 import Stats from './Stats.astro';
 import Swatches from './Swatches.astro';
 import Video from './Video.astro';
+import Screens from './Screens.astro';
+import WireframePair from './WireframePair.astro';
 
 export const mdxComponents = {
   Swatches,
   Video,
+  Screens,
+  WireframePair,
   Figure,
   FigureGrid,
   Gallery,

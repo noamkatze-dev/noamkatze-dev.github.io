@@ -1,26 +1,71 @@
 ---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { getCollection } from 'astro:content';
+import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { hero, aboutTeaser } from '../data/site';
+import { site, hero, aboutTeaser } from '../data/site';
 import { url } from '../lib/url';
+import { findImage } from '../lib/images';
+import { bindLast } from '../lib/todo.mjs';
 
 const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const portrait = await findImage('about/portrait-square.jpg');
+const hasCv = existsSync(join(process.cwd(), 'public', 'cv.pdf'));
+// Each word gets a stagger index; `text-wrap: balance` keeps the last line from being a lone word.
+const words = hero.headline.split(' ');
+const headlineWords = words.map((w, i) => ({ text: w, style: '--i: ' + i }));
+const portraitAlt = 'Portrait of ' + site.name;
 ---
 
 <Base>
   <section class="hero wrap" aria-labelledby="hero-title">
-    <h1 id="hero-title">{hero.headline}</h1>
-    <p class="lead">{hero.support}</p>
+    <div class="hero-text">
+      <h1 id="hero-title" class="hero-title" aria-label={hero.headline}>
+        {headlineWords.map((w) => <span class="w" style={w.style} aria-hidden="true">{w.text}</span>)}
+      </h1>
+      <p class="hero-support hero-late">{bindLast(hero.support)}</p>
+      <div class="buttons hero-late">
+        <a class="btn" href="#work">Selected work <span class="arrow" aria-hidden="true">→</span></a>
+        {
+          hasCv && (
+            <a class="btn btn-outline" href={url(site.cv)} download>
+              Download CV <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          )
+        }
+      </div>
+    </div>
+    {
+      portrait && (
+        <div class="hero-photo hero-late">
+          <Picture
+            src={portrait}
+            alt={portraitAlt}
+            width={560}
+            height={560}
+            widths={[140, 280, 560]}
+            sizes="(min-width: 768px) 280px, 140px"
+            formats={['avif', 'webp']}
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      )
+    }
   </section>
 
-  <section class="wrap" id="work" aria-labelledby="work-title">
-    <h2 id="work-title" class="visually-hidden">Selected work</h2>
-    <ul class="projects">
+  <section class="wrap work" id="work" aria-labelledby="work-title">
+    <div class="section-head">
+      <h2 id="work-title">Selected work</h2>
+      <p class="label">0{projects.length} case studies</p>
+    </div>
+    <ul class="cards">
       {
         projects.map((p, i) => (
           <li>
-            <ProjectCard project={p} eager={i === 0} />
+            <ProjectCard project={p} index={i + 1} eager={i === 0} />
           </li>
         ))
       }
@@ -28,8 +73,10 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
   </section>
 
   <section class="wrap section about-line" aria-labelledby="about-title">
-    <h2 id="about-title" class="visually-hidden">About</h2>
-    <p>{aboutTeaser}</p>
-    <p><a href={url('/about/')}>More about me, my background and skills</a></p>
+    <h2 id="about-title">About</h2>
+    <div class="about-line-body">
+      <p>{bindLast(aboutTeaser)}</p>
+      <p><a class="ul" href={url('/about/')}>More about me, my background and skills</a></p>
+    </div>
   </section>
 </Base>

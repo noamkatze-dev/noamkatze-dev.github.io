@@ -17,13 +17,16 @@ interface Props {
 
 const { src, label, phone = false } = Astro.props;
 const meta = (videos as Record<string, { width: number; height: number; duration: number; audio: boolean }>)[src];
-if (!meta) throw new Error(`Video "${src}" is not in src/data/videos.json`);
+if (!meta) throw new Error('Video "' + src + '" is not in src/data/videos.json');
+const videoSrc = url('/videos/' + src + '.mp4');
+const posterSrc = url('/videos/' + src + '.jpg');
+const wrapClass = phone ? 'video video--phone' : 'video';
 ---
 
-<div class:list={['video', { 'video--phone': phone }]}>
+<div class={wrapClass}>
   <video
-    src={url(`/videos/${src}.mp4`)}
-    poster={url(`/videos/${src}.jpg`)}
+    src={videoSrc}
+    poster={posterSrc}
     width={meta.width}
     height={meta.height}
     controls

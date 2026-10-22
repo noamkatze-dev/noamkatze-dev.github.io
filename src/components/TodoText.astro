@@ -1,16 +1,24 @@
 ---
 /**
- * Renders a plain string. "[TODO ...]" markers are highlighted in dev and
- * removed (with their sentence) in production builds.
+ * Renders a plain string.
+ * - "[TODO ...]" markers: highlighted in dev, removed (with their sentence) in production.
+ * - The last two words are joined by a non-breaking space (no lonely last word).
  */
-import { stripTodo } from '../lib/todo.mjs';
+import { stripTodo, bindLast } from '../lib/todo.mjs';
 
 interface Props {
   text?: string;
 }
 const { text = '' } = Astro.props;
 const dev = !import.meta.env.PROD;
-const parts = text.split(/(\[TODO[^\]]*\])/g).filter(Boolean);
+
+const TODO_SPLIT = /(\[TODO[^\]]*\])/g;
+const parts = dev
+  ? bindLast(text)
+      .split(TODO_SPLIT)
+      .filter((p) => p !== '')
+      .map((p) => ({ value: p, todo: p.indexOf('[TODO') === 0 }))
+  : [{ value: bindLast(stripTodo(text)), todo: false }];
 ---
 
-{dev ? parts.map((p) => (p.startsWith('[TODO') ? <mark class="todo">{p}</mark> : p)) : stripTodo(text)}
+{parts.map((p) => (p.todo ? <mark class="todo">{p.value}</mark> : p.value))}

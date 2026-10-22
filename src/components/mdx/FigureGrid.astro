@@ -5,7 +5,8 @@ interface Props {
 }
 const { cols = 2 } = Astro.props;
 const html = await Astro.slots.render('default');
-const hasMedia = /<(img|video|iframe)|class="(placeholder|embed)"/.test(html);
+const hasMedia =
+  html.includes('<img') || html.includes('<video') || html.includes('class="placeholder"') || html.includes('class="embed"');
 ---
 
 {hasMedia && <div class="figure-grid" data-cols={cols} set:html={html} />}

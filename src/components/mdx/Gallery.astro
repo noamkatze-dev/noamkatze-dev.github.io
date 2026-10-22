@@ -1,7 +1,7 @@
 ---
 /**
- * Collapsed gallery on native <details>: keyboard operable, and images inside
- * only load when it is opened (loading="lazy"). Omitted when it has no images.
+ * Collapsed gallery on native <details>: keyboard operable, images load only
+ * when opened (loading="lazy") and open in the lightbox. Omitted when empty.
  *
  * <Gallery title="All other app screens">
  *   <Figure thumb file="..." alt="..." caption="..." />
@@ -14,15 +14,18 @@ interface Props {
 }
 const { title } = Astro.props;
 const html = await Astro.slots.render('default');
-const count = (html.match(/<figure/g) ?? []).length;
-const label = /wireframe/i.test(title) ? 'Show wireframes' : 'Show all screens';
+const count = html.split('<figure').length - 1;
+const isWireframes = title.toLowerCase().includes('wireframe');
+const label = isWireframes ? 'Show wireframes' : 'Show all screens';
+const summary = label + ' (' + count + ')';
 ---
 
 {
   count > 0 && (
     <details class="gallery">
       <summary>
-        {label} ({count})<span class="visually-hidden">: {title}</span>
+        {summary}
+        <span class="visually-hidden">: {title}</span>
       </summary>
       <div class="gallery-grid" set:html={html} />
     </details>

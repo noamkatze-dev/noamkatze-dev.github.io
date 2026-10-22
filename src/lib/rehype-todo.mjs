@@ -8,7 +8,7 @@
 // No dependencies: walks the HAST tree by hand.
 import { existsSync, readdirSync } from 'node:fs';
 import { join, dirname, basename, extname } from 'node:path';
-import { TODO_RE, stripTodo, isTodoOnly } from './todo.mjs';
+import { TODO_RE, stripTodo, isTodoOnly, bindLast } from './todo.mjs';
 
 const SKIP = new Set(['code', 'pre', 'script', 'style', 'mark']);
 const IMAGES = join(process.cwd(), 'src/assets/images');
@@ -126,12 +126,49 @@ function dropEmptySections(root) {
   root.children = kids.filter((_, i) => keep[i]);
 }
 
+/* ---------- both: no lonely last word ---------- */
+
+// Headings are left to `text-wrap: balance` (binding big uppercase words could overflow on phones).
+const BIND = new Set(['p', 'li', 'figcaption', 'dd', 'blockquote']);
+
+function lastTextNode(node) {
+  const kids = node.children || [];
+  for (let i = kids.length - 1; i >= 0; i--) {
+    const c = kids[i];
+    if (c.type === 'text') {
+      if (c.value.trim() !== '') return c;
+    } else if (c.type === 'element' && !SKIP.has(c.tagName) && !BIND.has(c.tagName)) {
+      const t = lastTextNode(c);
+      if (t) return t;
+      return null;
+    } else if (c.type === 'element' || c.type === 'mdxJsxFlowElement' || c.type === 'mdxJsxTextElement') {
+      return null;
+    }
+  }
+  return null;
+}
+
+function bindWords(node) {
+  if (!node || !Array.isArray(node.children)) return;
+  if (node.type === 'element' && SKIP.has(node.tagName)) return;
+  if (node.type === 'element' && BIND.has(node.tagName)) {
+    const t = lastTextNode(node);
+    if (t) t.value = bindLast(t.value);
+  }
+  node.children.forEach(bindWords);
+}
+
 export default function rehypeTodo(options = {}) {
   // `astro build` → production. Detected here so astro.config.mjs needs no change.
   const prod = options.prod ?? (process.argv.includes('build') || process.env.NODE_ENV === 'production');
   return (tree) => {
-    if (!prod) return highlight(tree);
+    if (!prod) {
+      bindWords(tree);
+      highlight(tree);
+      return;
+    }
     strip(tree);
     dropEmptySections(tree);
+    bindWords(tree);
   };
 }

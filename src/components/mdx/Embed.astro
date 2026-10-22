@@ -1,8 +1,8 @@
 ---
 /**
  * Click-to-load embed (YouTube, Vimeo, Figma, or any page that allows framing).
- * Nothing third-party loads until the visitor clicks. In production an embed
- * whose url is still a TODO renders nothing.
+ * Nothing third-party loads until the visitor clicks (handled in src/scripts/ui.js).
+ * In production an embed whose url is still a TODO renders nothing.
  */
 import TodoText from '../TodoText.astro';
 import { isTodoOnly } from '../../lib/todo.mjs';
@@ -19,80 +19,72 @@ interface Props {
 const { url, title, ratio = '16 / 9', description, caption, action } = Astro.props;
 const todo = isTodoOnly(url);
 const prod = import.meta.env.PROD;
+const render = !(todo && prod);
 
-function toEmbed(u: string): { src: string; kind: 'video' | 'prototype' | 'site' } {
+let src = '';
+let kind = 'site';
+if (!todo) {
   try {
-    const p = new URL(u);
-    const host = p.hostname.replace(/^www\./, '');
+    const p = new URL(url);
+    const host = p.hostname.replace('www.', '');
+    const lastSegment = p.pathname.split('/').filter(Boolean).pop() ?? '';
     if (host === 'youtu.be' || host.endsWith('youtube.com')) {
-      const id = host === 'youtu.be' ? p.pathname.slice(1) : (p.searchParams.get('v') ?? p.pathname.split('/').filter(Boolean).pop());
-      return { src: `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`, kind: 'video' };
+      const id = host === 'youtu.be' ? lastSegment : (p.searchParams.get('v') ?? lastSegment);
+      src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+      kind = 'video';
+    } else if (host.endsWith('vimeo.com')) {
+      src = 'https://player.vimeo.com/video/' + lastSegment + '?autoplay=1&dnt=1';
+      kind = 'video';
+    } else if (host.endsWith('figma.com')) {
+      src = 'https://www.figma.com/embed?embed_host=share&url=' + encodeURIComponent(url);
+      kind = 'prototype';
+    } else {
+      src = url;
     }
-    if (host.endsWith('vimeo.com')) {
-      return { src: `https://player.vimeo.com/video/${p.pathname.split('/').filter(Boolean).pop()}?autoplay=1&dnt=1`, kind: 'video' };
-    }
-    if (host.endsWith('figma.com')) {
-      return { src: `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(u)}`, kind: 'prototype' };
-    }
-    return { src: u, kind: 'site' };
   } catch {
-    return { src: '', kind: 'site' };
+    src = '';
   }
 }
-const { src, kind } = todo ? { src: '', kind: 'site' as const } : toEmbed(url);
-const label = action ?? (kind === 'video' ? 'Play video' : kind === 'prototype' ? 'Load prototype' : 'Load live demo');
+let label = 'Load live demo';
+if (kind === 'video') label = 'Play video';
+if (kind === 'prototype') label = 'Load prototype';
+if (action) label = action;
+const frameStyle = '--ratio: ' + ratio;
+const hasCaption = Boolean(caption);
 ---
 
 {
-  !(todo && prod) && (
-    <figure class="embed">
-      <div class="embed-frame" style={`--ratio: ${ratio}`} data-embed-src={src || undefined} data-embed-title={title}>
+  render && (
+    <figure class="embed shot">
+      <div class="embed-frame" style={frameStyle} data-embed-src={src} data-embed-title={title}>
         <div class="embed-poster">
-          <p><strong>{title}</strong></p>
-          {todo ? (
+          <p>
+            <strong>{title}</strong>
+          </p>
+          {todo && (
             <p>
               <TodoText text={url} />
             </p>
-          ) : (
-            <>
-              {description && <p class="muted">{description}</p>}
-              <button type="button" class="button" data-embed-load>
-                {label}
-                <span class="visually-hidden">: {title}</span>
-              </button>
-            </>
+          )}
+          {!todo && description && <p class="muted">{description}</p>}
+          {!todo && (
+            <button type="button" class="btn" data-embed-load>
+              {label}
+              <span class="visually-hidden">: {title}</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </button>
           )}
         </div>
       </div>
       <figcaption>
-        {caption && <TodoText text={caption} />}
+        {hasCaption && <TodoText text={caption} />}
+        {hasCaption && !todo && ' '}
         {!todo && (
-          <>
-            {caption && ' '}
-            <a href={url} target="_blank" rel="noopener noreferrer">
-              Open in a new tab<span class="visually-hidden"> (opens in a new tab)</span>
-            </a>
-          </>
+          <a class="ul" href={url} target="_blank" rel="noopener noreferrer">
+            Open in a new tab<span class="visually-hidden"> (opens in a new tab)</span>
+          </a>
         )}
       </figcaption>
     </figure>
   )
 }
-
-<script>
-  document.querySelectorAll<HTMLButtonElement>('[data-embed-load]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const frame = btn.closest<HTMLElement>('[data-embed-src]');
-      const src = frame?.dataset.embedSrc;
-      if (!frame || !src) return;
-      const iframe = document.createElement('iframe');
-      iframe.src = src;
-      iframe.title = frame.dataset.embedTitle ?? 'Embedded content';
-      iframe.allow = 'autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media';
-      iframe.allowFullscreen = true;
-      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-      frame.replaceChildren(iframe);
-      iframe.focus();
-    });
-  });
-</script>

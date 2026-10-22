@@ -1,10 +1,11 @@
 ---
 /**
  * Optimized image (AVIF/WebP via <Picture>, width/height set, lazy unless `eager`).
- * `file` is a path under src/assets/images/. If the file doesn't exist, a labelled
- * placeholder is shown in dev only; production renders nothing.
+ * `file` is a path under src/assets/images/. Missing files show a labelled
+ * placeholder in dev only; production renders nothing.
+ * `zoom` wraps the image in a button that opens the lightbox (src/scripts/ui.js).
  */
-import { Picture } from 'astro:assets';
+import { Picture, getImage } from 'astro:assets';
 import { findImage } from '../lib/images';
 import { stripTodo } from '../lib/todo.mjs';
 
@@ -15,6 +16,7 @@ interface Props {
   ratio?: string;
   sizes?: string;
   eager?: boolean;
+  zoom?: boolean;
   class?: string;
 }
 
@@ -23,20 +25,49 @@ const {
   alt,
   note,
   ratio = '16 / 10',
-  sizes = '(min-width: 1216px) 1120px, calc(100vw - 48px)',
+  sizes = '(min-width: 960px) 880px, calc(100vw - 48px)',
   eager = false,
+  zoom = false,
   class: className,
 } = Astro.props;
 
 const img = await findImage(file);
-const widths = img
-  ? [...new Set([480, 800, 1120, 1600, 2240].filter((w) => w < img.width).concat(Math.min(img.width, 2400)))]
-  : [];
+const dev = !import.meta.env.PROD;
 const cleanAlt = stripTodo(alt);
+
+const candidates = [320, 480, 640, 880, 1200, 1760];
+const widths = img ? Array.from(new Set(candidates.filter((w) => w < img.width).concat([Math.min(img.width, 2000)]))) : [];
+
+let full = '';
+if (img && zoom) {
+  const big = await getImage({ src: img, width: Math.min(img.width, 2000), format: 'webp' });
+  full = big.src;
+}
+const zoomLabel = cleanAlt ? 'Enlarge image: ' + cleanAlt : 'Enlarge image';
+const placeholderStyle = 'aspect-ratio: ' + ratio;
+const placeholderLabel = 'Image placeholder: ' + alt;
+const placeholderPath = 'src/assets/images/' + file;
 ---
 
 {
-  img ? (
+  img && zoom && (
+    <button type="button" class="zoom" data-full={full} aria-label={zoomLabel}>
+      <Picture
+        src={img}
+        alt={cleanAlt}
+        formats={['avif', 'webp']}
+        widths={widths}
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        fetchpriority={eager ? 'high' : 'auto'}
+        class={className}
+      />
+    </button>
+  )
+}
+{
+  img && !zoom && (
     <Picture
       src={img}
       alt={cleanAlt}
@@ -44,16 +75,17 @@ const cleanAlt = stripTodo(alt);
       widths={widths}
       sizes={sizes}
       loading={eager ? 'eager' : 'lazy'}
-      decoding={eager ? 'sync' : 'async'}
+      decoding="async"
       fetchpriority={eager ? 'high' : 'auto'}
       class={className}
     />
-  ) : (
-    !import.meta.env.PROD && (
-      <div class="placeholder" style={`aspect-ratio: ${ratio}`} role="img" aria-label={`Image placeholder: ${alt}`}>
-        <code>src/assets/images/{file}</code>
-        {note && <span>{note}</span>}
-      </div>
-    )
+  )
+}
+{
+  !img && dev && (
+    <div class="placeholder" style={placeholderStyle} role="img" aria-label={placeholderLabel}>
+      <code>{placeholderPath}</code>
+      {note && <span>{note}</span>}
+    </div>
   )
 }

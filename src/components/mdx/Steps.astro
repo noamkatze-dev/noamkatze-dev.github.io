@@ -1,11 +1,23 @@
 ---
-/** A plain numbered list: <Steps items={['Research', 'Wireframes', 'Prototype']} /> */
+/** Process steps in a black band with large numerals: <Steps items={['Research', 'Wireframes']} /> */
+import { bindLast } from '../../lib/todo.mjs';
+
 interface Props {
   items: string[];
 }
 const { items } = Astro.props;
+const steps = items.map((text, i) => ({ text: bindLast(text), n: i < 9 ? '0' + (i + 1) : String(i + 1) }));
 ---
 
-<ol class="steps">
-  {items.map((item) => <li>{item}</li>)}
-</ol>
+<div class="band">
+  <ol class="band-steps">
+    {
+      steps.map((s) => (
+        <li>
+          <span class="num" aria-hidden="true">{s.n}</span>
+          <span class="step-text">{s.text}</span>
+        </li>
+      ))
+    }
+  </ol>
+</div>

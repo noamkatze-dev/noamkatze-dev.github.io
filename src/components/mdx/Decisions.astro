@@ -1,6 +1,7 @@
 ---
+/** Wrapper for <Decision> items. Omitted when none of them has content. */
 const html = await Astro.slots.render('default');
-const hasContent = html.trim().length > 0;
+const hasContent = html.includes('class="decision"');
 ---
 
 {hasContent && <div class="decisions" set:html={html} />}

@@ -14,50 +14,68 @@ export const getStaticPaths = (async () => {
   const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
   return projects.map((project, i) => ({
     params: { slug: project.id },
-    props: { project, next: projects[(i + 1) % projects.length] },
+    props: { project, index: i + 1, next: projects[(i + 1) % projects.length] },
   }));
 }) satisfies GetStaticPaths;
 
-const { project, next } = Astro.props;
+const { project, index, next } = Astro.props;
 const d = project.data;
 const { Content } = await render(project);
 const prod = import.meta.env.PROD;
-const shown = (v?: string) => Boolean(v) && (!prod || !isTodoOnly(v));
+
+function shown(v?: string) {
+  if (!v) return false;
+  return !prod || !isTodoOnly(v);
+}
 
 // Social image: the cover, cropped to 1200×630.
 const coverImg = await findImage(d.cover);
-const ogImage = coverImg ? (await getImage({ src: coverImg, width: 1200, height: 630, format: 'jpg', fit: 'cover' })).src : undefined;
+let ogImage: string | undefined = undefined;
+if (coverImg) {
+  const og = await getImage({ src: coverImg, width: 1200, height: 630, format: 'jpg', fit: 'cover' });
+  ogImage = og.src;
+}
 
-const links = [...d.links.filter((l) => l.primary), ...d.links.filter((l) => !l.primary)];
+const ordered = d.links.filter((l) => l.primary).concat(d.links.filter((l) => !l.primary));
+const links = ordered.map((l, i) => ({
+  label: l.label,
+  url: l.url,
+  todo: isTodoOnly(l.url),
+  filled: i === 0,
+}));
+const visibleLinks = links.filter((l) => !l.todo || !prod);
 const tools = d.tools.filter((t) => shown(t));
 const meta = [
   { label: 'Role', value: d.role },
   { label: 'Team', value: d.team },
   { label: 'Timeframe', value: d.duration },
 ].filter((m) => shown(m.value));
+const number = index < 10 ? '0' + index : String(index);
+const nextHref = next ? url('/work/' + next.id + '/') : '';
+const showNext = Boolean(next) && next.id !== project.id;
 ---
 
-<Base title={d.title} description={d.summary} image={ogImage} imageAlt={d.coverAlt} type="article">
+<Base title={d.title} description={d.summary} image={ogImage} imageAlt={d.coverAlt} type="article" progress>
   <article>
     <header class="cs-head wrap">
-      <p class="small muted"><TodoText text={d.context} /> · {d.year}</p>
+      <p class="label">{number} · <TodoText text={d.context} /> · {d.year}</p>
       <h1>{d.title}</h1>
       {d.tagline && <p class="lead">{d.tagline}</p>}
       <p class="lead muted"><TodoText text={d.summary} /></p>
 
       {
-        links.some((l) => shown(l.url)) && (
+        visibleLinks.length > 0 && (
           <div class="buttons">
-            {links.map((l) =>
-              isTodoOnly(l.url) ? (
-                !prod && (
-                  <span class="button" aria-disabled="true">
-                    {l.label}: <mark class="todo">{l.url}</mark>
-                  </span>
-                )
+            {visibleLinks.map((l) =>
+              l.todo ? (
+                <span class="btn btn-outline" aria-disabled="true">
+                  {l.label}: <mark class="todo">{l.url}</mark>
+                </span>
               ) : (
-                <a class="button" href={l.url} target="_blank" rel="noopener noreferrer">
-                  {l.label} ↗<span class="visually-hidden"> (opens in a new tab)</span>
+                <a class={l.filled ? 'btn' : 'btn btn-outline'} href={l.url} target="_blank" rel="noopener noreferrer">
+                  {l.label}
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                  <span class="arrow" aria-hidden="true">→</span>
                 </a>
               ),
             )}
@@ -103,7 +121,7 @@ const meta = [
       </dl>
 
       <figure class="cs-cover">
-        <Media file={d.cover} alt={d.coverAlt} note={d.coverNote} ratio="16 / 9" eager />
+        <Media file={d.cover} alt={d.coverAlt} note={d.coverNote} ratio="16 / 9" eager zoom />
       </figure>
     </header>
 
@@ -113,10 +131,12 @@ const meta = [
   </article>
 
   {
-    next && next.id !== project.id && (
+    showNext && (
       <nav class="wrap next" aria-label="Next project">
-        <p class="small muted">Next project</p>
-        <a href={url(`/work/${next.id}/`)}>{next.data.title} →</a>
+        <p class="label">Next project</p>
+        <a class="next-link" href={nextHref}>
+          {next.data.title} <span class="arrow" aria-hidden="true">→</span>
+        </a>
       </nav>
     )
   }

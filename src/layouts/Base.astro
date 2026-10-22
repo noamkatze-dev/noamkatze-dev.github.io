@@ -16,25 +16,30 @@ interface Props {
   imageAlt?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
+  /** Show the reading-progress bar under the header (case studies). */
+  progress?: boolean;
 }
 
 const {
   title,
   description = site.description,
   image,
-  imageAlt = `${site.name}, ${site.role}`,
+  imageAlt = site.name + ', ' + site.role,
   type = 'website',
   noindex = false,
+  progress = false,
 } = Astro.props;
 
-const fullTitle = title ? `${title} | ${site.name}, ${site.role}` : site.title;
+const fullTitle = title ? title + ' | ' + site.name + ', ' + site.role : site.title;
 const siteUrl = Astro.site ?? new URL('http://localhost:4321');
 // GitHub Pages serves every page as /path/, so canonical URLs end in a slash (matches the sitemap).
 let path = Astro.url.pathname;
-if (!path.endsWith('/') && !/\.[a-z0-9]+$/i.test(path)) path += '/';
+const looksLikeFile = path.split('/').pop()?.includes('.') ?? false;
+if (!path.endsWith('/') && !looksLikeFile) path = path + '/';
 const canonical = new URL(path, siteUrl).href;
 const ogImage = new URL(image ?? url('/og-default.png'), siteUrl).href;
-const cleanDescription = stripTodo(description).replace(/\s+/g, ' ').trim();
+const cleanDescription = stripTodo(description).split(/\s+/).join(' ').trim();
+const ogSiteName = site.name + ', ' + site.role;
 ---
 
 <!doctype html>
@@ -57,7 +62,7 @@ const cleanDescription = stripTodo(description).replace(/\s+/g, ' ').trim();
     <link rel="sitemap" href={url('/sitemap-index.xml')} />
 
     <meta property="og:type" content={type} />
-    <meta property="og:site_name" content={`${site.name}, ${site.role}`} />
+    <meta property="og:site_name" content={ogSiteName} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={cleanDescription} />
     <meta property="og:url" content={canonical} />
@@ -73,10 +78,22 @@ const cleanDescription = stripTodo(description).replace(/\s+/g, ' ').trim();
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Header />
+    <Header progress={progress} />
     <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer />
+
+    <dialog class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close">Close<span class="visually-hidden"> enlarged image</span></button>
+      <figure>
+        <img class="lightbox-img" src="data:," alt="" />
+        <figcaption class="lightbox-caption"></figcaption>
+      </figure>
+    </dialog>
+
+    <div class="cursor-label" aria-hidden="true">View</div>
+
+    <script src="../scripts/ui.js"></script>
   </body>
 </html>

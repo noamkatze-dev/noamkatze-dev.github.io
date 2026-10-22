@@ -1,4 +1,9 @@
 ---
+/**
+ * A key decision. Wrap several in <Decisions>.
+ * <Decision title="..." choice="What I decided" why="Why" tradeoff="What it cost" />
+ * Fields that are still TODO are hidden in production; an all-TODO decision renders nothing.
+ */
 import TodoText from '../TodoText.astro';
 import { isTodoOnly } from '../../lib/todo.mjs';
 
@@ -8,35 +13,41 @@ interface Props {
   why: string;
   tradeoff: string;
 }
-
 const { title, choice, why, tradeoff } = Astro.props;
 const prod = import.meta.env.PROD;
-const show = (v: string) => !prod || !isTodoOnly(v);
-
-const showTitle = show(title);
+function show(v: string) {
+  return !prod || !isTodoOnly(v);
+}
 const rows = [
   { label: 'Decision', value: choice },
   { label: 'Why', value: why },
   { label: 'Trade-off', value: tradeoff },
 ].filter((r) => show(r.value));
-const visible = showTitle || rows.length > 0;
-const blocks = visible ? [true] : [];
+const showTitle = show(title);
+const render = showTitle || rows.length > 0;
+const hasRows = rows.length > 0;
 ---
 
 {
-  blocks.map(() => (
+  render && (
     <div class="decision">
-      {showTitle && <h3><TodoText text={title} /></h3>}
-      {rows.length > 0 && (
+      {showTitle && (
+        <h3>
+          <TodoText text={title} />
+        </h3>
+      )}
+      {hasRows && (
         <dl>
           {rows.map((r) => (
             <div>
               <dt>{r.label}</dt>
-              <dd><TodoText text={r.value} /></dd>
+              <dd>
+                <TodoText text={r.value} />
+              </dd>
             </div>
           ))}
         </dl>
       )}
     </div>
-  ))
+  )
 }

@@ -1,6 +1,6 @@
 ---
 /**
- * One version in the iteration list. `why` and `gaveUp` are the most valuable
+ * One version in the iteration band. `why` and `gaveUp` are the most valuable
  * lines on the page — keep them honest. TODO-only lines are hidden in production.
  *
  * <IterationStage n={1} title="Ethical Insights" file="..." alt="..." why="..." gaveUp="...">
@@ -10,7 +10,7 @@
 import Media from '../Media.astro';
 import VideoMedia from '../VideoMedia.astro';
 import TodoText from '../TodoText.astro';
-import { isTodoOnly } from '../../lib/todo.mjs';
+import { isTodoOnly, bindLast } from '../../lib/todo.mjs';
 
 interface Props {
   n: number;
@@ -22,31 +22,40 @@ interface Props {
   why?: string;
   gaveUp?: string;
 }
-const { title, file, video, alt, note, why, gaveUp } = Astro.props;
+const { n, title, file, video, alt, note, why, gaveUp } = Astro.props;
 const prod = import.meta.env.PROD;
-const show = (v?: string) => Boolean(v) && (!prod || !isTodoOnly(v));
+function show(v?: string) {
+  if (!v) return false;
+  return !prod || !isTodoOnly(v);
+}
+const showWhy = show(why);
+const showGaveUp = show(gaveUp);
+const num = n < 10 ? '0' + n : String(n);
+const heading = bindLast(title);
+const imageFile = file ?? '';
 ---
 
-<li>
-  <div class="text">
-    <h3>{title}</h3>
+<li class="flow-item">
+  <span class="num" aria-hidden="true">{num}</span>
+  <div class="flow-text">
+    <h3>{heading}</h3>
     <slot />
     {
-      show(why) && (
+      showWhy && (
         <p>
           <strong>Why I changed it:</strong> <TodoText text={why} />
         </p>
       )
     }
     {
-      show(gaveUp) && (
+      showGaveUp && (
         <p>
           <strong>What I gave up:</strong> <TodoText text={gaveUp} />
         </p>
       )
     }
   </div>
-  <figure>
-    {video ? <VideoMedia src={video} label={alt} /> : <Media file={file ?? ''} alt={alt} note={note} />}
+  <figure class="shot">
+    {video ? <VideoMedia src={video} label={alt} /> : <Media file={imageFile} alt={alt} note={note} zoom />}
   </figure>
 </li>

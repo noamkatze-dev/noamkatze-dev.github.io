@@ -2,6 +2,11 @@
 import { site } from '../data/site';
 import { url } from '../lib/url';
 
+interface Props {
+  progress?: boolean;
+}
+const { progress = false } = Astro.props;
+
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname.replace(base, '') || '/';
 const nav = [
@@ -12,14 +17,14 @@ const nav = [
 ---
 
 <header class="site-header">
-  <div class="wrap">
+  <div class="wrap header-inner">
     <a class="name" href={url('/')}>{site.name}</a>
     <nav aria-label="Main">
       <ul>
         {
           nav.map((item) => (
             <li>
-              <a href={item.href} aria-current={item.current ? 'page' : undefined}>
+              <a class="ul" href={item.href} aria-current={item.current ? 'page' : undefined}>
                 {item.label}
               </a>
             </li>
@@ -28,4 +33,5 @@ const nav = [
       </ul>
     </nav>
   </div>
+  {progress && <div class="progress" aria-hidden="true"><span class="progress-bar"></span></div>}
 </header>

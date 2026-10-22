@@ -1,14 +1,32 @@
 ---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { site } from '../data/site';
+import { url } from '../lib/url';
+
 const year = new Date().getFullYear();
+const hasCv = existsSync(join(process.cwd(), 'public', 'cv.pdf'));
+const mailto = 'mailto:' + site.email;
 ---
 
-<footer class="site-footer" id="contact">
+<footer class="site-footer band-black" id="contact">
   <div class="wrap">
-    <p>
-      <a href={`mailto:${site.email}`}>{site.email}</a> · <a href={site.linkedin} rel="me noopener" target="_blank"
-        >LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a
-      > · © {year}
-    </p>
+    <h2 class="footer-title">Contact</h2>
+    <p class="footer-mail"><a class="ul" href={mailto}>{site.email}</a></p>
+    <div class="buttons">
+      <a class="btn btn-light" href={site.linkedin} rel="me noopener" target="_blank">
+        LinkedIn<span class="visually-hidden"> (opens in a new tab)</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+      {
+        hasCv && (
+          <a class="btn btn-outline-light" href={url(site.cv)} download>
+            Download CV
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        )
+      }
+    </div>
+    <p class="footer-meta">{site.name}, {site.role} · © {year}</p>
   </div>
 </footer>

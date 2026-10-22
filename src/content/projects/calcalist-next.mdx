@@ -134,50 +134,72 @@ The bubble is the core motif because it embodies the mission: giving access to t
 
 ### Key screens
 
-<FigureGrid cols={3}>
-  <Figure thumb file="calcalist-next/screen-home.png" alt="Conference home: You are now at a conference, INVESTECH at Dan Hotel Tel-Aviv, the current and next session, counters for new contacts, meetings and follow-ups, and new conference contacts as bubbles.">**Home at a conference.** What is happening now, what is next, and the people you have met, as bubbles.</Figure>
-  <Figure thumb file="calcalist-next/screen-scan.png" alt="Scan and connect: a camera view framing the QR code on a conference badge, with an upload-from-gallery option.">**Scan and connect.** Scan the QR code on someone’s badge to connect.</Figure>
-  <Figure thumb file="calcalist-next/screen-conference.png" alt="Conference page for INVESTECH: the day’s agenda from check-in at 09:00 to a startup pitch competition, with Schedule and Alerts tabs.">**Conference.** The day’s agenda, with live alerts in a second tab.</Figure>
-  <Figure thumb file="calcalist-next/screen-calendar.png" alt="Meeting calendar: a list of meetings with investors and entrepreneurs, each with time, date and conference.">**Meeting calendar.** Meetings booked at conferences, including requests to approve.</Figure>
-  <Figure thumb file="calcalist-next/screen-member-profile.png" alt="Member profile of Ron Levi: photo, a Send a message button, fields of expertise and experience.">**Member profile.** Expertise and experience at a glance, one tap to message.</Figure>
-  <Figure thumb file="calcalist-next/screen-new-meeting.png" alt="New meeting form: topic, description, participant search with Add buttons, and time selection.">**New meeting.** Pick a topic, participants and a time.</Figure>
-</FigureGrid>
+<Screens label="Onboarding">
+  <Figure phone file="calcalist-next/screen-onboarding-1.png" alt="Onboarding 1: The elite business community." caption="Onboarding 1" />
+  <Figure phone file="calcalist-next/screen-onboarding-3.png" alt="Onboarding 3: What are your goals?" caption="Onboarding 3" />
+  <Figure phone file="calcalist-next/screen-sign-up.png" alt="Sign up form: full name, email, password, confirm password and a terms checkbox." caption="Sign up" />
+  <Figure phone file="calcalist-next/screen-customization.png" alt="Customization: goal chips to select and privacy settings." caption="Customization" />
+</Screens>
 
-<Gallery title="All other app screens">
-  <Figure thumb file="calcalist-next/screen-onboarding-1.png" alt="Onboarding 1: The elite business community." caption="Onboarding 1" />
-  <Figure thumb file="calcalist-next/screen-onboarding-3.png" alt="Onboarding 3: What are your goals?" caption="Onboarding 3" />
-  <Figure thumb file="calcalist-next/screen-log-in.png" alt="Log in with LinkedIn, Facebook, Google or Instagram, or with email and password." caption="Log in" />
-  <Figure thumb file="calcalist-next/screen-sign-up.png" alt="Sign up form: full name, email, password, confirm password and a terms checkbox." caption="Sign up" />
-  <Figure thumb file="calcalist-next/screen-customization-full.png" alt="Customization, full length: every goal option, privacy toggles and a Finish and start using button." caption="Customization, full" />
-  <Figure thumb file="calcalist-next/screen-home-get-connected.png" alt="Home before joining a conference: a large bubble with a plus and the label Get connected." caption="Home, get connected" />
-  <Figure thumb file="calcalist-next/screen-home-contacts.png" alt="New conference contacts shown as a cluster of profile bubbles above scheduled meetings." caption="Home, contacts" />
-  <Figure thumb file="calcalist-next/screen-conference-alerts.png" alt="Conference alerts: who arrived, which session is starting, who is on stage." caption="Conference alerts" />
-  <Figure thumb file="calcalist-next/screen-calendar-pending.png" alt="Meeting requests with Reschedule and Approve buttons." caption="Calendar, requests" />
-  <Figure thumb file="calcalist-next/screen-add-new-contacts.png" alt="Add new contacts: search, suggested people, or scan." caption="Add new contacts" />
-  <Figure thumb file="calcalist-next/screen-my-friends.png" alt="Contacts list with My contacts and New contacts tabs and search." caption="My contacts" />
-  <Figure thumb file="calcalist-next/screen-settings.png" alt="General settings: language, dark mode, auto sync, integrations and notifications." caption="Settings" />
-</Gallery>
+<Screens label="Connect">
+  <Figure phone file="calcalist-next/screen-home.png" alt="Conference home: You are now at a conference, INVESTECH at Dan Hotel Tel-Aviv, the current and next session, counters for new contacts, meetings and follow-ups, and new conference contacts as bubbles.">**Home at a conference.** What is happening now, what is next, and the people you have met, as bubbles.</Figure>
+  <Figure phone file="calcalist-next/screen-member-profile.png" alt="Member profile of Ron Levi: photo, a Send a message button, fields of expertise and experience.">**Member profile.** Expertise and experience at a glance, one tap to message.</Figure>
+  <Figure phone file="calcalist-next/screen-add-new-contacts.png" alt="Add new contacts: search, suggested people, or scan." caption="Add new contacts" />
+</Screens>
+
+<Screens label="Conference and calendar">
+  <Figure phone file="calcalist-next/screen-calendar.png" alt="Meeting calendar: a list of meetings with investors and entrepreneurs, each with time, date and conference.">**Meeting calendar.** Meetings booked at conferences, including requests to approve.</Figure>
+  <Figure phone file="calcalist-next/screen-conference-alerts.png" alt="Conference alerts: who arrived, which session is starting, who is on stage." caption="Conference alerts" />
+  <Figure phone file="calcalist-next/screen-calendar-pending.png" alt="Meeting requests with Reschedule and Approve buttons." caption="Calendar, requests" />
+</Screens>
+
+### From wireframe to final
+
+<WireframePair
+  title="Scan and connect"
+  wireframe="calcalist-next/wireframes/scan.png"
+  wireframeAlt="Wireframe of Scan for new connections: a dashed frame labeled Position bar-code within frame, with Scan and Choose from gallery buttons."
+  final="calcalist-next/screen-scan.png"
+  finalAlt="Scan and connect: a camera view framing the QR code on a conference badge, with an upload-from-gallery option."
+/>
+
+<WireframePair
+  title="Conference"
+  wireframe="calcalist-next/wireframes/conference.png"
+  wireframeAlt="Wireframe of the INVESTECH conference page at Dan Hotel Tel-Aviv: Calendar and Meetings tabs and a list of sessions from Check-in and breakfast at 09:00 to a startup pitch competition at 14:00."
+  final="calcalist-next/screen-conference.png"
+  finalAlt="Conference page for INVESTECH: the day’s agenda from check-in at 09:00 to a startup pitch competition, with Schedule and Alerts tabs."
+/>
+
+<WireframePair
+  title="New meeting"
+  wireframe="calcalist-next/wireframes/new-meeting.png"
+  wireframeAlt="Wireframe of New meeting: topic and description fields, participant search with Add buttons, time slots showing how many participants are available, and meeting location options."
+  final="calcalist-next/screen-new-meeting.png"
+  finalAlt="New meeting form: topic, description, participant search with Add buttons, and time selection."
+/>
 
 <Gallery title="Wireframes">
-  <Figure thumb file="calcalist-next/wireframe-splash.png" alt="Wireframe of the Splash screen." note="Splash wireframe." ratio="9 / 19.5" caption="Splash" />
-  <Figure thumb file="calcalist-next/wireframe-onboarding-1.png" alt="Wireframe of the Onboarding, step 1 screen." note="Onboarding, step 1 wireframe." ratio="9 / 19.5" caption="Onboarding, step 1" />
-  <Figure thumb file="calcalist-next/wireframe-onboarding-2.png" alt="Wireframe of the Onboarding, step 2 screen." note="Onboarding, step 2 wireframe." ratio="9 / 19.5" caption="Onboarding, step 2" />
-  <Figure thumb file="calcalist-next/wireframe-onboarding-3.png" alt="Wireframe of the Onboarding, step 3 screen." note="Onboarding, step 3 wireframe." ratio="9 / 19.5" caption="Onboarding, step 3" />
-  <Figure thumb file="calcalist-next/wireframe-onboarding-4.png" alt="Wireframe of the Onboarding, step 4 screen." note="Onboarding, step 4 wireframe." ratio="9 / 19.5" caption="Onboarding, step 4" />
-  <Figure thumb file="calcalist-next/wireframe-onboarding-5.png" alt="Wireframe of the Onboarding, step 5 screen." note="Onboarding, step 5 wireframe." ratio="9 / 19.5" caption="Onboarding, step 5" />
-  <Figure thumb file="calcalist-next/wireframe-log-in.png" alt="Wireframe of the Log in screen." note="Log in wireframe." ratio="9 / 19.5" caption="Log in" />
-  <Figure thumb file="calcalist-next/wireframe-sign-up.png" alt="Wireframe of the Sign up screen." note="Sign up wireframe." ratio="9 / 19.5" caption="Sign up" />
-  <Figure thumb file="calcalist-next/wireframe-home.png" alt="Wireframe of the Home screen." note="Home wireframe." ratio="9 / 19.5" caption="Home" />
-  <Figure thumb file="calcalist-next/wireframe-scan.png" alt="Wireframe of the Scan screen." note="Scan wireframe." ratio="9 / 19.5" caption="Scan" />
-  <Figure thumb file="calcalist-next/wireframe-profile.png" alt="Wireframe of the Profile screen." note="Profile wireframe." ratio="9 / 19.5" caption="Profile" />
-  <Figure thumb file="calcalist-next/wireframe-conference.png" alt="Wireframe of the Conference screen." note="Conference wireframe." ratio="9 / 19.5" caption="Conference" />
-  <Figure thumb file="calcalist-next/wireframe-calendar.png" alt="Wireframe of the Calendar screen." note="Calendar wireframe." ratio="9 / 19.5" caption="Calendar" />
-  <Figure thumb file="calcalist-next/wireframe-add-a-friend.png" alt="Wireframe of the Add a friend screen." note="Add a friend wireframe." ratio="9 / 19.5" caption="Add a friend" />
-  <Figure thumb file="calcalist-next/wireframe-my-friends.png" alt="Wireframe of the My friends screen." note="My friends wireframe." ratio="9 / 19.5" caption="My friends" />
-  <Figure thumb file="calcalist-next/wireframe-member-profile.png" alt="Wireframe of the Member profile screen." note="Member profile wireframe." ratio="9 / 19.5" caption="Member profile" />
-  <Figure thumb file="calcalist-next/wireframe-customization.png" alt="Wireframe of the Customization screen." note="Customization wireframe." ratio="9 / 19.5" caption="Customization" />
-  <Figure thumb file="calcalist-next/wireframe-settings.png" alt="Wireframe of the Settings screen." note="Settings wireframe." ratio="9 / 19.5" caption="Settings" />
-  <Figure thumb file="calcalist-next/wireframe-new-meeting.png" alt="Wireframe of the New meeting screen." note="New meeting wireframe." ratio="9 / 19.5" caption="New meeting" />
+  <Figure thumb phone file="calcalist-next/wireframes/home.png" alt="Wireframe of the Home screen." caption="Home" />
+  <Figure thumb phone file="calcalist-next/wireframes/member-profile.png" alt="Wireframe of the Member profile screen." caption="Member profile" />
+  <Figure thumb phone file="calcalist-next/wireframes/calendar-day.png" alt="Wireframe of the Calendar, day view screen." caption="Calendar, day view" />
+  <Figure thumb phone file="calcalist-next/wireframes/calendar-pending.png" alt="Wireframe of the Calendar, requests screen." caption="Calendar, requests" />
+  <Figure thumb phone file="calcalist-next/wireframes/add-new-contacts.png" alt="Wireframe of the Add new contacts screen." caption="Add new contacts" />
+  <Figure thumb phone file="calcalist-next/wireframes/my-friends.png" alt="Wireframe of the Contacts screen." caption="Contacts" />
+  <Figure thumb phone file="calcalist-next/wireframes/customization.png" alt="Wireframe of the Customization screen." caption="Customization" />
+  <Figure thumb phone file="calcalist-next/wireframes/settings.png" alt="Wireframe of the Settings screen." caption="Settings" />
+  <Figure thumb phone file="calcalist-next/wireframes/onboarding-1.png" alt="Wireframe of the Onboarding 1 screen." caption="Onboarding 1" />
+  <Figure thumb phone file="calcalist-next/wireframes/log-in.png" alt="Wireframe of the Log in screen." caption="Log in" />
+  <Figure thumb phone file="calcalist-next/wireframes/sign-up.png" alt="Wireframe of the Sign up screen." caption="Sign up" />
+  <Figure thumb phone file="calcalist-next/wireframes/profile.png" alt="Wireframe of the My profile screen." caption="My profile" />
+</Gallery>
+
+<Gallery title="All other app screens">
+  <Figure thumb phone file="calcalist-next/screen-log-in.png" alt="Log in with LinkedIn, Facebook, Google or Instagram, or with email and password." caption="Log in" />
+  <Figure thumb phone file="calcalist-next/screen-home-get-connected.png" alt="Home before joining a conference: a large bubble with a plus and the label Get connected." caption="Home, get connected" />
+  <Figure thumb phone file="calcalist-next/screen-home-contacts.png" alt="New conference contacts shown as a cluster of profile bubbles above scheduled meetings." caption="Home, contacts" />
+  <Figure thumb phone file="calcalist-next/screen-my-friends.png" alt="Contacts list with My contacts and New contacts tabs and search." caption="My contacts" />
+  <Figure thumb phone file="calcalist-next/screen-settings.png" alt="General settings: language, dark mode, auto sync, integrations and notifications." caption="Settings" />
 </Gallery>
 
 ### Website

@@ -1,0 +1,32 @@
+---
+/**
+ * A wireframe next to the final screen, same size.
+ * <WireframePair title="Scan" wireframe="calcalist-next/wireframes/scan.png" final="calcalist-next/screen-scan.png"
+ *   wireframeAlt="..." finalAlt="..." />
+ */
+import Media from '../Media.astro';
+
+interface Props {
+  title: string;
+  wireframe: string;
+  final: string;
+  wireframeAlt: string;
+  finalAlt: string;
+}
+const { title, wireframe, final, wireframeAlt, finalAlt } = Astro.props;
+const sizes = '(min-width: 700px) 240px, 42vw';
+---
+
+<div class="pair">
+  <p class="label">{title}</p>
+  <div class="pair-row">
+    <figure class="phone">
+      <Media file={wireframe} alt={wireframeAlt} ratio="9 / 19.5" sizes={sizes} zoom />
+      <figcaption>Wireframe</figcaption>
+    </figure>
+    <figure class="phone">
+      <Media file={final} alt={finalAlt} ratio="9 / 19.5" sizes={sizes} zoom />
+      <figcaption>Final</figcaption>
+    </figure>
+  </div>
+</div>

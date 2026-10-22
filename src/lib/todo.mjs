@@ -44,3 +44,19 @@ export function stripTodo(input, { keepEdges = false } = {}) {
 export function isTodoOnly(s) {
   return stripTodo(s).replace(/[\s.,;:!?()–-]/g, '') === '';
 }
+
+/**
+ * Binds the last two words with a non-breaking space so a paragraph, caption
+ * or heading never ends with one lonely word. Text is otherwise unchanged.
+ * Skipped when the last word looks like a URL or email.
+ */
+export function bindLast(input) {
+  const s = String(input ?? '');
+  const trimmed = s.replace(/\s+$/, '');
+  const tail = s.slice(trimmed.length);
+  const i = trimmed.search(/\s+\S+$/);
+  if (i <= 0) return s;
+  const last = trimmed.slice(i).trim();
+  if (/[/@]/.test(last) || last.length > 18) return s;
+  return trimmed.slice(0, i) + ' ' + last + tail;
+}
