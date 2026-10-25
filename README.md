@@ -43,7 +43,9 @@ Each case study is one file in `src/content/projects/`. The file name becomes th
 
 **Body**: write normal Markdown. Each `## Heading` becomes a section: title on the left, text on the right. Omit any section that doesn't apply.
 
-**Frontmatter extras for the page top:** `shortTitle` (big title and Home card name), `heroTitle: false` (open with media only), and `hero: { file | video, alt, width, radius }` (defaults to the cover, 888px wide).
+**Frontmatter extras:** `teaser` (one line on the Home card), `card` (Home card image).
+
+**For the page top:** `shortTitle` (big title and Home card name), `heroTitle: false` (open with media only), and `hero: { file | video, alt, width, radius }` (defaults to the cover, 888px wide).
 
 **Components** you can use anywhere in the body, without importing them:
 
@@ -68,11 +70,18 @@ Each case study is one file in `src/content/projects/`. The file name becomes th
 <Phones> <Figure phone file="..." alt="..." /> <Figure phone ... /> </Phones>
 
 <Persona title="Data Analyst" photo="..." background={["...", "..."]} workflow={["..."]} goals={["..."]} />
+<Decisions> <Decision title="..." choice="..." why="..." tradeoff="..." /> </Decisions>   // numbered decision rows
+<Stats items={[{ value: "16", label: "images per session" }]} />                       // big numbers
+<Pairs dark> <WireframePair title="Scan" wireframe="..." final="..." wireframeAlt="..." finalAlt="..." /> </Pairs>
 <Checklist good={["What worked"]} bad={["What didn't"]} />
 <Cta href="https://..." label="Explore the feature" />
 ```
 
-Older components (`Figure`, `FigureGrid`, `Gallery`, `Embed`, `Decisions`, `Stats`, `Swatches`, `Callout`, `WireframePair`) still work but are not used in the Wix layout.
+Older components (`FigureGrid`, `Gallery`, `Embed`, `Swatches`, `Callout`) still work but are not used in the current layout.
+
+Every video plays muted and looped while it's on screen; clips with sound get a "Sound on" button. Screens and videos get rounded corners automatically. Images are always shown whole (never cropped or stretched).
+
+Each case study ends with a link to the next project (the last one links back to the first), following `order`. Home cards use `shortTitle`, `teaser` and `card` (image) when set.
 
 MDX gotchas: don't use bare `{`, `}` or `<` in normal text. Inside `"..."` attributes, use curly quotes “ ” instead of straight double quotes.
 
@@ -80,7 +89,7 @@ MDX gotchas: don't use bare `{`, `}` or `<` in normal text. Inside `"..."` attri
 Anything you don't know yet is written as `[TODO: what I need]`. In `npm run dev` these are **highlighted** on the page. In the production build (what GitHub Pages serves) they are removed automatically, together with the sentence they sit in; sections, links, embeds and galleries that only contained TODOs are left out. Unfinished links (`url: "[TODO link]"`) show as a disabled button in dev and are hidden in production. Run `npm run todos` to refresh `TODO.md`.
 
 ### Home, About, contact
-Edit `src/data/site.ts`: hero headline (with two alternatives in a comment), support line, About text, skills, timeline, recognition, email, LinkedIn.
+Edit `src/data/site.ts`: hero headline, support line, the short About text on Home (`aboutTeaser`), the About page bio, achievements, design skills (each linked to a project), tools, experience, education, email, LinkedIn.
 
 ### CV
 Replace `public/cv.pdf` with your real CV and keep the same file name.
