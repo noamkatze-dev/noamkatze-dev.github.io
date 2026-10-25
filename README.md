@@ -3,7 +3,7 @@
 My portfolio: a fast, static site built with [Astro](https://astro.build), plain CSS and a few lines of vanilla JS. It's hosted on GitHub Pages.
 
 - **Content**: Markdown/MDX case studies in `src/content/projects/`, global copy in `src/data/site.ts`
-- **Design**: every color, font, size and spacing value is a CSS variable in `src/styles/tokens.css`
+- **Design**: a 1:1 rebuild of the Wix Studio design (noamkatze.wixstudio.com/my-site-6): black on white, Heebo (self-hosted in `public/fonts/`, OFL licence included), uppercase section titles on the left, text from the middle of the page. Desktop sizes were measured on the Wix page at 1440px and written in `--u` units in `src/styles/global.css`, so the layout scales with the window like Wix Studio; below 1100px it stacks into one column
 - **To-do list**: `TODO.md` lists every unfinished marker and missing image. Regenerate it with `npm run todos`.
 
 ---
@@ -38,51 +38,46 @@ Each case study is one file in `src/content/projects/`. The file name becomes th
 | `tags` | Small chips on the home card |
 | `order` | Position on the home page (1 = first, shown large) |
 | `cover`, `coverAlt`, `coverNote` | Cover image path, its alt text, and what it should show (used by the placeholder) |
-| `links` | Buttons under the title. `primary: true` makes it the accent button |
+| `links` | Buttons under the title (one black button style). `primary: true` puts a link first |
 | `draft: true` | Hides the project everywhere |
 
-**Body**: write normal Markdown. Each `## Heading` becomes a section and an entry in the sticky table of contents. Omit any section that doesn't apply.
+**Body**: write normal Markdown. Each `## Heading` becomes a section: title on the left, text on the right. Omit any section that doesn't apply.
+
+**Frontmatter extras for the page top:** `shortTitle` (big title and Home card name), `heroTitle: false` (open with media only), and `hero: { file | video, alt, width, radius }` (defaults to the cover, 888px wide).
 
 **Components** you can use anywhere in the body, without importing them:
 
 ```mdx
-<Figure file="250ms/calibration.png" alt="What's on screen" caption="Short caption" note="What to export" />
+<IntroMedia video="250ms/landing" width={796} alt="..." />          // centred media above the first section
 
-<FigureGrid cols={3}> ...Figures... </FigureGrid>
+<Steps items={["Research", "Wireframes", "Prototype"]} />           // work process row
 
-<Gallery title="Wireframes" count={12}>          // expandable, keyboard accessible
-  <Figure thumb file="..." alt="..." caption="..." />
-</Gallery>
-
-<Embed url="https://youtu.be/..." title="Promo video" />            // click-to-load YouTube/Vimeo/Figma
-<Embed url="https://www.figma.com/proto/..." title="Prototype" ratio="9 / 16" />
-
-<Steps items={["Research", "Wireframes", "Prototype"]} />
-
-<Flow>
-  <FlowStep n={1} title="Dashboard" file="..." alt="...">Markdown text</FlowStep>
+<Flow>                                                               // media left, title + text right
+  <FlowStep title="Dashboard" video="slug/flow-1" alt="...">Markdown text</FlowStep>
 </Flow>
-
 <Iteration>
-  <IterationStage n={1} title="v1" file="..." alt="..." why="Why I changed it" gaveUp="What I gave up">
-    What this version was.
-  </IterationStage>
+  <IterationStage title="v1" video="..." alt="...">What this version was.</IterationStage>
 </Iteration>
 
-<Decisions>
-  <Decision title="..." choice="What I decided" why="Why" tradeoff="What it cost" />
-</Decisions>
+<SideMedia video="250ms/calibration" alt="..." />                   // media beside the title, text below (add `wide` for 788px)
+<Video src="calcalist-next/app-walkthrough" phone autoplay radius={20} label="..." />
 
-<Persona title="Data Analyst" background="..." workflow={["..."]} goals={["..."]} jobs={["..."]} />
-<Callout label="Framing">Markdown text</Callout>
-<Stats items={[{ value: "16", label: "images per session" }]} />
-<Swatches colors={[{ hex: "#003BAB", name: "Primary" }]} />
+<Screens>                                                            // 5 phone screens per row (`dark` = black band)
+  <Figure phone file="..." alt="..." caption="Splash" />
+</Screens>
+<Phones> <Figure phone file="..." alt="..." /> <Figure phone ... /> </Phones>
+
+<Persona title="Data Analyst" photo="..." background={["...", "..."]} workflow={["..."]} goals={["..."]} />
+<Checklist good={["What worked"]} bad={["What didn't"]} />
+<Cta href="https://..." label="Explore the feature" />
 ```
+
+Older components (`Figure`, `FigureGrid`, `Gallery`, `Embed`, `Decisions`, `Stats`, `Swatches`, `Callout`, `WireframePair`) still work but are not used in the Wix layout.
 
 MDX gotchas: don't use bare `{`, `}` or `<` in normal text. Inside `"..."` attributes, use curly quotes “ ” instead of straight double quotes.
 
 ### TODO markers
-Anything you don't know yet is written as `[TODO: what I need]`. These show up **highlighted in yellow on the site**, so nothing ships unfinished by accident. Unfinished links (`url: "[TODO link]"`) become a dashed, disabled button. Run `npm run todos` to refresh `TODO.md`.
+Anything you don't know yet is written as `[TODO: what I need]`. In `npm run dev` these are **highlighted** on the page. In the production build (what GitHub Pages serves) they are removed automatically, together with the sentence they sit in; sections, links, embeds and galleries that only contained TODOs are left out. Unfinished links (`url: "[TODO link]"`) show as a disabled button in dev and are hidden in production. Run `npm run todos` to refresh `TODO.md`.
 
 ### Home, About, contact
 Edit `src/data/site.ts`: hero headline (with two alternatives in a comment), support line, About text, skills, timeline, recognition, email, LinkedIn.
@@ -104,8 +99,8 @@ Replace `public/cv.pdf` with your real CV and keep the same file name.
 Short screen recordings live in `public/videos/<project>/` as `name.mp4` plus a `name.jpg` poster, and each one is listed in `src/data/videos.json` (width, height, duration, audio). Use them in a case study with:
 
 ```mdx
-<Video src="250ms/calibration" label="What the clip shows" caption="Caption" />          // silent loop, plays while visible
-<Video src="calcalist-next/app-walkthrough" mode="player" phone label="..." />           // normal player with sound
+<Video src="250ms/viewing-session" label="What the clip shows" caption="Caption" />       // click to play
+<Video src="calcalist-next/app-walkthrough" phone label="..." />                          // narrow phone frame
 <FlowStep video="dark-pattern-detection/flow-2-session-impact" ... />                    // also works in FlowStep / IterationStage
 ```
 
@@ -116,7 +111,7 @@ ffmpeg -i input.mov -vf "scale='min(1600,iw)':-2,fps=30,format=yuv420p" -c:v lib
 ffmpeg -ss 1 -i input.mov -frames:v 1 -vf "scale='min(1600,iw)':-2" -q:v 3 public/videos/<project>/<name>.jpg
 ```
 
-Loops never autoplay for visitors who prefer reduced motion. They get normal controls instead, and everyone else gets a pause button.
+Only the poster loads (`preload="none"`) until a video is needed. Videos in `FlowStep`, `IterationStage`, the hero, or with `autoplay` play muted and looped only while on screen (like the Wix site); with reduced motion they wait for a click. Keep each file under 25 MB (GitHub's web upload limit).
 
 **Social preview image**: each case study uses its `cover` image (auto-cropped to 1200×630). Other pages use `public/og-default.png`.
 
@@ -160,9 +155,8 @@ src/
   content/projects/*.mdx   ← case studies (edit these)
   data/site.ts             ← global copy (edit this)
   assets/images/<slug>/    ← image exports (drop files here)
-  styles/tokens.css        ← design tokens (colors, type, spacing, motion)
-  styles/global.css        ← all styles
-  components/              ← layout pieces (Header, Footer, ProjectCard, Toc, Media…)
+  styles/global.css        ← all styles + design tokens (top of file)
+  components/              ← layout pieces (Header, Footer, ProjectCard, Media…)
   components/mdx/          ← components usable inside case studies
   layouts/Base.astro       ← <head>, SEO, Open Graph, skip link
   pages/                   ← routes: /, /about/, /work/[slug]/, 404, robots.txt
@@ -173,9 +167,8 @@ scripts/list-todos.mjs     ← generates TODO.md
 
 ## Accessibility and performance notes
 
-- Skip link, landmarks, one `h1` per page, logical heading order, visible focus rings (a distinct blue, not the accent).
-- Colors meet WCAG AA in light and dark mode. Dark mode follows the OS setting.
-- All motion (scroll reveals, hovers, smooth scroll) is off under `prefers-reduced-motion`.
+- Skip link, landmarks, one `h1` per page, logical heading order, visible 2px black focus outlines.
+- Black, white and one gray (#6b6b6b, 5.3:1): all text meets WCAG AA. No dark mode, no animation beyond a 150ms hover fade.
 - Galleries use native `<details>`, so they're keyboard and screen-reader friendly with no JS.
 - Embeds (YouTube, Vimeo, Figma, Base44) load nothing until clicked.
-- Fonts are self-hosted via Fontsource (no Google Fonts CDN). The only JS is the scroll reveal, the TOC highlighter and the embed loader, all tiny and inlined by Astro.
+- Fonts are self-hosted via Fontsource (no Google Fonts CDN). All client JS lives in `src/scripts/ui.js` (scroll reveal, muted autoplay for flow videos while on screen, lightbox, click-to-load embeds). Every image in a case study opens in a lightbox. Everything respects `prefers-reduced-motion`, and all content stays visible if the script fails.
