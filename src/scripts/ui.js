@@ -22,7 +22,7 @@
 
   /* ---------- Scroll reveal (once; only for content below the fold) ---------- */
   if (!reduceMotion && 'IntersectionObserver' in window) {
-    var selector = '.projects > li, .home-section, .cs-section > .cs-text, .flow-item, .screens, .persona, .process, .cta, .side-media, .cs-intro-media';
+    var selector = '.projects > li, .home-section, .cs-section > .cs-text, .flow-item, .screens, .pairs, .persona, .process, .cta, .side-media, .cs-intro-media, .decision, .stats, .next, .about-block';
     var items = Array.prototype.slice.call(document.querySelectorAll(selector));
     var below = items.filter(function (el) {
       return el.getBoundingClientRect().top > window.innerHeight * 0.95;
@@ -49,8 +49,8 @@
     });
   }
 
-  /* ---------- Autoplay videos (muted loops, like the Wix site) ---------- */
-  // Videos marked data-autoplay play only while on screen. With reduced motion
+  /* ---------- Autoplay videos (muted loops while on screen) ---------- */
+  // Videos marked data-autoplay play only while visible. With reduced motion
   // (or no IntersectionObserver) they keep their controls and wait for a click.
   var autoVideos = Array.prototype.slice.call(document.querySelectorAll('video[data-autoplay]'));
   if (autoVideos.length && !reduceMotion && 'IntersectionObserver' in window) {
@@ -59,7 +59,6 @@
         entries.forEach(function (entry) {
           var v = entry.target;
           if (entry.isIntersecting) {
-            v.muted = true;
             if (v.preload !== 'auto') v.preload = 'auto';
             var p = v.play();
             if (p && p.catch) {
@@ -72,14 +71,25 @@
           }
         });
       },
-      { rootMargin: '200px 0px', threshold: 0.15 }
+      { rootMargin: '150px 0px', threshold: 0.25 }
     );
     autoVideos.forEach(function (v) {
       v.controls = false;
+      v.muted = true;
       v.addEventListener('click', function () {
         if (v.paused) v.play();
         else v.pause();
       });
+      var sound = v.parentNode.querySelector('[data-sound]');
+      if (sound) {
+        sound.hidden = false;
+        sound.addEventListener('click', function () {
+          v.muted = !v.muted;
+          sound.setAttribute('aria-pressed', v.muted ? 'false' : 'true');
+          sound.textContent = v.muted ? 'Sound on' : 'Sound off';
+          if (!v.muted && v.paused) v.play();
+        });
+      }
       vio.observe(v);
     });
   }

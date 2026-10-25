@@ -5,20 +5,25 @@ import { getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Media from '../../components/Media.astro';
 import VideoMedia from '../../components/VideoMedia.astro';
+import TodoText from '../../components/TodoText.astro';
 import { mdxComponents } from '../../components/mdx';
 import { findImage } from '../../lib/images';
+import { url } from '../../lib/url';
+import { isTodoOnly, stripTodo } from '../../lib/todo.mjs';
 
 export const getStaticPaths = (async () => {
   const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
-  return projects.map((project) => ({
+  // The last project's "next" link goes back to the first one.
+  return projects.map((project, i) => ({
     params: { slug: project.id },
-    props: { project },
+    props: { project, next: projects[(i + 1) % projects.length] },
   }));
 }) satisfies GetStaticPaths;
 
-const { project } = Astro.props;
+const { project, next } = Astro.props;
 const d = project.data;
 const { Content } = await render(project);
+const prod = import.meta.env.PROD;
 
 // Social image: the cover, cropped to 1200×630.
 const coverImg = await findImage(d.cover);
@@ -35,11 +40,34 @@ const heroFile = d.hero?.file ?? (d.hero?.video ? '' : d.cover);
 const heroVideo = d.hero?.video ?? '';
 const heroAlt = d.hero?.alt ?? d.coverAlt;
 const heroWidth = d.hero?.width ?? 888;
-const heroRadius = d.hero?.radius ?? 0;
-const heroStyle = '--w: ' + heroWidth + '; --r: ' + heroRadius;
+const heroStyle = '--w: ' + heroWidth;
 const heroClass = showTitle ? 'cs-hero wrap' : 'cs-hero cs-hero--media wrap';
 const titleClass = showTitle ? 'cs-title' : 'visually-hidden';
 const heroSizes = '(min-width: 1100px) ' + Math.round((heroWidth / 1425) * 100) + 'vw, 100vw';
+
+// Overview row: role, team, timeframe, tools. TODO-only values are hidden on the live site.
+function shown(v?: string) {
+  if (!v) return false;
+  return !prod || !isTodoOnly(v);
+}
+const tools = d.tools.filter((t) => shown(t)).map((t) => (prod ? stripTodo(t) : t));
+const meta = [
+  { label: 'Role', value: d.role },
+  { label: 'Team', value: d.team },
+  { label: 'Timeframe', value: d.duration },
+  { label: 'Tools', value: tools.join(', ') },
+  { label: 'Context', value: d.context },
+].filter((m) => shown(m.value));
+const ordered = d.links.filter((l) => l.primary).concat(d.links.filter((l) => !l.primary));
+const links = ordered
+  .map((l, i) => ({ label: l.label, url: l.url, todo: isTodoOnly(l.url), filled: i === 0 }))
+  .filter((l) => !l.todo || !prod);
+
+// Next project
+const nextHref = url('/work/' + next.id + '/');
+const nextName = next.data.shortTitle ?? next.data.title;
+const nextImage = next.data.card ?? next.data.cover;
+const showNext = next.id !== project.id;
 ---
 
 <Base title={d.title} description={d.summary} image={ogImage} imageAlt={d.coverAlt} type="article">
@@ -49,7 +77,7 @@ const heroSizes = '(min-width: 1100px) ' + Math.round((heroWidth / 1425) * 100) 
       {
         !showTitle && (
           <div class="cs-hero-media" style={heroStyle}>
-            {heroVideo ? <VideoMedia src={heroVideo} label={heroAlt} autoplay /> : <Media file={heroFile} alt={heroAlt} ratio="16 / 9" sizes={heroSizes} eager />}
+            {heroVideo ? <VideoMedia src={heroVideo} label={heroAlt} /> : <Media file={heroFile} alt={heroAlt} sizes={heroSizes} eager />}
           </div>
         )
       }
@@ -60,14 +88,67 @@ const heroSizes = '(min-width: 1100px) ' + Math.round((heroWidth / 1425) * 100) 
       {
         showTitle && (
           <div class="cs-hero-media" style={heroStyle}>
-            {heroVideo ? <VideoMedia src={heroVideo} label={heroAlt} autoplay /> : <Media file={heroFile} alt={heroAlt} ratio="16 / 9" sizes={heroSizes} eager zoom />}
+            {heroVideo ? <VideoMedia src={heroVideo} label={heroAlt} /> : <Media file={heroFile} alt={heroAlt} sizes={heroSizes} eager zoom />}
           </div>
         )
       }
     </header>
 
-    <div class="wrap prose" id="content">
+    <section class="wrap cs-overview" id="content" aria-label="Project overview">
+      <p class="cs-summary">{d.summary}</p>
+      <dl class="cs-meta">
+        {
+          meta.map((m) => (
+            <div>
+              <dt>{m.label}</dt>
+              <dd>
+                <TodoText text={m.value} />
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+      {
+        links.length > 0 && (
+          <div class="buttons">
+            {links.map((l) =>
+              l.todo ? (
+                <span class="btn btn-outline" aria-disabled="true">
+                  {l.label}: <mark class="todo">{l.url}</mark>
+                </span>
+              ) : (
+                <a class={l.filled ? 'btn' : 'btn btn-outline'} href={l.url} target="_blank" rel="noopener noreferrer">
+                  {l.label}
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                  <span class="arrow" aria-hidden="true">↗</span>
+                </a>
+              ),
+            )}
+          </div>
+        )
+      }
+    </section>
+
+    <div class="wrap prose">
       <Content components={mdxComponents} />
     </div>
   </article>
+
+  {
+    showNext && (
+      <nav class="wrap next" aria-label="Next project">
+        <a class="next-link" href={nextHref}>
+          <span class="next-text">
+            <span class="eyebrow">Next project</span>
+            <span class="next-title">
+              {nextName} <span class="arrow" aria-hidden="true">→</span>
+            </span>
+          </span>
+          <span class="next-media">
+            <Media file={nextImage} alt="" sizes="(min-width: 1100px) 30vw, 100vw" />
+          </span>
+        </a>
+      </nav>
+    )
+  }
 </Base>

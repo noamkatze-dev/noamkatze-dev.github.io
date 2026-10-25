@@ -5,23 +5,25 @@ import { url } from '../lib/url';
 
 interface Props {
   project: CollectionEntry<'projects'>;
-  /** Thumbnail proportions, e.g. "463 / 255". */
-  ratio?: string;
   /** The first item is near the top of the page: load its image eagerly. */
   eager?: boolean;
 }
-const { project, ratio = '16 / 10', eager = false } = Astro.props;
+const { project, eager = false } = Astro.props;
 const d = project.data;
 const href = url('/work/' + project.id + '/');
 const name = d.shortTitle ?? d.title;
 const discipline = d.discipline ?? '';
-const mediaStyle = '--ratio: ' + ratio;
+// The card image: `card` if set, otherwise the cover. Shown whole, never cropped.
+const image = d.card ?? d.cover;
+const teaser = d.teaser ?? d.summary;
 ---
 
 <a class="project" href={href}>
-  <div class="project-media" style={mediaStyle}>
-    <Media file={d.cover} alt="" note={d.coverNote} ratio={ratio} eager={eager} sizes="(min-width: 1100px) 33vw, 100vw" />
+  <div class="project-media">
+    <Media file={image} alt="" note={d.coverNote} eager={eager} sizes="(min-width: 1100px) 26vw, 100vw" />
   </div>
   <h3 class="project-title">{name}</h3>
   {discipline && <p class="project-tag">{discipline}</p>}
+  <p class="project-summary">{teaser}</p>
+  <span class="project-cta">View case study <span class="arrow" aria-hidden="true">→</span></span>
 </a>

@@ -1,0 +1,17 @@
+---
+/**
+ * Row of <WireframePair> items. `dark` puts the whole section on a full-width black band.
+ * <Pairs dark>
+ *   <WireframePair title="Scan" wireframe="..." final="..." wireframeAlt="..." finalAlt="..." />
+ * </Pairs>
+ */
+interface Props {
+  dark?: boolean;
+}
+const { dark = false } = Astro.props;
+const html = await Astro.slots.render('default');
+const hasMedia = html.includes('<img') || html.includes('class="placeholder"');
+const kind = dark ? 'pairs screens--dark' : 'pairs';
+---
+
+{hasMedia && <div class={kind} set:html={html} />}

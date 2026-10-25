@@ -1,12 +1,12 @@
 ---
 /**
- * Self-hosted video. Only the poster loads (preload="none").
+ * Self-hosted video. Only the poster loads (preload="none") until it is needed.
  * Files: public/videos/<src>.mp4 + <src>.jpg poster; sizes in src/data/videos.json.
  *
- * autoplay → plays muted and looped while on screen, like the Wix site
- *            (src/scripts/ui.js starts and pauses it; without JS, or with
- *            reduced motion, the normal controls stay).
- * otherwise → click to play.
+ * By default it plays muted and looped while on screen (src/scripts/ui.js starts
+ * and pauses it). Clips with sound get a small "Sound on" button. Without JS, or
+ * with reduced motion, the normal controls stay and nothing plays on its own.
+ * autoplay={false} → click to play.
  */
 import videos from '../data/videos.json';
 import { url } from '../lib/url';
@@ -18,14 +18,16 @@ interface Props {
   autoplay?: boolean;
 }
 
-const { src, label, autoplay = false } = Astro.props;
+const { src, label, autoplay = true } = Astro.props;
 const meta = (videos as Record<string, { width: number; height: number; duration: number; audio: boolean }>)[src];
 if (!meta) throw new Error('Video "' + src + '" is not in src/data/videos.json');
 const videoSrc = url('/videos/' + src + '.mp4');
 const posterSrc = url('/videos/' + src + '.jpg');
+const hasSound = autoplay && meta.audio;
+const ratio = 'aspect-ratio: ' + meta.width + ' / ' + meta.height;
 ---
 
-<div class="video">
+<div class="video" style={ratio}>
   {
     autoplay ? (
       <video
@@ -52,6 +54,13 @@ const posterSrc = url('/videos/' + src + '.jpg');
         preload="none"
         aria-label={label}
       ></video>
+    )
+  }
+  {
+    hasSound && (
+      <button type="button" class="video-sound" data-sound hidden aria-pressed="false">
+        Sound on
+      </button>
     )
   }
 </div>

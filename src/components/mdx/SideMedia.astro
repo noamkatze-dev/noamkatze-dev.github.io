@@ -17,7 +17,7 @@ interface Props {
   autoplay?: boolean;
   radius?: number;
 }
-const { file, video, alt, wide = false, autoplay = false, radius = 0 } = Astro.props;
+const { file, video, alt, wide = false, autoplay = true, radius = 0 } = Astro.props;
 const kind = wide ? 'side-media side-media--wide media-r' : 'side-media media-r';
 const frameStyle = '--r: ' + radius;
 const imageFile = file ?? '';

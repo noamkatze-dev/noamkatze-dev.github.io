@@ -1,117 +1,159 @@
 ---
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import TodoText from '../components/TodoText.astro';
-import { site, about, skills, experience, education, recognition } from '../data/site';
+import { site, about, achievements, skills, tools, experience, education } from '../data/site';
 import { url } from '../lib/url';
+import { findImage } from '../lib/images';
 import { isTodoOnly, bindLast } from '../lib/todo.mjs';
 import type { TimelineItem } from '../data/site';
 
 const prod = import.meta.env.PROD;
 const hasCv = existsSync(join(process.cwd(), 'public', 'cv.pdf'));
+const portrait = await findImage('about/portrait.jpg');
+const portraitAlt = 'Portrait of ' + site.name;
 
-// In production, drop entries that are still placeholders.
 function ready(items: TimelineItem[]) {
-  return prod ? items.filter((i) => !isTodoOnly(i.org)) : items;
+  const kept = prod ? items.filter((i) => !isTodoOnly(i.org)) : items;
+  return kept.map((i) => ({ ...i, detail: i.detail && (!prod || !isTodoOnly(i.detail)) ? i.detail : '' }));
 }
-
-const groups = [
-  {
-    id: 'experience',
-    title: 'Experience',
-    intro:
-      'Five years of military service taught me to run complex systems with many stakeholders, under real constraints. It is the same muscle I use in product design.',
-    items: ready(experience),
-  },
-  { id: 'education', title: 'Education', intro: '', items: ready(education) },
+const timeline = [
+  { id: 'experience', title: 'Experience', items: ready(experience) },
+  { id: 'education', title: 'Education', items: ready(education) },
 ];
 const bio = about.map((p) => bindLast(p));
-const skillRows = skills.map((g) => ({ group: g.group, list: bindLast(g.items.join(', ')) }));
-const pageDescription = 'About ' + site.name + ': product designer, B.Des University of Haifa, former IDF procurement team leader. Skills, education and experience.';
+const skillCards = skills.map((s, i) => ({
+  num: i < 9 ? '0' + (i + 1) : String(i + 1),
+  name: s.name,
+  proof: bindLast(s.proof),
+  project: s.project,
+  href: url('/work/' + s.slug + '/'),
+}));
+const mailto = 'mailto:' + site.email;
+const cvHref = url(site.cv);
+const pageDescription = 'About ' + site.name + ': product designer, B.Des. Visual Communication, University of Haifa. Design achievements, skills and tools.';
 ---
 
 <Base title="About" description={pageDescription}>
-  <div class="page">
-  <section class="page-head wrap" aria-labelledby="about-h1">
-    <h1 id="about-h1">About</h1>
-  </section>
-
-  <div class="rows">
-    <section class="wrap home-section" aria-labelledby="bio-title">
-      <h2 id="bio-title" class="row-label">Background</h2>
-      <div class="bio home-text">
-        {bio.map((p) => <p>{p}</p>)}
-        {
-          hasCv && (
-            <div class="buttons">
-              <a class="btn btn-outline" href={url(site.cv)} download>
-                Download CV <span class="arrow" aria-hidden="true">→</span>
+  <div class="page about">
+    <section class="wrap about-hero" aria-labelledby="about-h1">
+      {
+        portrait && (
+          <div class="about-photo">
+            <Picture
+              src={portrait}
+              alt={portraitAlt}
+              widths={[240, 400, 640, 1000]}
+              sizes="(min-width: 1100px) 24vw, 240px"
+              formats={['avif', 'webp']}
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
+        )
+      }
+      <div class="about-intro">
+        <p class="eyebrow">About</p>
+        <h1 id="about-h1">{site.name}</h1>
+        <p class="about-role">{site.role}</p>
+        <div class="bio">
+          {bio.map((p) => <p>{p}</p>)}
+        </div>
+        <div class="buttons">
+          {
+            hasCv && (
+              <a class="btn" href={cvHref} download>
+                Download CV <span class="arrow" aria-hidden="true">↓</span>
               </a>
+            )
+          }
+          <a class="btn btn-outline" href={mailto}>Get in touch</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap home-section about-block" aria-labelledby="achievements-title">
+      <h2 id="achievements-title">Achievements</h2>
+      <ol class="achievements">
+        {
+          achievements.map((a) => (
+            <li>
+              <span class="ach-year">{a.year}</span>
+              <span class="ach-text">
+                <strong>{a.title}</strong>
+                {a.detail && <span class="ach-detail">{a.detail}</span>}
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="wrap about-block skills-block" aria-labelledby="skills-title">
+      <div class="block-head">
+        <h2 id="skills-title">Design skills</h2>
+        <p class="block-note">Each one, and where you can see it.</p>
+      </div>
+      <ul class="skill-grid">
+        {
+          skillCards.map((s) => (
+            <li>
+              <a class="skill" href={s.href}>
+                <span class="skill-num">{s.num}</span>
+                <span class="skill-name">{s.name}</span>
+                <span class="skill-proof">{s.proof}</span>
+                <span class="skill-link">
+                  {s.project} <span class="arrow" aria-hidden="true">→</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="wrap about-block tools-block" aria-labelledby="tools-title">
+      <div class="block-head">
+        <h2 id="tools-title">Tools & technologies</h2>
+      </div>
+      <div class="tool-groups">
+        {
+          tools.map((g) => (
+            <div class="tool-group">
+              <p class="tool-label">{g.group}</p>
+              <ul class="chips">
+                {g.items.map((t) => (
+                  <li>{t}</li>
+                ))}
+              </ul>
             </div>
-          )
+          ))
         }
       </div>
     </section>
 
     {
-      groups.map((g) => (
-        <section class="wrap home-section" aria-labelledby={g.id + '-title'}>
-          <h2 id={g.id + '-title'} class="row-label">
-            {g.title}
-          </h2>
-          <div class="home-text">
-            {g.intro && <p class="row-intro">{bindLast(g.intro)}</p>}
-            <ul class="entries home-text">
-              {g.items.map((item) => (
-                <li>
-                  <span class="period">
-                    <TodoText text={item.period} />
-                  </span>
-                  <strong>{item.title}</strong>
-                  <span class="org">
-                    <TodoText text={item.org} />
-                  </span>
-                  {item.detail && (
-                    <p>
-                      <TodoText text={item.detail} />
-                    </p>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+      timeline.map((g) => (
+        <section class="wrap home-section about-block" aria-labelledby={g.id + '-title'}>
+          <h2 id={g.id + '-title'}>{g.title}</h2>
+          <ul class="entries home-text">
+            {g.items.map((item) => (
+              <li>
+                <span class="period">{item.period}</span>
+                <strong>{item.title}</strong>
+                <span class="org">{item.org}</span>
+                {item.detail && (
+                  <p>
+                    <TodoText text={item.detail} />
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
         </section>
       ))
     }
-
-    <section class="wrap home-section" aria-labelledby="skills-title">
-      <h2 id="skills-title" class="row-label">Skills and tools</h2>
-      <ul class="entries home-text">
-        {
-          skillRows.map((g) => (
-            <li>
-              <span class="period">{g.group}</span>
-              {g.list}
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
-    <section class="wrap home-section" aria-labelledby="recognition-title">
-      <h2 id="recognition-title" class="row-label">Recognition</h2>
-      <ul class="entries home-text">
-        {
-          recognition.map((r) => (
-            <li>
-              <strong>{r.title}</strong>
-              {r.detail && <span class="org">{r.detail}</span>}
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-  </div>
   </div>
 </Base>

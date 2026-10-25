@@ -2,7 +2,7 @@
 /**
  * <Video src="calcalist-next/app-walkthrough" label="What the clip shows" phone autoplay radius={20} />
  *   phone    → 250px-wide phone recording in the text column
- *   autoplay → muted loop while on screen (otherwise click to play)
+ *   autoplay → muted loop while on screen (default; autoplay={false} = click to play)
  *   radius   → rounded corners in px (at 1440px wide)
  * Files live in public/videos/<src>.mp4 with a <src>.jpg poster.
  */
@@ -19,7 +19,7 @@ interface Props {
   autoplay?: boolean;
   radius?: number;
 }
-const { src, label, caption, phone = false, autoplay = false, radius = 0 } = Astro.props;
+const { src, label, caption, phone = false, autoplay = true, radius = 0 } = Astro.props;
 const kind = phone ? 'shot shot-phone' : 'shot';
 const frameStyle = '--r: ' + radius;
 ---

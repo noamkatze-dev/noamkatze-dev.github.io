@@ -1,6 +1,6 @@
 ---
 /**
- * A key decision. Wrap several in <Decisions>.
+ * A key decision. Wrap several in <Decisions>; they are numbered automatically.
  * <Decision title="..." choice="What I decided" why="Why" tradeoff="What it cost" />
  * Fields that are still TODO are hidden in production; an all-TODO decision renders nothing.
  */
@@ -24,30 +24,25 @@ const rows = [
   { label: 'Trade-off', value: tradeoff },
 ].filter((r) => show(r.value));
 const showTitle = show(title);
-const render = showTitle || rows.length > 0;
-const hasRows = rows.length > 0;
+const render = showTitle && rows.length > 0;
 ---
 
 {
   render && (
-    <div class="decision">
-      {showTitle && (
-        <h3>
-          <TodoText text={title} />
-        </h3>
-      )}
-      {hasRows && (
-        <dl>
-          {rows.map((r) => (
-            <div>
-              <dt>{r.label}</dt>
-              <dd>
-                <TodoText text={r.value} />
-              </dd>
-            </div>
-          ))}
-        </dl>
-      )}
-    </div>
+    <li class="decision">
+      <h3>
+        <TodoText text={title} />
+      </h3>
+      <dl>
+        {rows.map((r) => (
+          <div>
+            <dt>{r.label}</dt>
+            <dd>
+              <TodoText text={r.value} />
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </li>
   )
 }

@@ -1,6 +1,6 @@
 ---
 /**
- * A wireframe next to the final screen, same size.
+ * A wireframe next to the final screen, same size. Use several inside <Pairs>.
  * <WireframePair title="Scan" wireframe="calcalist-next/wireframes/scan.png" final="calcalist-next/screen-scan.png"
  *   wireframeAlt="..." finalAlt="..." />
  */
@@ -14,18 +14,18 @@ interface Props {
   finalAlt: string;
 }
 const { title, wireframe, final, wireframeAlt, finalAlt } = Astro.props;
-const sizes = '(min-width: 700px) 240px, 42vw';
+const sizes = '(min-width: 1100px) 13vw, 42vw';
 ---
 
 <div class="pair">
-  <p class="label">{title}</p>
+  <p class="pair-title">{title}</p>
   <div class="pair-row">
     <figure class="phone">
-      <Media file={wireframe} alt={wireframeAlt} ratio="9 / 19.5" sizes={sizes} zoom />
+      <Media file={wireframe} alt={wireframeAlt} sizes={sizes} zoom />
       <figcaption>Wireframe</figcaption>
     </figure>
     <figure class="phone">
-      <Media file={final} alt={finalAlt} ratio="9 / 19.5" sizes={sizes} zoom />
+      <Media file={final} alt={finalAlt} sizes={sizes} zoom />
       <figcaption>Final</figcaption>
     </figure>
   </div>

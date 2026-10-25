@@ -25,6 +25,7 @@ import IntroMedia from './IntroMedia.astro';
 import Phones from './Phones.astro';
 import Checklist from './Checklist.astro';
 import Cta from './Cta.astro';
+import Pairs from './Pairs.astro';
 
 export const mdxComponents = {
   SideMedia,
@@ -32,6 +33,7 @@ export const mdxComponents = {
   Phones,
   Checklist,
   Cta,
+  Pairs,
   Swatches,
   Video,
   Screens,

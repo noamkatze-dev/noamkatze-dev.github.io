@@ -1,5 +1,6 @@
 ---
 title: Calcalist Next
+teaser: A networking app for Calcalist's business conferences that keeps connections and insights alive after the event.
 summary: A mobile platform for Calcalist's conferences that connects young entrepreneurs and business professionals with key figures in the Israeli economy, and keeps the knowledge and connections alive after the event.
 context: Academic project with Calcalist as the client
 year: 2025
@@ -17,33 +18,59 @@ deliverables:
 tags: [Mobile app, Networking, Events, Real client]
 order: 2
 discipline: UX/UI
-cover: calcalist-next/cover.jpg
-coverAlt: Three Calcalist Next app screens on a blue background, onboarding, the conference home with new contacts as bubbles, and a member profile.
+cover: calcalist-next/cover-screens.png
+coverAlt: Three Calcalist Next app screens side by side, onboarding, the conference home with new contacts as bubbles, and a member profile.
 heroTitle: false
 hero:
   video: calcalist-next/website-walkthrough
   alt: "Calcalist Next website walkthrough: the home page with upcoming meetings and conference updates on a deep blue background."
   width: 573
-  radius: 10
 links:
   - label: App prototype
     url: "[TODO link: app prototype]"
     kind: prototype
     primary: true
+  - label: Promo video
+    url: "[TODO link: promo video]"
+    kind: video
 ---
 
 ## Calcalist Next
 
-As part of my studies, I took part in a project in collaboration with Calcalist, one of Israel's leading business media outlets.
+Calcalist is one of Israel's leading business media outlets. As part of my studies, I took part in a project with Calcalist as the client: a digital platform that connects the next generation of entrepreneurs and business professionals with key figures in the Israeli economy.
 
-The project focused on a digital platform that connects the next generation of young entrepreneurs and business professionals with key figures in the Israeli economy.
+## Identifying a need
+
+In a discussion with Calcalist's representatives, they stressed the need for a platform that encourages mingling and networking during the company's conferences, and that gives a structured summary of the key content presented.
+
+**The goal:** help participants connect easily and build meaningful relationships, and keep the conference's insights accessible after the event.
+
+## Target audiences
+
+One app had to work for very different people at once, from senior executives to students looking for a way into the business world. Figures are the client's.
+
+- Key business and market leaders
+- Entrepreneurs and investors
+- Young people who want to connect to the business world
+- Speakers and domain experts
+- Calcalist subscribers and website readers
+
+[TODO: which audience was the primary design target, and why]
+
+<Stats
+  items={[
+    { value: "500–800", label: "business people per conference" },
+    { value: "~70,000", label: "Calcalist subscribers" },
+    { value: "~3M", label: "unique monthly website readers" },
+  ]}
+/>
 
 ## Work process
 
 <Steps
   items={[
     "Visual research",
-    "Meeting with Calcalist representatives",
+    "Meeting with Calcalist",
     "UX research",
     "Wireframing",
     "Prototyping",
@@ -52,121 +79,96 @@ The project focused on a digital platform that connects the next generation of y
   ]}
 />
 
+## The concept: the business bubble
+
+<Phones>
+  <Figure phone file="calcalist-next/screen-home-get-connected.png" alt="Home before joining a conference: a large bubble with a plus and the label Get connected." caption="Get connected" />
+  <Figure phone file="calcalist-next/screen-home-contacts.png" alt="New conference contacts shown as a cluster of profile bubbles above scheduled meetings." caption="Your network" />
+</Phones>
+
+The bubble is the core motif because it embodies the mission: giving access to the “business bubble”. Tapping the plus on a bubble creates a new connection and makes you part of that network, symbolically breaking through the barrier.
+
+Blue carries Calcalist's technological side. Brand values: prestigious, intelligent, technological, innovative, professional, reliable.
+
+## Key screens
+
+<Screens>
+  <Figure phone file="calcalist-next/screen-onboarding-1.png" alt="Onboarding: The elite business community." caption="Onboarding" />
+  <Figure phone file="calcalist-next/screen-customization.png" alt="Customization: goal chips to select and privacy settings." caption="Goals & privacy" />
+  <Figure phone file="calcalist-next/screen-home.png" alt="Conference home: You are now at a conference, INVESTECH at Dan Hotel Tel-Aviv, counters for new contacts, meetings and follow-ups." caption="Live conference" />
+  <Figure phone file="calcalist-next/screen-scan.png" alt="Scan and connect: a camera view framing the QR code on a conference badge, with an upload-from-gallery option." caption="Scan to connect" />
+  <Figure phone file="calcalist-next/screen-member-profile.png" alt="Member profile of Ron Levi: photo, a Send a message button, fields of expertise and experience." caption="Member profile" />
+  <Figure phone file="calcalist-next/screen-calendar-pending.png" alt="Meeting requests with Reschedule and Approve buttons." caption="Meeting requests" />
+  <Figure phone file="calcalist-next/screen-new-meeting.png" alt="New meeting form: topic, description, participant search with Add buttons, and time selection." caption="New meeting" />
+  <Figure phone file="calcalist-next/screen-conference.png" alt="Conference page for INVESTECH: the day’s agenda from check-in at 09:00 to a startup pitch competition." caption="Agenda" />
+  <Figure phone file="calcalist-next/screen-conference-alerts.png" alt="Conference alerts: who arrived, which session is starting, who is on stage." caption="Live alerts" />
+  <Figure phone file="calcalist-next/screen-my-friends.png" alt="Contacts list with My contacts and New contacts tabs and search." caption="Contacts" />
+</Screens>
+
 ## App prototype
 
 <Video
   src="calcalist-next/app-walkthrough"
   phone
-  autoplay
-  radius={20}
   label="App walkthrough: splash, sign up, onboarding, get connected, scan and connect, a member profile, a new meeting and settings."
 />
+
+From first launch to a booked meeting: sign up, set your goals, join a conference, scan a badge and follow up.
+
+## From wireframe to final
+
+<Pairs dark>
+  <WireframePair
+    title="Scan and connect"
+    wireframe="calcalist-next/wireframes/scan.png"
+    wireframeAlt="Wireframe of Scan for new connections: a dashed frame labeled Position bar-code within frame, with Scan and Choose from gallery buttons."
+    final="calcalist-next/screen-scan.png"
+    finalAlt="Scan and connect: a camera view framing the QR code on a conference badge, with an upload-from-gallery option."
+  />
+  <WireframePair
+    title="Conference"
+    wireframe="calcalist-next/wireframes/conference.png"
+    wireframeAlt="Wireframe of the INVESTECH conference page: Calendar and Meetings tabs and a list of sessions."
+    final="calcalist-next/screen-conference.png"
+    finalAlt="Conference page for INVESTECH: the day’s agenda with Schedule and Alerts tabs."
+  />
+  <WireframePair
+    title="New meeting"
+    wireframe="calcalist-next/wireframes/new-meeting.png"
+    wireframeAlt="Wireframe of New meeting: topic and description fields, participant search, time slots and location options."
+    final="calcalist-next/screen-new-meeting.png"
+    finalAlt="New meeting form: topic, description, participant search with Add buttons, and time selection."
+  />
+</Pairs>
 
 ## Website prototype
 
 <SideMedia
   wide
-  autoplay
-  radius={10}
   video="calcalist-next/website-walkthrough"
   alt="Website walkthrough: the Calcalist Next home page, meeting calendar, contacts and conference updates."
 />
 
-## App screens
+The same platform on desktop, for readers who meet Calcalist Next on the website first.
 
-<Screens>
-  <Figure phone file="calcalist-next/screen-splash.png" alt="Splash screen: the Calcalist Next wordmark on black with a loading spinner." caption="Splash" />
-  <Figure phone file="calcalist-next/screen-splash-2.png" alt="Splash screen, continued: the red Calcalist logo on black." caption="Splash | Continue" />
-  <Figure phone file="calcalist-next/screen-onboarding-1.png" alt="Onboarding 1: The elite business community." caption="Onboarding | Num 1" />
-  <Figure phone file="calcalist-next/screen-onboarding-2.png" alt="Onboarding 2: Intelligent business profile." caption="Onboarding | Num 2" />
-  <Figure phone file="calcalist-next/screen-onboarding-3.png" alt="Onboarding 3: What are your goals?" caption="Onboarding | Num 3" />
-  <Figure phone file="calcalist-next/screen-onboarding-4.png" alt="Onboarding 4: Everything in one place." caption="Onboarding | Num 4" />
-  <Figure phone file="calcalist-next/screen-onboarding-5.png" alt="Onboarding 5: Ready to start?" caption="Onboarding | Num 5" />
-  <Figure phone file="calcalist-next/screen-log-in.png" alt="Log in with LinkedIn, Facebook, Google or Instagram, or with email and password." caption="Log in" />
-  <Figure phone file="calcalist-next/screen-sign-up.png" alt="Sign up form: full name, email, password, confirm password and a terms checkbox." caption="Sign up" />
-  <Figure phone file="calcalist-next/screen-customization.png" alt="Customization: goal chips to select and privacy settings." caption="Customization" />
-  <Figure phone file="calcalist-next/screen-home-get-connected.png" alt="Home before joining a conference: a large bubble with a plus and the label Get connected." caption="Home" />
-  <Figure phone file="calcalist-next/screen-home.png" alt="Conference home: You are now at a conference, INVESTECH at Dan Hotel Tel-Aviv, counters for new contacts, meetings and follow-ups." caption="Home | Continue" />
-  <Figure phone file="calcalist-next/screen-home-contacts.png" alt="New conference contacts shown as a cluster of profile bubbles above scheduled meetings." caption="Home | Continue" />
-  <Figure phone file="calcalist-next/screen-home-meetings.png" alt="Scheduled meetings, future meetings and updates." caption="Home | Continue" />
-  <Figure phone file="calcalist-next/screen-add-new-contacts.png" alt="Add new contacts: search, suggested people, or scan." caption="Add new friend" />
-  <Figure phone file="calcalist-next/screen-scan.png" alt="Scan and connect: a camera view framing the QR code on a conference badge, with an upload-from-gallery option." caption="Scan" />
-  <Figure phone file="calcalist-next/screen-calendar.png" alt="Meeting calendar: a list of meetings with investors and entrepreneurs, each with time, date and conference." caption="Calendar | Num 1" />
-  <Figure phone file="calcalist-next/screen-calendar-day.png" alt="Meeting calendar, day view." caption="Calendar | Num 2" />
-  <Figure phone file="calcalist-next/screen-calendar-pending.png" alt="Meeting requests with Reschedule and Approve buttons." caption="Calendar | Num 3" />
-  <Figure phone file="calcalist-next/screen-settings.png" alt="General settings: language, dark mode, auto sync, integrations and notifications." caption="Settings" />
-  <Figure phone file="calcalist-next/screen-profile.png" alt="My profile: Daniel Cohen, CEO and founder of TechnoKid Israel, with fields of expertise and experience." caption="Profile" />
-  <Figure phone file="calcalist-next/screen-add-a-friend.png" alt="Profile of Sarah Noh, CEO of Tech Solution, with a plus button to add her as a contact." caption="Add a friend" />
-  <Figure phone file="calcalist-next/screen-my-friends.png" alt="Contacts list with My contacts and New contacts tabs and search." caption="My friends" />
-  <Figure phone file="calcalist-next/screen-member-profile.png" alt="Member profile of Ron Levi: photo, a Send a message button, fields of expertise and experience." caption="Member profile" />
-  <Figure phone file="calcalist-next/screen-new-meeting.png" alt="New meeting form: topic, description, participant search with Add buttons, and time selection." caption="New meeting" />
-  <Figure phone file="calcalist-next/screen-conference.png" alt="Conference page for INVESTECH: the day’s agenda from check-in at 09:00 to a startup pitch competition." caption="Conference | Num 1" />
-  <Figure phone file="calcalist-next/screen-conference-alerts.png" alt="Conference alerts: who arrived, which session is starting, who is on stage." caption="Conference | Num 2" />
-</Screens>
+## Key decisions
 
-## Wireframes screens
-
-<Screens dark>
-  <Figure phone file="calcalist-next/wireframes/onboarding-1.png" alt="Wireframe of the Onboarding 1 screen." caption="Onboarding | Num 1" />
-  <Figure phone file="calcalist-next/wireframes/log-in.png" alt="Wireframe of the Log in screen." caption="Log in" />
-  <Figure phone file="calcalist-next/wireframes/sign-up.png" alt="Wireframe of the Sign up screen." caption="Sign up" />
-  <Figure phone file="calcalist-next/wireframes/customization.png" alt="Wireframe of the Customization screen." caption="Customization" />
-  <Figure phone file="calcalist-next/wireframes/home.png" alt="Wireframe of the Home screen." caption="Home" />
-  <Figure phone file="calcalist-next/wireframes/add-new-contacts.png" alt="Wireframe of the Add new contacts screen." caption="Add new friend" />
-  <Figure phone file="calcalist-next/wireframes/scan.png" alt="Wireframe of Scan for new connections: a dashed frame labeled Position bar-code within frame, with Scan and Choose from gallery buttons." caption="Scan" />
-  <Figure phone file="calcalist-next/wireframes/calendar-day.png" alt="Wireframe of the Calendar, day view screen." caption="Calendar | Num 1" />
-  <Figure phone file="calcalist-next/wireframes/calendar-pending.png" alt="Wireframe of the Calendar, requests screen." caption="Calendar | Num 2" />
-  <Figure phone file="calcalist-next/wireframes/settings.png" alt="Wireframe of the Settings screen." caption="Settings" />
-  <Figure phone file="calcalist-next/wireframes/profile.png" alt="Wireframe of the My profile screen." caption="Profile" />
-  <Figure phone file="calcalist-next/wireframes/my-friends.png" alt="Wireframe of the Contacts screen." caption="My friends" />
-  <Figure phone file="calcalist-next/wireframes/member-profile.png" alt="Wireframe of the Member profile screen." caption="Member profile" />
-  <Figure phone file="calcalist-next/wireframes/new-meeting.png" alt="Wireframe of New meeting: topic and description fields, participant search with Add buttons, time slots and meeting location options." caption="New meeting" />
-  <Figure phone file="calcalist-next/wireframes/conference.png" alt="Wireframe of the INVESTECH conference page at Dan Hotel Tel-Aviv: Calendar and Meetings tabs and a list of sessions." caption="Conference | Num 1" />
-</Screens>
-
-## Design decisions
-
-<Phones>
-  <Figure phone file="calcalist-next/screen-home-get-connected.png" alt="Home before joining a conference: a large bubble with a plus and the label Get connected." />
-  <Figure phone file="calcalist-next/screen-home-contacts.png" alt="New conference contacts shown as a cluster of profile bubbles." />
-</Phones>
-
-We chose the bubble as our core design motif because it embodies the mission: giving access to the “business bubble”. When users tap the plus on a bubble, they create a new connection and become part of that network, symbolically breaking through the barrier.
-
-We chose blue because it represents technology: we wanted to show Calcalist's technological side.
-
-## Brand values
-
-- Prestigious
-- Intelligent
-- Technological
-- Innovative
-- Professional
-- Reliable
-
-## Identifying a need
-
-In a discussion with Calcalist representatives, they emphasized the need for a platform that fosters mingling and networking during the company's conferences, while also providing a structured summary of the key content presented.
-
-## Target audiences
-
-- Key business and market leaders (senior executives in key positions)
-- Business people (500–800 per conference)
-- Entrepreneurs and investors
-- Young people interested in connecting to the business world
-- Speakers and domain experts
-- Calcalist subscribers (~70,000)
-- Website readers (3,000,000 unique monthly visitors)
-
-## The solution
-
-In response, we developed a design concept based on the “business bubble” motif, symbolizing the dynamics of professional interactions. The platform helps participants connect easily, share knowledge and build meaningful relationships, and makes key conference insights more accessible, so attendees keep benefiting from the knowledge and connections after the event.
-
-<Cta href="[TODO link: app prototype]" label="Explore the prototype" />
+<Decisions>
+  <Decision
+    title="[TODO: decision 1, e.g. what the Scan feature does]"
+    choice="[TODO: what I decided]"
+    why="[TODO: why]"
+    tradeoff="[TODO: what it cost or what was cut]"
+  />
+  <Decision
+    title="[TODO: decision 2, e.g. networking that isn't intrusive]"
+    choice="[TODO: what I decided]"
+    why="[TODO: why]"
+    tradeoff="[TODO: what it cost or what was cut]"
+  />
+</Decisions>
 
 ## Outcome and reflection
-
-[TODO: research methods and 2 to 4 concrete insights that shaped the design]
 
 [TODO: client feedback from the presentation]
 

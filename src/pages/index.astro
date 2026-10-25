@@ -3,19 +3,18 @@ import { getCollection } from 'astro:content';
 import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { site, hero, homeAbout, homeSkills } from '../data/site';
+import { site, hero, aboutTeaser } from '../data/site';
+import { url } from '../lib/url';
 import { findImage } from '../lib/images';
 import { bindLast } from '../lib/todo.mjs';
 
 const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
-const portrait = await findImage('about/portrait-square.jpg');
+// The original round portrait, used as-is (no crop or zoom).
+const portrait = await findImage('about/portrait.jpg');
 const portraitAlt = 'Portrait of ' + site.name;
 const support = bindLast(hero.support);
-const paragraphs = homeAbout.map((p) => bindLast(p));
-const skillRows = homeSkills.map((g) => ({ label: g.label, list: g.items.join(' · ') }));
-// Thumbnail proportions of the three cards on the Wix home page
-const ratios = ['463 / 255', '394 / 254', '394 / 195'];
-const cards = projects.map((p, i) => ({ project: p, ratio: ratios[i] ?? '16 / 10', eager: i === 0 }));
+const paragraphs = aboutTeaser.map((p) => bindLast(p));
+const aboutHref = url('/about/');
 ---
 
 <Base>
@@ -26,10 +25,8 @@ const cards = projects.map((p, i) => ({ project: p, ratio: ratios[i] ?? '16 / 10
           <Picture
             src={portrait}
             alt={portraitAlt}
-            width={640}
-            height={640}
-            widths={[200, 320, 640]}
-            sizes="(min-width: 1100px) 20vw, 200px"
+            widths={[240, 400, 640, 1000]}
+            sizes="(min-width: 1100px) 20vw, 220px"
             formats={['avif', 'webp']}
             loading="eager"
             fetchpriority="high"
@@ -51,26 +48,21 @@ const cards = projects.map((p, i) => ({ project: p, ratio: ratios[i] ?? '16 / 10
     <h2 id="about-title">About</h2>
     <div class="home-text">
       {paragraphs.map((p) => <p>{p}</p>)}
-      <dl class="home-skills">
-        {
-          skillRows.map((g) => (
-            <>
-              <dt>{g.label}</dt>
-              <dd>{g.list}</dd>
-            </>
-          ))
-        }
-      </dl>
+      <p class="home-more">
+        <a class="btn btn-outline" href={aboutHref}>
+          More about me <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </p>
     </div>
   </section>
 
-  <section class="wrap home-section" id="work" aria-labelledby="work-title">
+  <section class="wrap home-section home-work" id="work" aria-labelledby="work-title">
     <h2 id="work-title">Projects</h2>
     <ul class="projects">
       {
-        cards.map((c) => (
+        projects.map((p, i) => (
           <li>
-            <ProjectCard project={c.project} ratio={c.ratio} eager={c.eager} />
+            <ProjectCard project={p} eager={i === 0} />
           </li>
         ))
       }

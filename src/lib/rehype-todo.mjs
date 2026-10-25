@@ -92,6 +92,7 @@ function strip(node) {
       case 'Flow':
       case 'Iteration':
       case 'Screens':
+      case 'Pairs':
       case 'Phones':
         return !node.children.some((c) => isJsx(c) || (c.type === 'element'));
       default:
@@ -166,7 +167,7 @@ function bindWords(node) {
 // Lets the case-study layout put the heading in a left column and the text on the right.
 // MDX components that span the full width of a section (everything else
 // goes into the right-hand text column).
-const WIDE = new Set(['Steps', 'Flow', 'Iteration', 'Persona', 'Screens', 'Cta', 'Gallery', 'Decisions', 'Stats']);
+const WIDE = new Set(['Steps', 'Flow', 'Iteration', 'Persona', 'Screens', 'Pairs', 'Cta', 'Gallery', 'Decisions', 'Stats']);
 const el = (tagName, className, children) => ({ type: 'element', tagName, properties: { className: [className] }, children });
 
 /**
