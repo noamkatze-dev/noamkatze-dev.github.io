@@ -1,0 +1,34 @@
+---
+/**
+ * Centred outlined button, e.g. a link to the live prototype.
+ * <Cta href="https://..." label="Explore the feature" />
+ * A TODO href shows as a disabled button in dev and is removed in production.
+ */
+import { isTodoOnly } from '../../lib/todo.mjs';
+
+interface Props {
+  href: string;
+  label: string;
+}
+const { href, label } = Astro.props;
+const todo = isTodoOnly(href);
+const prod = import.meta.env.PROD;
+const render = !(todo && prod);
+---
+
+{
+  render && (
+    <div class="cta">
+      {todo ? (
+        <span class="btn" aria-disabled="true">
+          {label}: <mark class="todo">{href}</mark>
+        </span>
+      ) : (
+        <a class="btn" href={href} target="_blank" rel="noopener noreferrer">
+          {label}
+          <span class="visually-hidden"> (opens in a new tab)</span>
+        </a>
+      )}
+    </div>
+  )
+}

@@ -1,0 +1,25 @@
+---
+/**
+ * Findings list: a check mark for what worked, a cross for what didn't.
+ * <Checklist good={["It worked"]} bad={["It didn't"]} />
+ */
+import TodoText from '../TodoText.astro';
+
+interface Props {
+  good?: string[];
+  bad?: string[];
+}
+const { good = [], bad = [] } = Astro.props;
+const items = good.map((t) => ({ text: t, kind: 'good', sr: 'Worked: ' })).concat(bad.map((t) => ({ text: t, kind: 'bad', sr: 'Issue: ' })));
+---
+
+<ul class="checklist">
+  {
+    items.map((i) => (
+      <li class={i.kind}>
+        <span class="visually-hidden">{i.sr}</span>
+        <TodoText text={i.text} />
+      </li>
+    ))
+  }
+</ul>

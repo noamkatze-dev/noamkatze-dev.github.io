@@ -22,7 +22,7 @@
 
   /* ---------- Scroll reveal (once; only for content below the fold) ---------- */
   if (!reduceMotion && 'IntersectionObserver' in window) {
-    var selector = '.projects > li, .split, .cs-section, .row, .next, .flow-item, .screens, .pair, .process';
+    var selector = '.projects > li, .home-section, .cs-section > .cs-text, .flow-item, .screens, .persona, .process, .cta, .side-media, .cs-intro-media';
     var items = Array.prototype.slice.call(document.querySelectorAll(selector));
     var below = items.filter(function (el) {
       return el.getBoundingClientRect().top > window.innerHeight * 0.95;
@@ -46,6 +46,41 @@
     );
     below.forEach(function (el) {
       io.observe(el);
+    });
+  }
+
+  /* ---------- Autoplay videos (muted loops, like the Wix site) ---------- */
+  // Videos marked data-autoplay play only while on screen. With reduced motion
+  // (or no IntersectionObserver) they keep their controls and wait for a click.
+  var autoVideos = Array.prototype.slice.call(document.querySelectorAll('video[data-autoplay]'));
+  if (autoVideos.length && !reduceMotion && 'IntersectionObserver' in window) {
+    var vio = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          var v = entry.target;
+          if (entry.isIntersecting) {
+            v.muted = true;
+            if (v.preload !== 'auto') v.preload = 'auto';
+            var p = v.play();
+            if (p && p.catch) {
+              p.catch(function () {
+                v.controls = true;
+              });
+            }
+          } else if (!v.paused) {
+            v.pause();
+          }
+        });
+      },
+      { rootMargin: '200px 0px', threshold: 0.15 }
+    );
+    autoVideos.forEach(function (v) {
+      v.controls = false;
+      v.addEventListener('click', function () {
+        if (v.paused) v.play();
+        else v.pause();
+      });
+      vio.observe(v);
     });
   }
 

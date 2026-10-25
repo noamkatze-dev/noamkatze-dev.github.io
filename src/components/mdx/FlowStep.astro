@@ -1,14 +1,16 @@
 ---
 /**
- * One step of a flow: large numeral, title, short text, then its image (or video).
- * <FlowStep n={1} title="Dashboard" file="slug/flow-1.png" alt="...">Markdown text</FlowStep>
+ * One step of a flow: large image or video on the left, title and text on the right.
+ * <FlowStep title="Dashboard" video="slug/flow-1" alt="...">Markdown text</FlowStep>
+ * Videos autoplay (muted, looped) while on screen, like the Wix site.
+ * `n` is kept for compatibility and is not shown.
  */
 import Media from '../Media.astro';
 import VideoMedia from '../VideoMedia.astro';
 import { bindLast } from '../../lib/todo.mjs';
 
 interface Props {
-  n: number;
+  n?: number;
   title: string;
   /** Image under src/assets/images/ … */
   file?: string;
@@ -19,20 +21,18 @@ interface Props {
   note?: string;
   ratio?: string;
 }
-const { n, title, file, video, alt, caption, note, ratio } = Astro.props;
-const num = n < 10 ? '0' + n : String(n);
+const { title, file, video, alt, note, ratio } = Astro.props;
 const heading = bindLast(title);
 const imageFile = file ?? '';
+const sizes = '(min-width: 1100px) 57vw, 100vw';
 ---
 
 <li class="flow-item">
-  <span class="num" aria-hidden="true">{num}</span>
+  <div class="flow-media">
+    {video ? <VideoMedia src={video} label={alt} autoplay /> : <Media file={imageFile} alt={alt} note={note} ratio={ratio} sizes={sizes} zoom />}
+  </div>
   <div class="flow-text">
     <h3>{heading}</h3>
     <slot />
   </div>
-  <figure class="shot">
-    {video ? <VideoMedia src={video} label={alt} /> : <Media file={imageFile} alt={alt} note={note} ratio={ratio} zoom />}
-    {caption && <figcaption>{caption}</figcaption>}
-  </figure>
 </li>

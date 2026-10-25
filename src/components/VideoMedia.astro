@@ -1,8 +1,12 @@
 ---
 /**
- * Self-hosted video, click-to-load: only the poster loads (preload="none"),
- * nothing plays until the visitor presses play. Never autoplays.
+ * Self-hosted video. Only the poster loads (preload="none").
  * Files: public/videos/<src>.mp4 + <src>.jpg poster; sizes in src/data/videos.json.
+ *
+ * autoplay → plays muted and looped while on screen, like the Wix site
+ *            (src/scripts/ui.js starts and pauses it; without JS, or with
+ *            reduced motion, the normal controls stay).
+ * otherwise → click to play.
  */
 import videos from '../data/videos.json';
 import { url } from '../lib/url';
@@ -11,27 +15,43 @@ interface Props {
   src: string;
   /** Accessible description of what the clip shows. */
   label: string;
-  /** Narrow frame for phone recordings. */
-  phone?: boolean;
+  autoplay?: boolean;
 }
 
-const { src, label, phone = false } = Astro.props;
+const { src, label, autoplay = false } = Astro.props;
 const meta = (videos as Record<string, { width: number; height: number; duration: number; audio: boolean }>)[src];
 if (!meta) throw new Error('Video "' + src + '" is not in src/data/videos.json');
 const videoSrc = url('/videos/' + src + '.mp4');
 const posterSrc = url('/videos/' + src + '.jpg');
-const wrapClass = phone ? 'video video--phone' : 'video';
 ---
 
-<div class={wrapClass}>
-  <video
-    src={videoSrc}
-    poster={posterSrc}
-    width={meta.width}
-    height={meta.height}
-    controls
-    playsinline
-    preload="none"
-    aria-label={label}
-  ></video>
+<div class="video">
+  {
+    autoplay ? (
+      <video
+        src={videoSrc}
+        poster={posterSrc}
+        width={meta.width}
+        height={meta.height}
+        controls
+        muted
+        loop
+        playsinline
+        preload="none"
+        data-autoplay
+        aria-label={label}
+      ></video>
+    ) : (
+      <video
+        src={videoSrc}
+        poster={posterSrc}
+        width={meta.width}
+        height={meta.height}
+        controls
+        playsinline
+        preload="none"
+        aria-label={label}
+      ></video>
+    )
+  }
 </div>

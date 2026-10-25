@@ -4,9 +4,13 @@ import { url } from '../lib/url';
 ---
 
 <Base title="Page not found" description="This page doesn't exist." noindex>
-  <section class="hero wrap">
-    <h1>This page doesn't exist.</h1>
-    <p class="lead">The link may be old, or the page moved.</p>
-    <p style="margin-top: var(--s-4)"><a href={url('/')}>Back to home</a> · <a href={url('/#work')}>See selected work</a></p>
-  </section>
+  <div class="page">
+    <section class="wrap home-section" aria-labelledby="nf-title">
+      <h1 id="nf-title">Page not found</h1>
+      <div class="home-text">
+        <p>The link may be old, or the page moved.</p>
+        <p><a class="ul" href={url('/')}>Back to home</a> · <a class="ul" href={url('/#work')}>See the projects</a></p>
+      </div>
+    </section>
+  </div>
 </Base>

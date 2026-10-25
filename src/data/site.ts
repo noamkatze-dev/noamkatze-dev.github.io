@@ -27,6 +27,19 @@ export const hero = {
   support: 'I turn complex data and workflows into clear, trustworthy interfaces.',
 };
 
+/** About text on Home (as on the Wix site). One string per paragraph. */
+export const homeAbout = [
+  "I'm a Product Designer (UX/UI) with a background in Visual Communication and a user-centered approach to design. I graduated in 2026 with a B.Des. in Visual Communication from the University of Haifa and hold a professional UX certification from BEX College.",
+  'I currently work as a Product Designer at a design studio.',
+  'My approach combines research-oriented and systems thinking with a strong visual foundation, allowing me to translate user needs into clear, cohesive, and intuitive digital experiences.',
+];
+
+/** Skill lines under the About text on Home. */
+export const homeSkills = [
+  { label: 'Design Skills', items: ['User Research', 'Wireframing', 'Prototyping', 'UI Design', 'Design Systems'] },
+  { label: 'Tools & Technologies', items: ['Figma', 'Adobe Creative Suite', 'AI Tools', 'Vibe Coding'] },
+];
+
 /** Short version shown on Home. */
 export const aboutTeaser =
   "I'm a recent B.Des graduate from the University of Haifa. Before design, I spent five years in the IDF leading a procurement-system upgrade and managing a permits center, which taught me to work with complex systems and many stakeholders at once. Now I design data-heavy tools and multi-role workflows, end to end.";

@@ -80,6 +80,8 @@ function strip(node) {
     switch (node.name) {
       case 'Embed':
         return isTodoOnly(attr(node, 'url') ?? '');
+      case 'Cta':
+        return isTodoOnly(attr(node, 'href') ?? '');
       case 'Figure':
         return !imageExists(attr(node, 'file'));
       case 'Decision':
@@ -89,6 +91,8 @@ function strip(node) {
       case 'Gallery':
       case 'Flow':
       case 'Iteration':
+      case 'Screens':
+      case 'Phones':
         return !node.children.some((c) => isJsx(c) || (c.type === 'element'));
       default:
         return false;
@@ -160,17 +164,38 @@ function bindWords(node) {
 
 /* ---------- both: wrap each h2 and its content in <section class="cs-section"> ---------- */
 // Lets the case-study layout put the heading in a left column and the text on the right.
+// MDX components that span the full width of a section (everything else
+// goes into the right-hand text column).
+const WIDE = new Set(['Steps', 'Flow', 'Iteration', 'Persona', 'Screens', 'Cta', 'Gallery', 'Decisions', 'Stats']);
+const el = (tagName, className, children) => ({ type: 'element', tagName, properties: { className: [className] }, children });
+
+/**
+ * Each "## Title" and what follows becomes
+ * <section class="cs-section"><h2/><div class="cs-text">…</div>[wide block]<div class="cs-text">…</div></section>.
+ * Content before the first h2 is left as is.
+ */
 function wrapSections(root) {
   const out = [];
-  let current = null;
+  let section = null;
+  let text = null;
   for (const node of root.children) {
     if (node.type === 'element' && node.tagName === 'h2') {
-      current = { type: 'element', tagName: 'section', properties: { className: ['cs-section'] }, children: [node] };
-      out.push(current);
-    } else if (current) {
-      current.children.push(node);
-    } else {
+      section = el('section', 'cs-section', [node]);
+      text = null;
+      out.push(section);
+    } else if (!section) {
       out.push(node);
+    } else if (isJsx(node) && WIDE.has(node.name)) {
+      section.children.push(node);
+      text = null;
+    } else if (node.type === 'text' && node.value.trim() === '') {
+      // whitespace between blocks
+    } else {
+      if (!text) {
+        text = el('div', 'cs-text', []);
+        section.children.push(text);
+      }
+      text.children.push(node);
     }
   }
   root.children = out;

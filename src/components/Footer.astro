@@ -4,7 +4,6 @@ import { join } from 'node:path';
 import { site } from '../data/site';
 import { url } from '../lib/url';
 
-const year = new Date().getFullYear();
 const hasCv = existsSync(join(process.cwd(), 'public', 'cv.pdf'));
 const mailto = 'mailto:' + site.email;
 const cvHref = url(site.cv);
@@ -13,28 +12,25 @@ const cvHref = url(site.cv);
 <footer class="site-footer" id="contact">
   <div class="wrap footer-row">
     <h2 class="visually-hidden">Contact</h2>
-    <p class="footer-item">
-      <span class="footer-label">Email</span>
-      <a class="ul" href={mailto}>{site.email}</a>
-    </p>
     {
       hasCv && (
-        <p class="footer-item">
+        <p class="footer-item footer-cv">
           <span class="footer-label">CV</span>
-          <a class="ul" href={cvHref} download>Download (PDF)</a>
+          <a href={cvHref} download>Download (PDF)</a>
         </p>
       )
     }
+    <p class="footer-item footer-email">
+      <span class="footer-label">Email</span>
+      <a href={mailto}>{site.email}</a>
+    </p>
     <a class="footer-icon" href={site.linkedin} rel="me noopener" target="_blank" aria-label="LinkedIn (opens in a new tab)">
-      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+      <svg width="27" height="27" viewBox="0 0 24 24" aria-hidden="true">
         <path
           fill="currentColor"
           d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.3-.02-2.95-1.8-2.95-1.8 0-2.07 1.4-2.07 2.86V21H9z"
         ></path>
       </svg>
     </a>
-  </div>
-  <div class="wrap">
-    <p class="footer-meta">© {year} {site.name}</p>
   </div>
 </footer>

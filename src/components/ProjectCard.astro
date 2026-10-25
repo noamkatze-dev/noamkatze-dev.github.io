@@ -5,19 +5,23 @@ import { url } from '../lib/url';
 
 interface Props {
   project: CollectionEntry<'projects'>;
+  /** Thumbnail proportions, e.g. "463 / 255". */
+  ratio?: string;
   /** The first item is near the top of the page: load its image eagerly. */
   eager?: boolean;
 }
-const { project, eager = false } = Astro.props;
+const { project, ratio = '16 / 10', eager = false } = Astro.props;
 const d = project.data;
 const href = url('/work/' + project.id + '/');
+const name = d.shortTitle ?? d.title;
 const discipline = d.discipline ?? '';
+const mediaStyle = '--ratio: ' + ratio;
 ---
 
 <a class="project" href={href}>
-  <div class="project-media">
-    <Media file={d.cover} alt="" note={d.coverNote} ratio="16 / 10" eager={eager} sizes="(min-width: 900px) 560px, 100vw" />
+  <div class="project-media" style={mediaStyle}>
+    <Media file={d.cover} alt="" note={d.coverNote} ratio={ratio} eager={eager} sizes="(min-width: 1100px) 33vw, 100vw" />
   </div>
-  <h3 class="project-title">{d.title}</h3>
+  <h3 class="project-title">{name}</h3>
   {discipline && <p class="project-tag">{discipline}</p>}
 </a>

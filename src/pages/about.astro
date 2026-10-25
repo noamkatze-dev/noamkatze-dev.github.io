@@ -32,15 +32,15 @@ const pageDescription = 'About ' + site.name + ': product designer, B.Des Univer
 ---
 
 <Base title="About" description={pageDescription}>
+  <div class="page">
   <section class="page-head wrap" aria-labelledby="about-h1">
-    <p class="label">About</p>
-    <h1 id="about-h1">Clarity is the whole point.</h1>
+    <h1 id="about-h1">About</h1>
   </section>
 
-  <div class="wrap rows">
-    <section class="row" aria-labelledby="bio-title">
+  <div class="rows">
+    <section class="wrap home-section" aria-labelledby="bio-title">
       <h2 id="bio-title" class="row-label">Background</h2>
-      <div class="bio">
+      <div class="bio home-text">
         {bio.map((p) => <p>{p}</p>)}
         {
           hasCv && (
@@ -56,13 +56,13 @@ const pageDescription = 'About ' + site.name + ': product designer, B.Des Univer
 
     {
       groups.map((g) => (
-        <section class="row" aria-labelledby={g.id + '-title'}>
+        <section class="wrap home-section" aria-labelledby={g.id + '-title'}>
           <h2 id={g.id + '-title'} class="row-label">
             {g.title}
           </h2>
-          <div>
+          <div class="home-text">
             {g.intro && <p class="row-intro">{bindLast(g.intro)}</p>}
-            <ul class="entries">
+            <ul class="entries home-text">
               {g.items.map((item) => (
                 <li>
                   <span class="period">
@@ -85,9 +85,9 @@ const pageDescription = 'About ' + site.name + ': product designer, B.Des Univer
       ))
     }
 
-    <section class="row" aria-labelledby="skills-title">
+    <section class="wrap home-section" aria-labelledby="skills-title">
       <h2 id="skills-title" class="row-label">Skills and tools</h2>
-      <ul class="entries">
+      <ul class="entries home-text">
         {
           skillRows.map((g) => (
             <li>
@@ -99,9 +99,9 @@ const pageDescription = 'About ' + site.name + ': product designer, B.Des Univer
       </ul>
     </section>
 
-    <section class="row" aria-labelledby="recognition-title">
+    <section class="wrap home-section" aria-labelledby="recognition-title">
       <h2 id="recognition-title" class="row-label">Recognition</h2>
-      <ul class="entries">
+      <ul class="entries home-text">
         {
           recognition.map((r) => (
             <li>
@@ -112,5 +112,6 @@ const pageDescription = 'About ' + site.name + ': product designer, B.Des Univer
         }
       </ul>
     </section>
+  </div>
   </div>
 </Base>

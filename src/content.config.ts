@@ -20,6 +20,18 @@ const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
+    shortTitle: z.string().optional(), // shorter name for the Home card and the big page title
+    heroTitle: z.boolean().default(true), // false: the hero opens with media only (the title stays for screen readers)
+    // Media at the top of the page. Defaults to the cover image, 888px wide.
+    hero: z
+      .object({
+        file: z.string().optional(), // image under src/assets/images/
+        video: z.string().optional(), // or a video under public/videos/ (no extension)
+        alt: z.string().optional(),
+        width: z.number().default(888), // px at 1440px wide
+        radius: z.number().default(0),
+      })
+      .optional(),
     tagline: z.string().optional(), // optional poetic line under the title
     summary: z.string(), // one line: used on cards, in the header and as meta description
     context: z.string(), // e.g. "Academic project, University of Haifa"

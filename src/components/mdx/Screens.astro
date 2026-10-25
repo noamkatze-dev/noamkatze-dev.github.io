@@ -1,33 +1,22 @@
 ---
 /**
- * A row of mobile screens with a small label above and an optional caption below.
- * Desktop: 3–4 screens per row. Mobile: a horizontal scroll-snap strip.
+ * Grid of phone screens, five per row on desktop, uppercase captions underneath.
+ * `dark` puts the whole section on a full-width black band (the Wireframes section).
  *
- * <Screens label="Connect" caption="...">
- *   <Figure phone file="..." alt="..." caption="Scan" />
+ * <Screens>
+ *   <Figure phone file="..." alt="..." caption="Splash" />
  * </Screens>
  */
-import TodoText from '../TodoText.astro';
-
 interface Props {
+  dark?: boolean;
+  /** Kept for compatibility with older content. */
   label?: string;
   caption?: string;
 }
-const { label, caption } = Astro.props;
+const { dark = false } = Astro.props;
 const html = await Astro.slots.render('default');
 const hasMedia = html.includes('<img') || html.includes('class="placeholder"');
+const kind = dark ? 'screens screens--dark' : 'screens';
 ---
 
-{
-  hasMedia && (
-    <div class="screens">
-      {label && <p class="label">{label}</p>}
-      <div class="screens-row" set:html={html} />
-      {caption && (
-        <p class="screens-caption">
-          <TodoText text={caption} />
-        </p>
-      )}
-    </div>
-  )
-}
+{hasMedia && <div class={kind}><div class="screens-grid" set:html={html} /></div>}

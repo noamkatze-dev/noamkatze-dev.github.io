@@ -20,8 +20,18 @@ import Swatches from './Swatches.astro';
 import Video from './Video.astro';
 import Screens from './Screens.astro';
 import WireframePair from './WireframePair.astro';
+import SideMedia from './SideMedia.astro';
+import IntroMedia from './IntroMedia.astro';
+import Phones from './Phones.astro';
+import Checklist from './Checklist.astro';
+import Cta from './Cta.astro';
 
 export const mdxComponents = {
+  SideMedia,
+  IntroMedia,
+  Phones,
+  Checklist,
+  Cta,
   Swatches,
   Video,
   Screens,

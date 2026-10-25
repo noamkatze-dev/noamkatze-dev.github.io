@@ -1,7 +1,8 @@
 ---
 /**
- * Primary user: optional round photo, name and background, then lists side by side.
- * <Persona title="Data Analyst" photo="slug/persona.jpg" photoAlt="..." background="..." workflow={[...]} goals={[...]} jobs={[...]} />
+ * Primary user: round photo with name and background, then two lists side by side.
+ * <Persona title="Data Analyst" photo="slug/persona.jpg" photoAlt="..." background={["Line one", "Line two"]} workflow={[...]} goals={[...]} />
+ * `jobs` is still accepted (shown as a third list) but the Wix layout uses a separate JTBD section.
  */
 import TodoText from '../TodoText.astro';
 import Media from '../Media.astro';
@@ -10,17 +11,18 @@ interface Props {
   title: string;
   photo?: string;
   photoAlt?: string;
-  background?: string;
+  background?: string | string[];
   workflow?: string[];
   goals?: string[];
   jobs?: string[];
 }
-const { title, photo, photoAlt = '', background, workflow = [], goals = [], jobs = [] } = Astro.props;
+const { title, photo, photoAlt = '', background = [], workflow = [], goals = [], jobs = [] } = Astro.props;
 const lists = [
-  { label: 'Daily workflow', items: workflow },
+  { label: 'Daily Workflow', items: workflow },
   { label: 'Goals', items: goals },
   { label: 'Jobs to be done', items: jobs },
 ].filter((l) => l.items.length > 0);
+const bgLines = Array.isArray(background) ? background : [background];
 const hasPhoto = Boolean(photo);
 const photoFile = photo ?? '';
 ---
@@ -30,13 +32,19 @@ const photoFile = photo ?? '';
     {
       hasPhoto && (
         <div class="persona-photo">
-          <Media file={photoFile} alt={photoAlt} ratio="1 / 1" sizes="220px" />
+          <Media file={photoFile} alt={photoAlt} ratio="1 / 1" sizes="280px" />
         </div>
       )
     }
     <div>
-      <h3>{title}</h3>
-      {background && <p><TodoText text={background} /></p>}
+      <h3 class="persona-name">{title}</h3>
+      {
+        bgLines.map((line) => (
+          <p>
+            <TodoText text={line} />
+          </p>
+        ))
+      }
     </div>
   </div>
   <div class="persona-lists">

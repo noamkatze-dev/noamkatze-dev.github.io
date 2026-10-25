@@ -1,9 +1,9 @@
 ---
 /**
- * One version in the iteration band. `why` and `gaveUp` are the most valuable
- * lines on the page — keep them honest. TODO-only lines are hidden in production.
+ * One version of the design, laid out like a flow step (media left, text right).
+ * `why` and `gaveUp` are optional extra lines; TODO-only lines are hidden in production.
  *
- * <IterationStage n={1} title="Ethical Insights" file="..." alt="..." why="..." gaveUp="...">
+ * <IterationStage title="Initial Integration" video="..." alt="..." why="..." gaveUp="...">
  *   What this version was, in Markdown.
  * </IterationStage>
  */
@@ -13,7 +13,7 @@ import TodoText from '../TodoText.astro';
 import { isTodoOnly, bindLast } from '../../lib/todo.mjs';
 
 interface Props {
-  n: number;
+  n?: number;
   title: string;
   file?: string;
   video?: string;
@@ -22,7 +22,7 @@ interface Props {
   why?: string;
   gaveUp?: string;
 }
-const { n, title, file, video, alt, note, why, gaveUp } = Astro.props;
+const { title, file, video, alt, note, why, gaveUp } = Astro.props;
 const prod = import.meta.env.PROD;
 function show(v?: string) {
   if (!v) return false;
@@ -30,32 +30,31 @@ function show(v?: string) {
 }
 const showWhy = show(why);
 const showGaveUp = show(gaveUp);
-const num = n < 10 ? '0' + n : String(n);
 const heading = bindLast(title);
 const imageFile = file ?? '';
+const sizes = '(min-width: 1100px) 57vw, 100vw';
 ---
 
 <li class="flow-item">
-  <span class="num" aria-hidden="true">{num}</span>
+  <div class="flow-media">
+    {video ? <VideoMedia src={video} label={alt} autoplay /> : <Media file={imageFile} alt={alt} note={note} sizes={sizes} zoom />}
+  </div>
   <div class="flow-text">
     <h3>{heading}</h3>
     <slot />
     {
       showWhy && (
-        <p>
+        <p class="flow-note">
           <strong>Why I changed it:</strong> <TodoText text={why} />
         </p>
       )
     }
     {
       showGaveUp && (
-        <p>
+        <p class="flow-note">
           <strong>What I gave up:</strong> <TodoText text={gaveUp} />
         </p>
       )
     }
   </div>
-  <figure class="shot">
-    {video ? <VideoMedia src={video} label={alt} /> : <Media file={imageFile} alt={alt} note={note} zoom />}
-  </figure>
 </li>

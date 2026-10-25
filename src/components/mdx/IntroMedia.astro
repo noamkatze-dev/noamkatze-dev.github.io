@@ -1,0 +1,27 @@
+---
+/**
+ * Centred image or video before the first section (e.g. the 250ms landing clip).
+ * Put it at the very top of the .mdx body, above the first "## Title".
+ *
+ * <IntroMedia video="250ms/landing" alt="What the clip shows" width={796} />
+ */
+import Media from '../Media.astro';
+import VideoMedia from '../VideoMedia.astro';
+
+interface Props {
+  file?: string;
+  video?: string;
+  alt: string;
+  /** Width in px at 1440px wide. */
+  width?: number;
+  autoplay?: boolean;
+  radius?: number;
+}
+const { file, video, alt, width = 796, autoplay = false, radius = 0 } = Astro.props;
+const frameStyle = '--w: ' + width + '; --r: ' + radius;
+const imageFile = file ?? '';
+---
+
+<figure class="cs-intro-media media-r" style={frameStyle}>
+  {video ? <VideoMedia src={video} label={alt} autoplay={autoplay} /> : <Media file={imageFile} alt={alt} sizes="(min-width: 1100px) 56vw, 100vw" />}
+</figure>

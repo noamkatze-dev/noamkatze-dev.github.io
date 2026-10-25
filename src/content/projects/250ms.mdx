@@ -13,202 +13,126 @@ tools:
   - HTML and CSS
   - "[TODO: Figma or other design tools]"
 tags: [Research tool, Data visualization, Computer vision, Code prototype]
-order: 2
+order: 3
 discipline: UX/UI
 cover: 250ms/cover-16x10.jpg
 coverAlt: The 250ms landing screen, a red Hebrew headline over a sky backdrop crossed by a thin red grid.
+heroTitle: false
+hero:
+  file: 250ms/logo.png
+  alt: The 250ms wordmark in a blocky display face.
+  width: 700
 links:
   - label: Try it live
     url: "[TODO link: live demo, the most important link on the page]"
     kind: live
     primary: true
-  - label: Watch the demo
-    url: "[TODO link: demo video]"
-    kind: video
-  - label: Source code
-    url: "[TODO link: optional, GitHub repository]"
-    kind: code
 ---
+
+<IntroMedia
+  video="250ms/landing"
+  width={796}
+  alt="Screen recording of the 250ms landing screen: a red headline over a drifting sky crossed by a thin red grid."
+/>
+
+## 250ms
+
+What your eyes reveal before you've decided what you think.<br />
+A browser-based eye-tracking experiment that measures visual attention on political imagery: no hardware, just a webcam.
+
+<p></p>
+
+Role: Solo designer and developer<br />
+Tools: MediaPipe Face Landmarker, JavaScript and Canvas, HTML and CSS<br />
+Type: Final-year thesis project
+
+## Work process
+
+<Steps
+  items={[
+    "Concept & research",
+    "Technical feasibility",
+    "UX flow & wireframing",
+    "Visual design system",
+    "Build & calibration",
+    "Iteration & refinement",
+  ]}
+/>
 
 ## The question
 
-Political imagery surrounds us daily, in the news, on social media and in campaigns, shaping how we perceive reality. We usually ask what people *think* about these images.
+Political imagery surrounds us daily, in the news, on social media and in campaigns, shaping how we perceive reality. We usually ask what people *think* about these images. I wanted to ask a different question: how do we *look* at them? Our eyes choose where to land, what to linger on and what to avoid.
 
-I wanted to ask a different question: how do we *look* at them? Our eyes choose where to land, what to linger on and what to avoid, before we've decided what we think.
+## How it works – concept overview
 
-<Stats
-  items={[
-    { value: "16", label: "images per session" },
-    { value: "3 s", label: "per image" },
-    { value: "9-point", label: "personal gaze calibration" },
-    { value: ">50%", label: "less visible gaze tremor after adaptive filtering" },
-  ]}
+With nothing but a laptop webcam and real-time facial-landmark detection, the system calibrates to each viewer's gaze, then tracks exactly where they look while viewing a set of political photographs, measuring fixations, saccades and attention density down to the pixel.
+
+## Process – research & approach
+
+Every design decision here was a research decision: how many images balance statistical value against fatigue? How long should each image stay before attention drifts toward boredom rather than genuine interest?
+
+The system settled on 16 images at 3 seconds each: long enough for a first fixation and a scan, short enough to stay honest.
+
+## Calibration
+
+<SideMedia
+  video="250ms/calibration"
+  alt="Screen recording of the 9-point calibration: a red target ring moves across a blurred sky while the viewer follows it with their eyes."
 />
 
-## How it works
+Before any data collection, the viewer completes a 9-point calibration, holding their gaze on each point while the system builds a personal mapping between iris position and screen coordinates.
 
-With a laptop webcam and real-time facial-landmark detection, the system calibrates to each viewer's gaze, then tracks where they look while viewing a set of political photographs, measuring fixations, saccades and attention density.
+## The viewing session
 
-<Embed
-  url="[TODO link: demo video on YouTube or Vimeo]"
-  title="250ms demo video"
-  caption="A full session, from calibration to analysis."
+<SideMedia
+  video="250ms/viewing-session"
+  alt="Screen recording of a viewing session: political photographs appear one after another over the sky backdrop, with small red markers on screen."
 />
 
-## Process
+The system records what your eyes do naturally: fixations, scanpaths, first glance and attention density.
 
-<Steps
-  items={[
-    "Concept and research",
-    "Technical feasibility",
-    "UX flow and wireframing",
-    "Visual design system",
-    "Build and calibration",
-    "Iteration and refinement",
-  ]}
+Age, gender and location are logged too, to allow comparison across viewers later.
+
+## Gaze analysis modes
+
+The system reconstructs the same viewing session in several ways: fixations, saccades, scanpath, heatmap and first fixation. [TODO: the original text said six modes but listed five; confirm the sixth or correct the count]
+
+## The political arc
+
+<SideMedia
+  video="250ms/political-arc"
+  alt="Screen recording of the political arc: a red semicircle over the sky with tick marks and a marker moving along the arc."
 />
 
-The experience, from the viewer's side:
+Each region a viewer's gaze lingers on is mapped to a rough position on a left-right political arc, based on who occupies that region. This is deliberately presented as an artistic, conceptual interpretation, not a scientific measurement, and that framing is stated on screen.
 
-<Steps
-  items={[
-    "Landing",
-    "Calibration",
-    "Viewing session",
-    "Gaze analysis",
-    "Political arc",
-    "Compare and data",
-  ]}
+## Compare
+
+<SideMedia
+  file="250ms/compare.png"
+  alt="The Data view: a grid of political photographs, each overlaid with a viewer's gaze points in red, with filters for gender, age range, location and gaze mode."
 />
-
-## Key decisions and trade-offs
-
-Every design decision here was also a research decision.
-
-<Decisions>
-  <Decision
-    title="A webcam, not an eye tracker"
-    choice="Run entirely in the browser with a laptop webcam and MediaPipe facial landmarks. No extra hardware."
-    why="Anyone with a laptop can take part, which makes the experiment possible to run at all, and at scale."
-    tradeoff="Webcam tracking is noisy and less precise than dedicated hardware. That cost shaped the calibration and the filter described below."
-  />
-  <Decision
-    title="16 images, 3 seconds each"
-    choice="A session shows 16 images for 3 seconds each."
-    why="How many images balance statistical value against fatigue, and how long before attention drifts toward boredom rather than interest? 3 seconds is long enough for a first fixation and a scan, short enough to stay honest."
-    tradeoff="Less data per viewer in exchange for attention that is still genuine. [TODO: how I arrived at these numbers: pilot, literature, testing]"
-  />
-  <Decision
-    title="Smooth hard only when the eye is still"
-    choice="An adaptive filter that detects when the eye is actually still and smooths heavily only then."
-    why="Smoothing everywhere would have made real eye movements feel sluggish."
-    tradeoff="[TODO: what it cost, e.g. tuning complexity, edge cases where it misfires]"
-  />
-  <Decision
-    title="Say clearly what is art and what is measurement"
-    choice="The political arc is presented as an artistic, conceptual interpretation, and the screen says so."
-    why="Mapping gaze to a political position is not a scientific measurement. Framing it honestly avoids misleading claims."
-    tradeoff="[TODO: what I gave up by not presenting it as a finding]"
-  />
-</Decisions>
-
-## Solution
-
-### Calibration
-
-Before data collection, the viewer completes a 9-point calibration, holding their gaze on each point while the system builds a personal mapping between iris position and screen coordinates.
-
-<Figure
-  file="250ms/calibration.jpg"
-  alt="Calibration screen: a blurred sky with one red target ring for the viewer to fix their gaze on, and a point counter in the corner."
-  caption="9-point calibration builds a personal map from iris position to screen."
-/>
-
-### The viewing session
-
-The session records fixations, scanpaths, first glance and attention density. Age, gender and location are logged as well, to allow comparison across viewers.
-
-<Video
-  src="250ms/viewing-session"
-  label="Screen recording of a viewing session: political photographs appear one after another over the sky backdrop, with small red markers on screen."
-  caption="Each image shows for 3 seconds while gaze is recorded."
-/>
-
-### Gaze analysis modes
-
-The system reconstructs the same session in several ways: fixations, saccades, scanpath, heatmap and first fixation. [TODO: the original text said six modes but listed five; confirm the sixth or correct the count]
-
-<FigureGrid cols={3}>
-  <Figure thumb file="250ms/mode-points.jpg" alt="Red dots marking where one viewer looked, over a photograph of two politicians embracing." caption="Points: where the eye landed." />
-  <Figure thumb file="250ms/mode-lines.jpg" alt="Red lines tracing how the eye moved across the same photograph." caption="Path: how the eye moved." />
-  <Figure thumb file="250ms/mode-contours.jpg" alt="Red contour lines around the areas looked at most, over the same photograph." caption="Density: where attention gathered." />
-</FigureGrid>
-
-### The political arc
-
-Each region the gaze lingers on is mapped to a rough position on a left-right arc, based on who occupies that region.
-
-<Callout label="Framing">
-
-This is deliberately presented as an artistic, conceptual interpretation, not a scientific measurement, and that framing is stated on screen.
-
-</Callout>
-
-<Figure
-  file="250ms/political-arc.jpg"
-  alt="The political arc screen: a red semicircle over a sky backdrop with tick marks and one marker on the left of the arc, under a red Hebrew title."
-  caption="The political arc: an interpretation, labeled as one."
-/>
-
-### Compare and dashboard
 
 A comparison view filters multiple sessions side by side by gender, age range or location, and a dashboard surfaces aggregate patterns, turning individual gaze data into something that can be studied at scale.
 
-[TODO: who uses it (researcher, artist, viewer?) and what decisions it supports]
-
-<Figure
-  file="250ms/compare.png"
-  alt="The Data view: a grid of political photographs, each overlaid with a viewer's gaze points in red, with filters for gender, age range, location and gaze mode."
-  caption="The Data view: every image with its gaze data, filterable by gender, age range and location. [TODO: add a screenshot of the Compare view and the aggregate dashboard if you have them]"
-/>
-
-<Gallery title="Wireframes">
-  <Figure thumb file="250ms/wireframe-01.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export. Add or remove Figure lines as needed]" />
-  <Figure thumb file="250ms/wireframe-02.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export]" />
-  <Figure thumb file="250ms/wireframe-03.png" alt="[TODO: describe wireframe]" note="[TODO: wireframe export]" />
-</Gallery>
-
 ## Design system
 
-The sky is where the eye rests between charged images. Clouds ask nothing of you and take no side. That innocence is the point, because looking at a political image is never neutral.
+The sky is where the eye rests between charged images. Clouds ask nothing of you, take no side and provoke no feeling. That innocence is the point: it is the exact opposite of looking at a political image, which is never neutral. Over that calm backdrop sits a thin red grid and deep red typography, the visual language of surveillance and lab instruments.
 
-Over that calm backdrop sits a thin red grid and deep red typography, the visual language of surveillance and lab instruments.
+## Challenges & iteration
 
-<Figure
-  file="250ms/logo.png"
-  alt="The 250ms wordmark in a blocky red display face on black."
-  caption="The wordmark: blocky, red, instrument-like."
-/>
+Webcam tracking is noisy by nature. One challenge: a steady, fixated gaze still visibly trembled on screen. The fix wasn't more smoothing everywhere, which would have made real eye movements feel sluggish, but an adaptive filter that detects when the eye is actually still and smooths hard only then. It cut visible tremor by over 50%, with no added lag during real movement. [TODO: how the 50% was measured]
 
-## Iteration
-
-Webcam tracking is noisy. Even a steady, fixated gaze visibly trembled on screen.
-
-More smoothing everywhere would have made real eye movements feel sluggish, so I built an adaptive filter that detects when the eye is actually still and smooths hard only then. It cut visible tremor by over 50%, with no added lag during real movement. [TODO: how the 50% was measured]
-
+<Cta href="[TODO link: live demo]" label="Try it live" />
 
 ## Data, consent and privacy
 
-[TODO: consent flow, what is stored, where, whether it is anonymized, and how the framing avoids misleading claims]
+[TODO: consent flow, what is stored, where, whether it is anonymized]
 
-## Results
+## Results and reflection
 
 [TODO: number of sessions, patterns found, what surprised me]
 
-## Limitations
-
-[TODO: accuracy of webcam tracking, lighting, head movement, sample size]
-
-## Reflection
+[TODO: limitations: accuracy of webcam tracking, lighting, head movement, sample size]
 
 [TODO: what I would do differently, what I would build next]

@@ -1,7 +1,9 @@
 ---
 /**
- * <Video src="250ms/viewing-session" label="What the clip shows" caption="Short caption" />
- * Click-to-load: poster only, preload="none", never autoplays.
+ * <Video src="calcalist-next/app-walkthrough" label="What the clip shows" phone autoplay radius={20} />
+ *   phone    → 250px-wide phone recording in the text column
+ *   autoplay → muted loop while on screen (otherwise click to play)
+ *   radius   → rounded corners in px (at 1440px wide)
  * Files live in public/videos/<src>.mp4 with a <src>.jpg poster.
  */
 import VideoMedia from '../VideoMedia.astro';
@@ -11,16 +13,21 @@ interface Props {
   src: string;
   label: string;
   caption?: string;
-  /** Kept for compatibility; every video uses the click-to-play player. */
+  /** Kept for compatibility with older content. */
   mode?: 'loop' | 'player';
   phone?: boolean;
+  autoplay?: boolean;
+  radius?: number;
 }
-const { src, label, caption, phone = false } = Astro.props;
+const { src, label, caption, phone = false, autoplay = false, radius = 0 } = Astro.props;
 const kind = phone ? 'shot shot-phone' : 'shot';
+const frameStyle = '--r: ' + radius;
 ---
 
 <figure class={kind}>
-  <VideoMedia src={src} label={label} phone={phone} />
+  <div class="media-r" style={frameStyle}>
+    <VideoMedia src={src} label={label} autoplay={autoplay} />
+  </div>
   {
     caption && (
       <figcaption>

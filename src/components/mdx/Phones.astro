@@ -1,0 +1,13 @@
+---
+/**
+ * Two (or three) small phone screens side by side in the text column.
+ * <Phones>
+ *   <Figure phone file="..." alt="..." />
+ *   <Figure phone file="..." alt="..." />
+ * </Phones>
+ */
+const html = await Astro.slots.render('default');
+const hasMedia = html.includes('<img') || html.includes('class="placeholder"');
+---
+
+{hasMedia && <div class="phones" set:html={html} />}

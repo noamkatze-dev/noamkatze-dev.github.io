@@ -1,0 +1,29 @@
+---
+/**
+ * Large image or video to the right of the section title, with the section
+ * text underneath it (the 250ms layout). `wide` makes it 788px instead of 754px.
+ *
+ * <SideMedia video="250ms/calibration" alt="What the clip shows" />
+ * <SideMedia file="250ms/compare.png" alt="What is on screen" />
+ */
+import Media from '../Media.astro';
+import VideoMedia from '../VideoMedia.astro';
+
+interface Props {
+  file?: string;
+  video?: string;
+  alt: string;
+  wide?: boolean;
+  autoplay?: boolean;
+  radius?: number;
+}
+const { file, video, alt, wide = false, autoplay = false, radius = 0 } = Astro.props;
+const kind = wide ? 'side-media side-media--wide media-r' : 'side-media media-r';
+const frameStyle = '--r: ' + radius;
+const imageFile = file ?? '';
+const sizes = '(min-width: 1100px) 56vw, 100vw';
+---
+
+<figure class={kind} style={frameStyle}>
+  {video ? <VideoMedia src={video} label={alt} autoplay={autoplay} /> : <Media file={imageFile} alt={alt} sizes={sizes} zoom />}
+</figure>
