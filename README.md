@@ -45,7 +45,7 @@ Each case study is one file in `src/content/projects/`. The file name becomes th
 
 **Frontmatter extras:** `role` and `outcome` (shown as "My role" and "Outcome" at the top of the page), `teaser` (one line on the Home card), `card` (Home card image).
 
-**Opening section (`opening:`)**: the same layout on every project: `eyebrow`, `headline`, `description`, `tags`, then `images` (real screens) on a light grid with numbered `steps` (label plus x/y in % of the image; with several images, step N sits on image N). `phones: true` shows several images as phone screens; `accent` sets the marker colour. The project's links appear as buttons in the opening.
+**Opening section (`opening:`)**: the same layout on every project: `eyebrow`, `headline`, `description`, `tags`, then `images` (real screens) with black numbered markers from `steps` (label plus x/y in % of the image; with several images, step N sits on image N). Hovering or tapping a marker shows its label. `phones: true` shows several images as phone screens. The project's links appear as buttons in the opening.
 
 **Older page-top fields (used only when there is no `opening`):** `shortTitle` (big title and Home card name), `heroTitle: false` (open with media only), and `hero: { file | video, alt, width, radius }` (defaults to the cover, 888px wide).
 
@@ -81,7 +81,7 @@ Each case study is one file in `src/content/projects/`. The file name becomes th
 
 Older components (`FigureGrid`, `Gallery`, `Embed`, `Swatches`, `Callout`) still work but are not used in the current layout.
 
-Every video plays silently and loops while it is on screen (the files have no sound track; strip audio with `-an` when adding new ones). Screens and videos get rounded corners automatically. Images are always shown whole (never cropped or stretched).
+Every video is silent and has no browser controls: it loops while on screen, and clicking it pauses or plays (a play icon shows while paused). Strip audio with `-an` when adding new files. Screens and videos get rounded corners automatically. Images are always shown whole (never cropped or stretched).
 
 Each case study ends with a link to the next project (the last one links back to the first), following `order`. Home cards use `shortTitle`, `teaser` and `card` (image) when set.
 
