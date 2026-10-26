@@ -45,7 +45,9 @@ Each case study is one file in `src/content/projects/`. The file name becomes th
 
 **Frontmatter extras:** `role` and `outcome` (shown as "My role" and "Outcome" at the top of the page), `teaser` (one line on the Home card), `card` (Home card image).
 
-**For the page top:** `shortTitle` (big title and Home card name), `heroTitle: false` (open with media only), and `hero: { file | video, alt, width, radius }` (defaults to the cover, 888px wide).
+**Opening section (`opening:`)**: `variant` (`phones`, `screen` or `editorial`), `eyebrow`, `headline`, `description`, `tags`, `images` (real project screens), plus `video`/`logo` for `editorial` and numbered `steps` (x/y in % of the image) for `screen`. The project's links appear as buttons in the opening.
+
+**Older page-top fields (used only when there is no `opening`):** `shortTitle` (big title and Home card name), `heroTitle: false` (open with media only), and `hero: { file | video, alt, width, radius }` (defaults to the cover, 888px wide).
 
 **Components** you can use anywhere in the body, without importing them:
 
