@@ -24,7 +24,7 @@ export default defineConfig({
   //
   // `site` is used for canonical URLs, Open Graph URLs, the sitemap and robots.txt.
   // ---------------------------------------------------------------------------
-  site: 'https://USERNAME.github.io', // TODO: replace USERNAME with your GitHub username
+  site: 'https://noamkatze-dev.github.io',
   // base: '/portfolio',
 
   trailingSlash: 'ignore',
