@@ -1,12 +1,13 @@
 ---
 title: Dark Pattern Detection for Microsoft Clarity
 shortTitle: Dark Pattern Detection Feature
+outcome: "A usability test confirmed the core flow: the participant understood the feature right away and reached the evidence in recordings without help. It also exposed three gaps (buried fix tips, no explanation on hover, no way to dismiss a pattern), and we changed the design accordingly. [TODO: one line on what changed, and what you learned]"
 summary: An automated layer for Microsoft Clarity that flags manipulative UI patterns in the behavioral data teams already collect, so analysts can weigh performance and ethics in the same view.
 teaser: Flagging manipulative UI patterns in Clarity's behavioral data, so analysts weigh performance and ethics in one view.
 context: Academic team project, University of Haifa
 year: 2025
 duration: Oct 2024 – Jan 2025
-role: "[TODO: my specific contributions, e.g. which flows and screens I designed, which research parts I led, which tests I ran]"
+role: "Product designer in a full-collaboration team: every member, me included, worked on research, design, data analysis and presentation. [TODO: the flows and screens I led, e.g. the session impact view or the recording markers]"
 team: "[TODO: team size and disciplines]"
 tools:
   - Figma
@@ -82,35 +83,6 @@ Detect dark patterns early, at the analysis and decision stage, and reduce users
 - Receive clear, actionable insights, not just charts or raw data.
 - Shorten analysis time to support efficient decisions.
 
-## Key decisions
-
-<Decisions>
-  <Decision
-    title="Build on signals Clarity already captures"
-    choice="Translate the academic dark-pattern taxonomy into behavioral indicators Clarity can already measure, instead of designing new tracking."
-    why="Investigating frustration signals was manual and fragmented across tools. Detecting patterns inside Clarity, on data teams already collect, addresses that directly."
-    tradeoff="[TODO: what this ruled out, e.g. patterns that can't be detected from behavior alone]"
-  />
-  <Decision
-    title="Every pattern links straight to its recordings"
-    choice="Each detected pattern opens the exact recordings where it happened, filtered and annotated."
-    why="The slowest part of the job is combing through recordings by hand. Removing that step is the core value."
-    tradeoff="[TODO: what it cost, e.g. more density on the pattern screen]"
-  />
-  <Decision
-    title="One dashboard, not a dashboard plus an internal page"
-    choice="Removed the separate internal page and moved severity sorting, recordings and heatmaps into a single dashboard."
-    why="Splitting the feature across two places created fragmentation and navigation friction."
-    tradeoff="[TODO: what I gave up, e.g. space for deeper explanations of the severity logic]"
-  />
-  <Decision
-    title="Measure impact, not just detection"
-    choice="Each pattern shows how many sessions it affected, with filtering, comparison and a graph of impact over time."
-    why="Analysts need to decide what needs action first. Impact over time links detection to business insight."
-    tradeoff="[TODO: what this added or removed]"
-  />
-</Decisions>
-
 ## Main flow
 
 A new feature in Clarity that detects potential dark patterns in existing behavioral data, and helps analysts judge design decisions on performance and ethics at once.
@@ -152,6 +124,35 @@ A new feature in Clarity that detects potential dark patterns in existing behavi
     Timeline markers highlight the pattern in the recording. Hovering shows a fix tip, and a side panel gives the full AI behavior analysis.
   </FlowStep>
 </Flow>
+
+## Key decisions
+
+<Decisions>
+  <Decision
+    title="Build on signals Clarity already captures"
+    choice="Translate the academic dark-pattern taxonomy into behavioral indicators Clarity can already measure, instead of designing new tracking."
+    why="Investigating frustration signals was manual and fragmented across tools. Detecting patterns inside Clarity, on data teams already collect, addresses that directly."
+    tradeoff="[TODO: what this ruled out, e.g. patterns that can't be detected from behavior alone]"
+  />
+  <Decision
+    title="Every pattern links straight to its recordings"
+    choice="Each detected pattern opens the exact recordings where it happened, filtered and annotated."
+    why="The slowest part of the job is combing through recordings by hand. Removing that step is the core value."
+    tradeoff="[TODO: what it cost, e.g. more density on the pattern screen]"
+  />
+  <Decision
+    title="One dashboard, not a dashboard plus an internal page"
+    choice="Removed the separate internal page and moved severity sorting, recordings and heatmaps into a single dashboard."
+    why="Splitting the feature across two places created fragmentation and navigation friction."
+    tradeoff="[TODO: what I gave up, e.g. space for deeper explanations of the severity logic]"
+  />
+  <Decision
+    title="Measure impact, not just detection"
+    choice="Each pattern shows how many sessions it affected, with filtering, comparison and a graph of impact over time."
+    why="Analysts need to decide what needs action first. Impact over time links detection to business insight."
+    tradeoff="[TODO: what this added or removed]"
+  />
+</Decisions>
 
 ## Usability test
 

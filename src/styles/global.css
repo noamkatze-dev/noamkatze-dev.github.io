@@ -40,7 +40,9 @@
   --fs-sub: 17px;
   --fs-cap: 11px;
   --fs-footer: 15px;
-  --section: 72px;
+  --section: 72px; /* between sections */
+  --space-block: 32px; /* title or text -> a wide block (grid, flow, stats) */
+  --space-inline: 12px; /* title -> a short intro line under it */
 
   --radius: 10px; /* screenshots and videos */
   --radius-phone: 16px; /* phone screens */
@@ -60,6 +62,8 @@
     --fs-cap: max(10px, calc(11.3 * var(--u)));
     --fs-footer: max(14px, calc(16.9 * var(--u)));
     --section: calc(175 * var(--u));
+    --space-block: calc(64 * var(--u));
+    --space-inline: calc(16 * var(--u));
     --radius: max(8px, calc(14 * var(--u)));
     --radius-phone: max(12px, calc(22 * var(--u)));
   }
@@ -342,7 +346,7 @@ mark.todo {
    ========================================================================== */
 
 .site-footer {
-  padding-block: 64px 48px;
+  padding-block: var(--section) 48px;
 }
 .footer-row {
   display: grid;
@@ -422,6 +426,16 @@ mark.todo {
   line-height: 1.2;
   text-wrap: balance;
 }
+.hero-buttons {
+  justify-content: center;
+  margin-top: 28px;
+}
+@media (min-width: 1100px) {
+  .hero-buttons {
+    justify-content: flex-start;
+    margin-top: calc(36 * var(--u));
+  }
+}
 .hero-support {
   margin-top: 16px;
   font-size: var(--fs-small);
@@ -466,7 +480,7 @@ mark.todo {
 .home-section {
   display: grid;
   gap: 20px;
-  padding-block: 48px;
+  padding-block: calc(var(--section) / 2);
 }
 .home-section > h1,
 .home-section > h2 {
@@ -476,6 +490,9 @@ mark.todo {
 .home-text {
   font-size: var(--fs-small);
   line-height: 1.6;
+}
+.home-text p + p {
+  margin-top: 0.9em;
 }
 .home-text p:empty {
   min-height: 1.6em;
@@ -495,7 +512,7 @@ mark.todo {
     gap: 0;
   }
   #about.home-section {
-    padding-block: calc(92 * var(--u)) calc(110 * var(--u));
+    padding-block: var(--section) 0;
   }
   .home-text {
     max-width: calc(586 * var(--u));
@@ -591,10 +608,10 @@ mark.todo {
 @media (min-width: 1100px) {
   .home-work.home-section {
     grid-template-columns: 1fr;
-    padding-block: calc(126 * var(--u)) calc(62 * var(--u));
+    padding-block: calc(92 * var(--u)) 0;
   }
   .home-work > h2 {
-    margin-bottom: calc(80 * var(--u));
+    margin-bottom: var(--space-block);
   }
   .projects {
     column-gap: calc(64 * var(--u));
@@ -686,7 +703,7 @@ mark.todo {
 }
 .cs-text + .cs-text,
 .cs-section > :not(h2) + .cs-text {
-  margin-top: 40px;
+  margin-top: var(--space-block);
 }
 .cs-text p + p,
 .cs-text ul + p,
@@ -737,7 +754,7 @@ mark.todo {
   }
   .cs-text + .cs-text,
   .cs-section > :not(h2) + .cs-text {
-    margin-top: calc(60 * var(--u));
+    margin-top: var(--space-block);
   }
   .cs-text ul,
   .cs-text ol {
@@ -752,6 +769,7 @@ mark.todo {
     grid-column: 1 / -1;
     grid-row: 2;
     max-width: calc(732 * var(--u));
+    margin-top: var(--space-inline);
   }
 
   /* Media beside the title (250ms): title column 475u, media 754u wide */
@@ -770,33 +788,16 @@ mark.todo {
   }
 }
 
-/* Wide blocks keep their own spacing from the title */
-.process,
-.flow,
-.persona,
-.screens,
-.cta {
-  margin-top: 32px;
-}
-@media (min-width: 1100px) {
-  .process {
-    margin-top: calc(103 * var(--u));
-  }
-  .flow {
-    margin-top: calc(35 * var(--u));
-  }
-  .persona {
-    margin-top: calc(90 * var(--u));
-  }
-  .screens {
-    margin-top: calc(73 * var(--u));
-  }
-  .cta {
-    margin-top: calc(127 * var(--u));
-  }
-  .cs-section:has(> .process) + .cs-section {
-    margin-top: calc(255 * var(--u));
-  }
+/* Spacing rhythm: every wide block sits the same distance from what's above it */
+.cs-section > .process,
+.cs-section > .flow,
+.cs-section > .persona,
+.cs-section > .screens,
+.cs-section > .pairs,
+.cs-section > ol.decisions,
+.cs-section > ul.stats,
+.cs-section > .cta {
+  margin-top: var(--space-block);
 }
 
 /* ---------- Media ---------- */
@@ -847,27 +848,6 @@ figcaption {
 .shot-phone .video {
   aspect-ratio: auto !important;
 }
-.video-sound {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  padding: 6px 14px;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.72);
-  color: #fff;
-  font: inherit;
-  font-size: 12px;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-}
-.video-sound:hover,
-.video-sound[aria-pressed='true'] {
-  background: #fff;
-  color: #000;
-}
 
 /* Phone recording in the text column (250u wide) */
 .shot-phone {
@@ -901,12 +881,6 @@ figcaption {
 @media (min-width: 1100px) {
   .cs-intro-media {
     width: calc(var(--w, 796) * var(--u));
-  }
-  .prose:has(> .cs-intro-media:first-child) {
-    padding-top: calc(80 * var(--u));
-  }
-  .prose > .cs-intro-media {
-    margin-bottom: calc(135 * var(--u));
   }
 }
 
@@ -1127,12 +1101,14 @@ ol.flow {
 }
 @media (min-width: 1100px) {
   .cs-section:has(> .screens--dark) {
-    margin-top: calc(69 * var(--u));
-    padding-block: calc(93 * var(--u));
+    padding-block: calc(110 * var(--u));
   }
-  .cs-section:has(> .screens--dark) + .cs-section {
-    margin-top: calc(90 * var(--u));
-  }
+}
+
+/* A black band's own edge separates it, so the white gaps around it are shorter */
+.cs-section:has(> .screens--dark),
+.cs-section:has(> .screens--dark) + .cs-section {
+  margin-top: calc(var(--section) * 0.6);
 }
 
 /* ---------- Usability findings: check / cross list ---------- */
@@ -1282,7 +1258,7 @@ ol.flow {
 }
 
 .cs-overview {
-  padding-top: 48px;
+  padding-top: var(--section);
 }
 .cs-summary {
   max-width: 34ch;
@@ -1290,6 +1266,35 @@ ol.flow {
   font-weight: 400;
   line-height: 1.35;
   text-wrap: balance;
+}
+/* My role + Outcome: the two lines a recruiter looks for first */
+.cs-key {
+  display: grid;
+  gap: 24px;
+  margin-top: var(--space-block);
+}
+.cs-key dt {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.cs-key dd {
+  margin-top: 8px;
+  font-size: max(16px, calc(18 * var(--u)));
+  font-weight: 400;
+  line-height: 1.55;
+}
+@media (min-width: 900px) {
+  .cs-key {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: calc(64 * var(--u));
+  }
+}
+@media (min-width: 1100px) {
+  .cs-key dt {
+    font-size: max(11px, calc(11.5 * var(--u)));
+  }
 }
 .cs-meta {
   display: grid;
@@ -1314,11 +1319,11 @@ ol.flow {
   margin-top: 32px;
 }
 .cs-overview + .prose {
-  padding-top: 96px;
+  padding-top: var(--section);
 }
 @media (min-width: 1100px) {
   .cs-overview {
-    padding-top: calc(149 * var(--u));
+    padding-top: var(--section);
   }
   .cs-summary {
     max-width: calc(860 * var(--u));
@@ -1335,9 +1340,6 @@ ol.flow {
   }
   .cs-overview .buttons {
     margin-top: calc(48 * var(--u));
-  }
-  .cs-overview + .prose {
-    padding-top: calc(175 * var(--u));
   }
 }
 
@@ -1384,9 +1386,6 @@ ol.decisions {
   margin-top: 2px;
 }
 @media (min-width: 1100px) {
-  ol.decisions {
-    margin-top: calc(73 * var(--u));
-  }
   .decision {
     grid-template-columns: calc(675 * var(--u)) minmax(0, 1fr);
     gap: 0;
@@ -1432,7 +1431,6 @@ ul.stats {
     grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
     grid-auto-flow: column;
     gap: calc(40 * var(--u));
-    margin-top: calc(80 * var(--u));
   }
   .stats li {
     padding-top: calc(24 * var(--u));
@@ -1484,7 +1482,6 @@ ul.stats {
 @media (min-width: 1100px) {
   .pairs {
     column-gap: calc(64 * var(--u));
-    margin-top: calc(73 * var(--u));
   }
   .pair-row {
     gap: calc(18 * var(--u));
@@ -1617,7 +1614,7 @@ ul.stats {
     font-size: calc(64 * var(--u));
   }
   .page .home-section {
-    padding-block: calc(150 * var(--u)) 0;
+    padding-block: var(--section) 0;
   }
 }
 
@@ -1661,7 +1658,7 @@ ul.stats {
 /* Skills: five cards, each pointing to the project that shows it */
 .about-block.skills-block,
 .about-block.tools-block {
-  padding-block: 64px 0;
+  padding-block: var(--section) 0;
 }
 .block-head {
   display: flex;
@@ -1669,7 +1666,7 @@ ul.stats {
   align-items: baseline;
   justify-content: space-between;
   gap: 8px 24px;
-  margin-bottom: 28px;
+  margin-bottom: var(--space-block);
 }
 .block-head h2 {
   font-size: var(--fs-h2);
@@ -1730,10 +1727,10 @@ ul.stats {
 @media (min-width: 1100px) {
   .about-block.skills-block,
   .about-block.tools-block {
-    padding-block: calc(150 * var(--u)) 0;
+    padding-block: var(--section) 0;
   }
   .block-head {
-    margin-bottom: calc(56 * var(--u));
+    margin-bottom: var(--space-block);
   }
   .skill-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));

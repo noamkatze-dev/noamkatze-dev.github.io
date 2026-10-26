@@ -51,8 +51,9 @@ function shown(v?: string) {
   return !prod || !isTodoOnly(v);
 }
 const tools = d.tools.filter((t) => shown(t)).map((t) => (prod ? stripTodo(t) : t));
+const showRole = shown(d.role);
+const showOutcome = shown(d.outcome);
 const meta = [
-  { label: 'Role', value: d.role },
   { label: 'Team', value: d.team },
   { label: 'Timeframe', value: d.duration },
   { label: 'Tools', value: tools.join(', ') },
@@ -96,6 +97,28 @@ const showNext = next.id !== project.id;
 
     <section class="wrap cs-overview" id="content" aria-label="Project overview">
       <p class="cs-summary">{d.summary}</p>
+      {
+        (showRole || showOutcome) && (
+          <dl class="cs-key">
+            {showRole && (
+              <div>
+                <dt>My role</dt>
+                <dd>
+                  <TodoText text={d.role} />
+                </dd>
+              </div>
+            )}
+            {showOutcome && (
+              <div>
+                <dt>Outcome</dt>
+                <dd>
+                  <TodoText text={d.outcome ?? ''} />
+                </dd>
+              </div>
+            )}
+          </dl>
+        )
+      }
       <dl class="cs-meta">
         {
           meta.map((m) => (

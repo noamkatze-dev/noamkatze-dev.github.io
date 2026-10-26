@@ -1,5 +1,5 @@
 ---
-import { existsSync } from 'node:fs';
+import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
@@ -11,7 +11,9 @@ import { isTodoOnly, bindLast } from '../lib/todo.mjs';
 import type { TimelineItem } from '../data/site';
 
 const prod = import.meta.env.PROD;
-const hasCv = existsSync(join(process.cwd(), 'public', 'cv.pdf'));
+// The CV link appears only once public/cv.pdf is a real CV (the placeholder is tiny).
+const cvPath = join(process.cwd(), 'public', 'cv.pdf');
+const hasCv = existsSync(cvPath) && statSync(cvPath).size > 5000;
 const portrait = await findImage('about/portrait.jpg');
 const portraitAlt = 'Portrait of ' + site.name;
 

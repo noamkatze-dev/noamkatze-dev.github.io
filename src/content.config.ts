@@ -21,6 +21,7 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     shortTitle: z.string().optional(), // shorter name for the Home card and the big page title
+    outcome: z.string().optional(), // one or two lines at the top of the page: result, feedback or key insight
     teaser: z.string().optional(), // one short line on the Home card (falls back to summary)
     card: z.string().optional(), // Home card image under src/assets/images/ (falls back to cover)
     heroTitle: z.boolean().default(true), // false: the hero opens with media only (the title stays for screen readers)

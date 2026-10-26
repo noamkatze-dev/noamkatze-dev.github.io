@@ -1,6 +1,7 @@
 ---
 title: 250ms
 tagline: What your eyes reveal before you've decided what you think.
+outcome: "A working, hardware-free eye-tracking system in the browser: personal 9-point calibration, 16-image viewing sessions, several ways to read the gaze data and a comparison dashboard. An adaptive filter cut visible gaze tremor by over 50% with no added lag. [TODO: sessions run so far, or what the exhibition or jury feedback was]"
 teaser: A browser eye-tracking experiment that measures how we look at political images, with nothing but a webcam.
 summary: A browser-based eye-tracking experiment that measures visual attention on political imagery using nothing but a webcam, no extra hardware.
 context: Final-year thesis project, University of Haifa
@@ -14,7 +15,7 @@ tools:
   - HTML and CSS
   - "[TODO: Figma or other design tools]"
 tags: [Research tool, Data visualization, Computer vision, Code prototype]
-order: 3
+order: 2
 discipline: UX/UI
 cover: 250ms/cover.jpg
 card: 250ms/card.jpg
@@ -61,7 +62,6 @@ With nothing but a laptop webcam and real-time facial-landmark detection, the sy
     { value: "16", label: "images per session" },
     { value: "3 s", label: "per image" },
     { value: "9-point", label: "personal gaze calibration" },
-    { value: ">50%", label: "less visible gaze tremor after adaptive filtering" },
   ]}
 />
 
@@ -77,35 +77,6 @@ With nothing but a laptop webcam and real-time facial-landmark detection, the sy
     "Iteration & refinement",
   ]}
 />
-
-## Key decisions
-
-<Decisions>
-  <Decision
-    title="A webcam, not an eye tracker"
-    choice="Run entirely in the browser with a laptop webcam and MediaPipe facial landmarks. No extra hardware."
-    why="Anyone with a laptop can take part, which makes the experiment possible to run at all, and at scale."
-    tradeoff="Webcam tracking is noisy and less precise than dedicated hardware. That cost shaped the calibration and the adaptive filter."
-  />
-  <Decision
-    title="16 images, 3 seconds each"
-    choice="A session shows 16 images for 3 seconds each."
-    why="How many images balance statistical value against fatigue? How long before attention drifts toward boredom? Three seconds is long enough for a first fixation and a scan, short enough to stay honest."
-    tradeoff="Less data per viewer, in exchange for attention that is still genuine. [TODO: how I arrived at these numbers: pilot, literature, testing]"
-  />
-  <Decision
-    title="Smooth hard only when the eye is still"
-    choice="An adaptive filter that detects when the eye is actually still and smooths heavily only then."
-    why="Smoothing everywhere would have made real eye movements feel sluggish."
-    tradeoff="[TODO: what it cost, e.g. tuning complexity, edge cases where it misfires]"
-  />
-  <Decision
-    title="Say clearly what is art and what is measurement"
-    choice="The political arc is presented as an artistic, conceptual interpretation, and the screen says so."
-    why="Mapping gaze to a political position is not a scientific measurement. Framing it honestly avoids misleading claims."
-    tradeoff="[TODO: what I gave up by not presenting it as a finding]"
-  />
-</Decisions>
 
 ## Calibration
 
@@ -158,11 +129,28 @@ The sky is where the eye rests between charged images. Clouds ask nothing of you
 
 Over that calm backdrop sits a thin red grid and deep red type, the visual language of surveillance and lab instruments.
 
-## Challenges & iteration
+## Key decisions
 
-Webcam tracking is noisy by nature. Even a steady, fixated gaze visibly trembled on screen.
-
-Smoothing everything would have made real eye movements feel sluggish, so I built an adaptive filter that detects when the eye is actually still and smooths hard only then. It cut visible tremor by over 50%, with no added lag during real movement. [TODO: how the 50% was measured]
+<Decisions>
+  <Decision
+    title="A webcam, not an eye tracker"
+    choice="Run entirely in the browser with a laptop webcam and MediaPipe facial landmarks. No extra hardware."
+    why="Anyone with a laptop can take part, which makes the experiment possible to run at all, and at scale."
+    tradeoff="Webcam tracking is noisy and less precise than dedicated hardware. That cost shaped the calibration and the filter below."
+  />
+  <Decision
+    title="16 images, 3 seconds each"
+    choice="A session shows 16 images for 3 seconds each."
+    why="How many images balance statistical value against fatigue? How long before attention drifts toward boredom? Three seconds is long enough for a first fixation and a scan, short enough to stay honest."
+    tradeoff="Less data per viewer, in exchange for attention that is still genuine. [TODO: how I arrived at these numbers: pilot, literature, testing]"
+  />
+  <Decision
+    title="Smooth hard only when the eye is still"
+    choice="Even a steady, fixated gaze visibly trembled on screen. Instead of smoothing everything, an adaptive filter detects when the eye is actually still and smooths heavily only then."
+    why="Smoothing everywhere would have made real eye movements feel sluggish. The adaptive filter cut visible tremor by over 50%, with no added lag during real movement."
+    tradeoff="[TODO: what it cost, e.g. tuning complexity, edge cases where it misfires; and how the 50% was measured]"
+  />
+</Decisions>
 
 <Cta href="[TODO link: live demo]" label="Try it live" />
 

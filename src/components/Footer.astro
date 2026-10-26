@@ -1,10 +1,12 @@
 ---
-import { existsSync } from 'node:fs';
+import { existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { site } from '../data/site';
 import { url } from '../lib/url';
 
-const hasCv = existsSync(join(process.cwd(), 'public', 'cv.pdf'));
+// The CV link appears only once public/cv.pdf is a real CV (the placeholder is tiny).
+const cvPath = join(process.cwd(), 'public', 'cv.pdf');
+const hasCv = existsSync(cvPath) && statSync(cvPath).size > 5000;
 const mailto = 'mailto:' + site.email;
 const cvHref = url(site.cv);
 ---
