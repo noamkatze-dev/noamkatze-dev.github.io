@@ -24,18 +24,17 @@ const projects = defineCollection({
     outcome: z.string().optional(), // one or two lines at the top of the page: result, feedback or key insight
     teaser: z.string().optional(), // one short line on the Home card (falls back to summary)
     card: z.string().optional(), // Home card image under src/assets/images/ (falls back to cover)
-    // Opening section (hero) of the case study. When set, it replaces the older `hero` block.
+    // Opening section of the case study (same layout on every project, see ProjectHero.astro)
     opening: z
       .object({
-        variant: z.enum(['phones', 'screen', 'editorial']), // layout: Calcalist / Clarity / 250ms
         eyebrow: z.string(),
         headline: z.string(),
         description: z.string(),
         tags: z.array(z.string()).default([]),
-        logo: z.string().optional(), // editorial: wordmark image shown large
-        video: z.object({ src: z.string(), alt: z.string() }).optional(),
-        images: z.array(z.object({ file: z.string(), alt: z.string(), caption: z.string().optional() })).default([]),
-        // screen: numbered markers over the main image, positioned in % of its width/height
+        phones: z.boolean().default(false), // several images shown as a row of phone screens
+        accent: z.string().optional(), // marker colour, e.g. "#0039aa"
+        images: z.array(z.object({ file: z.string(), alt: z.string() })).default([]),
+        // numbered markers: one image → x/y in % of that image; several images → step N sits on image N
         steps: z.array(z.object({ label: z.string(), x: z.number(), y: z.number() })).default([]),
       })
       .optional(),

@@ -1,17 +1,18 @@
 ---
 /**
- * Opening section of a case study: eyebrow, headline, one or two sentences,
- * a short discipline line, the main links, then a large composition of real
- * project visuals. One shared type system, three layouts:
+ * Opening section of a case study, the same layout on every project:
+ * eyebrow, headline on the left; description, discipline line and links on the
+ * right; then the real project visual on a light measured grid, with numbered
+ * markers and a legend that explain what you are looking at.
  *
- *   phones    → full-bleed brand band with a group of phone screens (Calcalist Next)
- *   screen    → one large interface shot on a measured grid, with numbered markers (Clarity)
- *   editorial → large wordmark, a gaze-data video and stills framed by a thin grid (250ms)
+ *   one image      → a large interface shot, markers placed in % of the image (x, y)
+ *   several images → a row of screens (phones: true for phone screens),
+ *                    step N is placed on image N, again in % (x, y)
  *
+ * `accent` colours the markers so each project keeps a touch of its own identity.
  * Content lives in each project's frontmatter under `opening:`.
  */
 import Media from './Media.astro';
-import VideoMedia from './VideoMedia.astro';
 
 interface Link {
   label: string;
@@ -21,34 +22,24 @@ interface Link {
 }
 interface Props {
   opening: {
-    variant: 'phones' | 'screen' | 'editorial';
     eyebrow: string;
     headline: string;
     description: string;
     tags: string[];
-    logo?: string;
-    video?: { src: string; alt: string };
-    images: { file: string; alt: string; caption?: string }[];
+    phones: boolean;
+    accent?: string;
+    images: { file: string; alt: string }[];
     steps: { label: string; x: number; y: number }[];
   };
-  /** Project name, for screen readers when a wordmark stands in for it. */
-  name: string;
   links: Link[];
 }
 
-const { opening: o, name, links } = Astro.props;
-const variant = o.variant;
-const heroClass = 'ph ph--' + variant;
+const { opening: o, links } = Astro.props;
 const tagLine = o.tags.join(' · ');
 const hasTags = o.tags.length > 0;
-const isPhones = variant === 'phones';
-const isScreen = variant === 'screen';
-const isEditorial = variant === 'editorial';
+const accentStyle = o.accent ? '--ph-accent: ' + o.accent : '';
 
-// phones: the middle screen is the hero of the group
-const phones = o.images.map((img, i) => ({ ...img, cls: 'ph-phone ph-phone--' + (i + 1) }));
-
-// screen: first image, with numbered markers
+const single = o.images.length === 1;
 const main = o.images[0];
 const mainFile = main ? main.file : '';
 const mainAlt = main ? main.alt : '';
@@ -58,28 +49,22 @@ const markers = o.steps.map((st, i) => ({
   style: 'left: ' + st.x + '%; top: ' + st.y + '%',
 }));
 
-// editorial: video plus up to two stills with captions
-const stills = o.images.slice(0, 2);
-const hasVideo = Boolean(o.video);
-const videoSrc = o.video ? o.video.src : '';
-const videoAlt = o.video ? o.video.alt : '';
-const logoFile = o.logo ?? '';
-const hasLogo = Boolean(o.logo);
-const logoAlt = name;
+// Several images: step i belongs to image i
+const rowClass = o.phones ? 'ph-row ph-row--phones' : 'ph-row';
+const rowStyle = '--n: ' + o.images.length;
+const rowItems = o.images.map((img, i) => ({
+  file: img.file,
+  alt: img.alt,
+  marker: markers[i],
+}));
+const rowSizes = o.phones ? '(min-width: 1100px) 18vw, 30vw' : '(min-width: 1100px) 28vw, 33vw';
 ---
 
-<header class={heroClass}>
+<header class="ph" style={accentStyle}>
   <div class="wrap ph-inner">
     <div class="ph-text">
-      {
-        isEditorial && hasLogo && (
-          <h1 class="ph-logo">
-            <Media file={logoFile} alt={logoAlt} sizes="(min-width: 1100px) 50vw, 90vw" eager />
-          </h1>
-        )
-      }
       <p class="ph-eyebrow">{o.eyebrow}</p>
-      {isEditorial && hasLogo ? <p class="ph-headline">{o.headline}</p> : <h1 class="ph-headline">{o.headline}</h1>}
+      <h1 class="ph-headline">{o.headline}</h1>
       <div class="ph-side">
         <p class="ph-desc">{o.description}</p>
         {hasTags && <p class="ph-tags">{tagLine}</p>}
@@ -105,23 +90,10 @@ const logoAlt = name;
       </div>
     </div>
 
-    {
-      isPhones && (
-        <div class="ph-visual ph-phones">
-          <span class="ph-bubble" aria-hidden="true" />
-          {phones.map((p) => (
-            <figure class={p.cls}>
-              <Media file={p.file} alt={p.alt} sizes="(min-width: 1100px) 20vw, 30vw" eager />
-            </figure>
-          ))}
-        </div>
-      )
-    }
-
-    {
-      isScreen && main && (
-        <div class="ph-visual ph-screen">
-          <div class="ph-board">
+    <div class="ph-visual">
+      <div class="ph-board">
+        {
+          single && (
             <div class="ph-shot">
               <Media file={mainFile} alt={mainAlt} sizes="(min-width: 1100px) 84vw, 100vw" eager />
               {markers.map((m) => (
@@ -130,43 +102,39 @@ const logoAlt = name;
                 </span>
               ))}
             </div>
-          </div>
-          {markers.length > 0 && (
-            <ol class="ph-steps">
-              {markers.map((m) => (
-                <li>
-                  <span class="ph-step-n" aria-hidden="true">
-                    {m.n}
-                  </span>
-                  {m.label}
-                </li>
-              ))}
-            </ol>
-          )}
-        </div>
-      )
-    }
-
-    {
-      isEditorial && (
-        <div class="ph-visual ph-editorial">
-          {hasVideo && (
-            <figure class="ph-main">
-              <VideoMedia src={videoSrc} label={videoAlt} />
-            </figure>
-          )}
-          {stills.length > 0 && (
-            <div class="ph-stills">
-              {stills.map((s) => (
-                <figure>
-                  <Media file={s.file} alt={s.alt} sizes="(min-width: 1100px) 28vw, 50vw" eager />
-                  {s.caption && <figcaption>{s.caption}</figcaption>}
-                </figure>
+          )
+        }
+        {
+          !single && (
+            <div class={rowClass} style={rowStyle}>
+              {rowItems.map((it) => (
+                <div class="ph-shot">
+                  <Media file={it.file} alt={it.alt} sizes={rowSizes} eager />
+                  {it.marker && (
+                    <span class="ph-marker" style={it.marker.style} aria-hidden="true">
+                      {it.marker.n}
+                    </span>
+                  )}
+                </div>
               ))}
             </div>
-          )}
-        </div>
-      )
-    }
+          )
+        }
+      </div>
+      {
+        markers.length > 0 && (
+          <ol class="ph-steps">
+            {markers.map((m) => (
+              <li>
+                <span class="ph-step-n" aria-hidden="true">
+                  {m.n}
+                </span>
+                {m.label}
+              </li>
+            ))}
+          </ol>
+        )
+      }
+    </div>
   </div>
 </header>

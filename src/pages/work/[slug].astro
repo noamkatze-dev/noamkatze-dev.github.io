@@ -69,7 +69,7 @@ const overviewLinks = hasOpening ? [] : links;
 
 <Base title={d.title} description={d.summary} image={ogImage} imageAlt={d.coverAlt} type="article">
   <article>
-    {opening && <ProjectHero opening={opening} name={heading} links={links} />}
+    {opening && <ProjectHero opening={opening} links={links} />}
     {
       !hasOpening && (
         <header class="cs-hero wrap">

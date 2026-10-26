@@ -29,22 +29,28 @@ links:
     url: "[TODO link: demo video]"
     kind: video
 opening:
-  variant: editorial
   eyebrow: 250ms · Graduation project
   headline: What do we really see?
   description: An interactive exploration of visual attention, gaze patterns, and the role of political imagery in shaping perception.
   tags: [Interactive Experience, Visual Research, Eye Tracking]
-  logo: 250ms/logo-wordmark.png
-  video:
-    src: 250ms/analysis-modes
-    alt: "Screen recording from 250ms: switching between gaze analysis modes over a photograph of two politicians embracing."
+  accent: "#d10000"
   images:
+    - file: 250ms/mode-points.jpg
+      alt: Red dots marking where one viewer looked, over a photograph of two politicians embracing.
     - file: 250ms/mode-lines.jpg
-      alt: Red lines tracing how one viewer's gaze moved across the photograph.
-      caption: Gaze path
+      alt: Red lines tracing how the same viewer's gaze moved across the photograph.
     - file: 250ms/mode-contours.jpg
       alt: Red contour lines around the areas of the photograph that drew the most attention.
-      caption: Attention density
+  steps:
+    - label: Where the eye landed
+      x: 6
+      y: 88
+    - label: How the eye moved
+      x: 6
+      y: 88
+    - label: Where attention gathered
+      x: 6
+      y: 88
 ---
 
 <IntroMedia
