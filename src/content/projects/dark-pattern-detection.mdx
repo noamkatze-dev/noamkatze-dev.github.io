@@ -1,14 +1,14 @@
 ---
 title: Dark Pattern Detection for Microsoft Clarity
 shortTitle: Dark Pattern Detection Feature
-outcome: "A usability test confirmed the core flow: the participant understood the feature right away and reached the evidence in recordings without help. It also exposed three gaps (buried fix tips, no explanation on hover, no way to dismiss a pattern), and we changed the design accordingly. [TODO: one line on what changed, and what you learned]"
-summary: An automated layer for Microsoft Clarity that flags manipulative UI patterns in the behavioral data teams already collect, so analysts can weigh performance and ethics in the same view.
+outcome: "In a usability test with one participant, the feature's purpose was clear and the participant reached the relevant session recordings without help. The test surfaced three improvements, which we carried into the design: visible recommendations, hover explanations for pattern names, and a way to hide ignored patterns."
+summary: A feature concept for Microsoft Clarity that helps analysts spot potentially manipulative interface patterns, judge how severe they are, and investigate the affected sessions through recordings and contextual AI insights.
 teaser: Flagging manipulative UI patterns in Clarity's behavioral data, so analysts weigh performance and ethics in one view.
 context: Academic team project, University of Haifa
 year: 2025
 duration: Oct 2024 – Jan 2025
-role: "Product designer in a full-collaboration team: every member, me included, worked on research, design, data analysis and presentation. [TODO: the flows and screens I led, e.g. the session impact view or the recording markers]"
-team: "[TODO: team size and disciplines]"
+role: "I independently analyzed the entire Microsoft Clarity platform before and during design: how it works, its features and workflows, where a dark-pattern feature could fit, and which existing capabilities could support it. I shared these findings with the team to inform our research and design decisions. I also contributed to user research, data analysis and product design."
+team: "Team project [TODO: team size and each member's discipline]"
 tools:
   - Figma
   - Base44 (live prototype)
@@ -30,9 +30,18 @@ links:
 
 ## Microsoft Clarity
 
-Microsoft Clarity gives product teams heatmaps and session recordings. This project adds an automated layer on top: it flags manipulative UI patterns, known as dark patterns, in the behavioral data teams already collect.
+Microsoft Clarity is a behavioral analytics platform: product teams use its heatmaps and session recordings to understand how people use their sites. Our team explored a new feature for it that flags potentially manipulative interface patterns, known as dark patterns, assesses their severity, and links each one to the sessions where it happened.
 
-We worked as one team across research, design, data analysis and presentation. [TODO: one sentence on how work was split and which part was mine]
+## Understanding Clarity first
+
+Before designing anything new, I wanted to understand the product we were adding to. On my own initiative, I analyzed the entire Clarity platform in depth, before and during the design process:
+
+- how the platform works, end to end
+- its existing features and the workflows analysts follow
+- where a dark-pattern detection feature could fit into the current product
+- which existing capabilities could support it and help us develop the concept
+
+I shared the findings with my teammates to inform our collective research, design decisions and feature development.
 
 ## The problem
 
@@ -69,11 +78,11 @@ Detect dark patterns early, at the analysis and decision stage, and reduce users
 
 ## Research insights
 
-**Interviews.** Through interviews with UX practitioners and analysis of industry workflows, we found that teams rely heavily on behavioral data to find usability issues. But investigating frustration signals is manual, time-consuming and fragmented across tools.
+**User interviews.** We interviewed UX practitioners and looked at how teams work with behavioral data. [TODO: number of interviewees] Teams rely heavily on recordings and interaction data to find usability issues, but investigating frustration signals such as rage clicks, repeated interactions and abandoned flows is manual, time-consuming and spread across tools.
 
-**Literature review.** We reviewed academic research that classifies dark patterns by category, severity and frequency, and translated it into measurable behavioral indicators that Clarity can already capture.
+**Literature review.** We reviewed academic research that classifies dark patterns by category, severity and frequency, and translated it into behavioral indicators that Clarity's existing capabilities can measure.
 
-**The opportunity:** centralize and automate detection inside Clarity, where the data already lives. [TODO: number of interviews, and 1 to 2 concrete insights, ideally with a short paraphrased quote]
+**The opportunity:** centralize and automate dark-pattern detection inside Clarity, where the data already lives.
 
 ## Jobs to be done
 
@@ -131,53 +140,55 @@ A new feature in Clarity that detects potential dark patterns in existing behavi
   <Decision
     title="Build on signals Clarity already captures"
     choice="Translate the academic dark-pattern taxonomy into behavioral indicators Clarity can already measure, instead of designing new tracking."
-    why="Investigating frustration signals was manual and fragmented across tools. Detecting patterns inside Clarity, on data teams already collect, addresses that directly."
-    tradeoff="[TODO: what this ruled out, e.g. patterns that can't be detected from behavior alone]"
+    why="The platform analysis showed which existing capabilities could support detection, and the interviews showed that investigating frustration signals was manual and fragmented. Detecting patterns inside Clarity, on data teams already collect, addresses both."
   />
   <Decision
     title="Every pattern links straight to its recordings"
-    choice="Each detected pattern opens the exact recordings where it happened, filtered and annotated."
-    why="The slowest part of the job is combing through recordings by hand. Removing that step is the core value."
-    tradeoff="[TODO: what it cost, e.g. more density on the pattern screen]"
+    choice="Each detected pattern opens the recordings where it happened, filtered to that pattern and summarized by AI."
+    why="Finding the evidence by combing through recordings is the slowest part of the work. Linking each detection to its sessions removes that step."
   />
   <Decision
     title="One dashboard, not a dashboard plus an internal page"
-    choice="Removed the separate internal page and moved severity sorting, recordings and heatmaps into a single dashboard."
+    choice="We removed the separate internal page and moved severity sorting, recordings and heatmaps into a single dashboard."
     why="Splitting the feature across two places created fragmentation and navigation friction."
-    tradeoff="[TODO: what I gave up, e.g. space for deeper explanations of the severity logic]"
   />
   <Decision
     title="Measure impact, not just detection"
     choice="Each pattern shows how many sessions it affected, with filtering, comparison and a graph of impact over time."
-    why="Analysts need to decide what needs action first. Impact over time links detection to business insight."
-    tradeoff="[TODO: what this added or removed]"
+    why="Analysts need to decide what to act on first. Showing impact over time connects detection to business insight."
   />
 </Decisions>
 
 ## Usability test
 
-After the wireframes, we tested the flow with a user to see how they react and what the experience is like. [TODO: number of participants, be honest if it was one]
+After designing the wireframes, we ran a usability test with one participant to see how a user would react to the feature and move through it.
 
 ### What we found
 
 <Checklist
   good={[
-    "The participant immediately understood the purpose of the feature.",
-    "They navigated from the dashboard to pattern details and recordings without help.",
+    "The participant understood the purpose of the feature right away.",
+    "They moved from the dashboard to pattern details and the relevant session recordings without assistance.",
     "They valued the AI-generated insight summaries.",
   ]}
   bad={[
-    "Improvement tips lacked visual emphasis and were buried in the side panel.",
-    "They expected an explanation when hovering over a pattern's name.",
-    "There was no way to hide patterns the user consciously chooses to ignore.",
+    "Recommendations lacked visual emphasis and were buried in the side panel.",
+    "They expected an explanation when hovering over a dark pattern's name.",
+    "There was no way to hide patterns they had chosen to ignore.",
   ]}
 />
 
-**What I changed:** [TODO: which of these findings changed the design, and how]
+### What we changed
+
+1. **Recommendations moved into view.** Fix tips now appear when you hover a dark-pattern marker on the recording timeline, at the moment of the problem. The side panel stays for the full AI analysis.
+2. **Explanations in context.** Hovering a pattern's name explains what the pattern is, so users don't have to leave the dashboard to understand it.
+3. **Hiding ignored patterns.** Users can hide patterns they have consciously decided to ignore, which keeps the list focused on what still needs attention. [TODO: confirm this change made it into the final design, and where]
+
+With a single participant, these findings are directional rather than conclusive.
 
 ## Widget evolution
 
-Four versions, from a score inside an existing tab to a dashboard built around session impact. Each one answered a problem the previous version exposed.
+Four versions, from a score inside an existing tab to a dashboard built around session impact, shaped by research, usability insights and iteration.
 
 <Iteration>
   <IterationStage
@@ -212,10 +223,6 @@ Four versions, from a score inside an existing tab to a dashboard built around s
 
 <Cta href="https://clarity-dashboard-521382ae.base44.app/" label="Explore the feature" />
 
-## Outcome and reflection
+## Reflection
 
-[TODO: what I learned]
-
-[TODO: what I would do differently]
-
-[TODO: what I would test next]
+I learned that identifying a problem is only part of the design process: the information also has to be presented in a way that helps people understand it and act on it. Looking back, I would test the feature with a broader range of users and scenarios.

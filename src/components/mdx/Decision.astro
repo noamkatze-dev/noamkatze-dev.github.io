@@ -2,6 +2,7 @@
 /**
  * A key decision. Wrap several in <Decisions>; they are numbered automatically.
  * <Decision title="..." choice="What I decided" why="Why" tradeoff="What it cost" />
+ * `tradeoff` is optional: leave it out when none is documented.
  * Fields that are still TODO are hidden in production; an all-TODO decision renders nothing.
  */
 import TodoText from '../TodoText.astro';
@@ -11,17 +12,18 @@ interface Props {
   title: string;
   choice: string;
   why: string;
-  tradeoff: string;
+  tradeoff?: string;
 }
 const { title, choice, why, tradeoff } = Astro.props;
 const prod = import.meta.env.PROD;
-function show(v: string) {
+function show(v?: string) {
+  if (!v) return false;
   return !prod || !isTodoOnly(v);
 }
 const rows = [
   { label: 'Decision', value: choice },
   { label: 'Why', value: why },
-  { label: 'Trade-off', value: tradeoff },
+  { label: 'Trade-off', value: tradeoff ?? '' },
 ].filter((r) => show(r.value));
 const showTitle = show(title);
 const render = showTitle && rows.length > 0;

@@ -32,7 +32,6 @@ export const aboutTeaser = [
 export const about = [
   "I'm a Product Designer (UX/UI) with a background in Visual Communication and a user-centered approach to design. I graduated in 2026 with a B.Des. in Visual Communication from the University of Haifa and hold a professional UX certification from BEX College.",
   "I'm drawn to products where the problem is hard: data-heavy tools, multi-role workflows, and anything where clarity is the whole point. I work end to end, from research and flows to interface and prototype, and I build working prototypes in code when it helps. For my thesis I designed and built a browser-based eye-tracking system from scratch.",
-  'Before design, I spent five years in the IDF, including leading the upgrade of a procurement system in the Intelligence Corps. That is where I learned to work with complex systems and many stakeholders at once.',
 ];
 
 /** Design achievements, newest first. */
@@ -44,13 +43,8 @@ export const achievements: { year: string; title: string; detail?: string }[] = 
   },
   {
     year: '2023',
-    title: 'Department Excellence Award',
+    title: 'Department Excellence',
     detail: 'Visual Communication, University of Haifa.',
-  },
-  {
-    year: 'Year 1',
-    title: 'Excellence Exhibition',
-    detail: 'Selected for the first-year Excellence Exhibition, University of Haifa.',
   },
 ];
 
@@ -58,25 +52,25 @@ export const achievements: { year: string; title: string; detail?: string }[] = 
 export const skills: { name: string; proof: string; project: string; slug: string }[] = [
   {
     name: 'User Research',
-    proof: 'Interviews with UX practitioners, a literature review and a usability test.',
+    proof: 'An independent analysis of the Microsoft Clarity platform, plus team interviews, a literature review and a usability test.',
     project: 'Dark Pattern Detection',
     slug: 'dark-pattern-detection',
   },
   {
     name: 'Wireframing',
-    proof: 'Wireframes for every screen of a mobile app, before any visual design.',
+    proof: "Turned a client's needs into user flows and wireframes before any visual design.",
     project: 'Calcalist Next',
     slug: 'calcalist-next',
   },
   {
     name: 'Prototyping',
-    proof: 'A live dashboard prototype in Base44, and a working eye-tracking prototype in JavaScript.',
+    proof: 'A working, live eye-tracking experience, designed and built in JavaScript.',
     project: '250ms',
     slug: '250ms',
   },
   {
     name: 'UI Design',
-    proof: 'An app, a website and a promo video for a real client, presented to Calcalist.',
+    proof: 'App UI for a real client, presented to Calcalist, plus a self-initiated website.',
     project: 'Calcalist Next',
     slug: 'calcalist-next',
   },

@@ -1,13 +1,13 @@
 ---
 title: 250ms
 tagline: What your eyes reveal before you've decided what you think.
-outcome: "A working, hardware-free eye-tracking system in the browser: personal 9-point calibration, 16-image viewing sessions, several ways to read the gaze data and a comparison dashboard. An adaptive filter cut visible gaze tremor by over 50% with no added lag. [TODO: sessions run so far, or what the exhibition or jury feedback was]"
-teaser: A browser eye-tracking experiment that measures how we look at political images, with nothing but a webcam.
-summary: A browser-based eye-tracking experiment that measures visual attention on political imagery using nothing but a webcam, no extra hardware.
-context: Final-year thesis project, University of Haifa
+outcome: "A working interactive experience, live in the browser: personal gaze calibration, viewing sessions with political images, gaze paths, fixations and heatmaps, and a comparison view across viewers. [TODO: one line of feedback from the graduation review or exhibition, if any]"
+teaser: A webcam eye-tracking experience exploring how we look at political images. Live in the browser.
+summary: "An interactive graduation project that uses webcam-based eye tracking to explore how people look at political images: what they focus on, what they avoid, and how they respond."
+context: Graduation project, B.Des. Visual Communication, University of Haifa
 year: 2026
 duration: "[TODO: dates]"
-role: Solo designer and developer. I defined the research question, designed the experience and visual system, and built the eye-tracking, calibration and analysis views in JavaScript.
+role: Solo project. I defined the research question, designed the experience and its visual system, and built the eye tracking, calibration and analysis views in JavaScript.
 team: Solo project
 tools:
   - MediaPipe Face Landmarker
@@ -27,7 +27,7 @@ hero:
   width: 700
 links:
   - label: Try it live
-    url: "[TODO link: live demo, the most important link on the page]"
+    url: https://noamkatze-dev.github.io/250ms/
     kind: live
     primary: true
   - label: Watch the demo
@@ -45,7 +45,7 @@ links:
 
 What your eyes reveal before you've decided what you think.
 
-A browser-based eye-tracking experiment that measures visual attention on political imagery: no hardware, just a webcam. I designed it and built it, end to end.
+An interactive experience about visual attention and political imagery. Using only a laptop webcam, it follows where viewers look as political photographs appear, then visualizes their gaze paths, fixations and heatmaps, to explore how these images may shape the way we perceive reality. I designed and built it on my own.
 
 ## The question
 
@@ -55,7 +55,7 @@ I wanted to ask a different question: how do we *look* at them? Our eyes choose 
 
 ## How it works
 
-With nothing but a laptop webcam and real-time facial-landmark detection, the system calibrates to each viewer's gaze, then tracks exactly where they look while they view a set of political photographs, measuring fixations, saccades and attention density.
+With nothing but a laptop webcam and real-time facial-landmark detection, the system calibrates to each viewer's gaze, then estimates where they look while they view a set of political photographs, recording fixations, saccades and attention density.
 
 <Stats
   items={[
@@ -152,16 +152,12 @@ Over that calm backdrop sits a thin red grid and deep red type, the visual langu
   />
 </Decisions>
 
-<Cta href="[TODO link: live demo]" label="Try it live" />
+<Cta href="https://noamkatze-dev.github.io/250ms/" label="Try it live" />
 
 ## Data, consent and privacy
 
 [TODO: consent flow, what is stored, where, whether it is anonymized]
 
-## Results and reflection
+## Reflection
 
-[TODO: number of sessions, patterns found, what surprised me]
-
-[TODO: limitations: webcam accuracy, lighting, head movement, sample size]
-
-[TODO: what I would do differently, what I would build next]
+I learned how to translate a research-driven concept into an interactive experience about visual attention and political imagery. Webcam tracking is noisy by nature, which is why the experience needed a personal calibration and an adaptive filter. Looking back, I would validate the technical feasibility and accuracy of webcam-based eye tracking earlier in the process.
