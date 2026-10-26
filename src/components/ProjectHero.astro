@@ -2,14 +2,13 @@
 /**
  * Opening section of a case study, the same layout on every project:
  * eyebrow, headline on the left; description, discipline line and links on the
- * right; then the real project visual on a light measured grid, with numbered
- * markers and a legend that explain what you are looking at.
+ * right; then the real project visual with numbered markers. Hovering (or
+ * tapping / focusing) a marker shows what that part of the screen is.
  *
  *   one image      → a large interface shot, markers placed in % of the image (x, y)
  *   several images → a row of screens (phones: true for phone screens),
  *                    step N is placed on image N, again in % (x, y)
  *
- * `accent` colours the markers so each project keeps a touch of its own identity.
  * Content lives in each project's frontmatter under `opening:`.
  */
 import Media from './Media.astro';
@@ -27,7 +26,6 @@ interface Props {
     description: string;
     tags: string[];
     phones: boolean;
-    accent?: string;
     images: { file: string; alt: string }[];
     steps: { label: string; x: number; y: number }[];
   };
@@ -37,7 +35,6 @@ interface Props {
 const { opening: o, links } = Astro.props;
 const tagLine = o.tags.join(' · ');
 const hasTags = o.tags.length > 0;
-const accentStyle = o.accent ? '--ph-accent: ' + o.accent : '';
 
 const single = o.images.length === 1;
 const main = o.images[0];
@@ -60,7 +57,7 @@ const rowItems = o.images.map((img, i) => ({
 const rowSizes = o.phones ? '(min-width: 1100px) 18vw, 30vw' : '(min-width: 1100px) 28vw, 33vw';
 ---
 
-<header class="ph" style={accentStyle}>
+<header class="ph">
   <div class="wrap ph-inner">
     <div class="ph-text">
       <p class="ph-eyebrow">{o.eyebrow}</p>
@@ -97,9 +94,10 @@ const rowSizes = o.phones ? '(min-width: 1100px) 18vw, 30vw' : '(min-width: 1100
             <div class="ph-shot">
               <Media file={mainFile} alt={mainAlt} sizes="(min-width: 1100px) 84vw, 100vw" eager />
               {markers.map((m) => (
-                <span class="ph-marker" style={m.style} aria-hidden="true">
-                  {m.n}
-                </span>
+                <button type="button" class="ph-marker" style={m.style} aria-label={m.n + '. ' + m.label}>
+                  <span aria-hidden="true">{m.n}</span>
+                  <span class="ph-tip" aria-hidden="true">{m.label}</span>
+                </button>
               ))}
             </div>
           )
@@ -111,9 +109,10 @@ const rowSizes = o.phones ? '(min-width: 1100px) 18vw, 30vw' : '(min-width: 1100
                 <div class="ph-shot">
                   <Media file={it.file} alt={it.alt} sizes={rowSizes} eager />
                   {it.marker && (
-                    <span class="ph-marker" style={it.marker.style} aria-hidden="true">
-                      {it.marker.n}
-                    </span>
+                    <button type="button" class="ph-marker" style={it.marker.style} aria-label={it.marker.n + '. ' + it.marker.label}>
+                      <span aria-hidden="true">{it.marker.n}</span>
+                      <span class="ph-tip" aria-hidden="true">{it.marker.label}</span>
+                    </button>
                   )}
                 </div>
               ))}
@@ -121,20 +120,6 @@ const rowSizes = o.phones ? '(min-width: 1100px) 18vw, 30vw' : '(min-width: 1100
           )
         }
       </div>
-      {
-        markers.length > 0 && (
-          <ol class="ph-steps">
-            {markers.map((m) => (
-              <li>
-                <span class="ph-step-n" aria-hidden="true">
-                  {m.n}
-                </span>
-                {m.label}
-              </li>
-            ))}
-          </ol>
-        )
-      }
     </div>
   </div>
 </header>

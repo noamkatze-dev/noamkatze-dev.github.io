@@ -3,10 +3,10 @@
  * Self-hosted video. Only the poster loads (preload="none") until it is needed.
  * Files: public/videos/<src>.mp4 + <src>.jpg poster; sizes in src/data/videos.json.
  *
- * By default it plays muted and looped while on screen (src/scripts/ui.js starts
- * and pauses it). Clips with sound get a small "Sound on" button. Without JS, or
- * with reduced motion, the normal controls stay and nothing plays on its own.
- * autoplay={false} → click to play.
+ * No browser controls and no sound: the files have no audio track, and the
+ * video is always muted. By default it plays in a loop while on screen
+ * (src/scripts/ui.js starts and pauses it); clicking it pauses or plays.
+ * With reduced motion, or autoplay={false}, it waits for a click.
  */
 import videos from '../data/videos.json';
 import { url } from '../lib/url';
@@ -23,11 +23,10 @@ const meta = (videos as Record<string, { width: number; height: number; duration
 if (!meta) throw new Error('Video "' + src + '" is not in src/data/videos.json');
 const videoSrc = url('/videos/' + src + '.mp4');
 const posterSrc = url('/videos/' + src + '.jpg');
-const hasSound = autoplay && meta.audio;
 const ratio = 'aspect-ratio: ' + meta.width + ' / ' + meta.height;
 ---
 
-<div class="video" style={ratio}>
+<div class="video is-paused" style={ratio}>
   {
     autoplay ? (
       <video
@@ -35,10 +34,10 @@ const ratio = 'aspect-ratio: ' + meta.width + ' / ' + meta.height;
         poster={posterSrc}
         width={meta.width}
         height={meta.height}
-        controls
         muted
         loop
         playsinline
+        disablepictureinpicture
         preload="none"
         data-autoplay
         aria-label={label}
@@ -49,18 +48,14 @@ const ratio = 'aspect-ratio: ' + meta.width + ' / ' + meta.height;
         poster={posterSrc}
         width={meta.width}
         height={meta.height}
-        controls
+        muted
+        loop
         playsinline
+        disablepictureinpicture
         preload="none"
         aria-label={label}
       ></video>
     )
   }
-  {
-    hasSound && (
-      <button type="button" class="video-sound" data-sound hidden aria-pressed="false">
-        Sound on
-      </button>
-    )
-  }
+  <button type="button" class="video-toggle" aria-label="Play or pause the video"></button>
 </div>

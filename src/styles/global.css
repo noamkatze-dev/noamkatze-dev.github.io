@@ -34,7 +34,7 @@
   --fs-body: 15px; /* case-study text */
   --lh-body: 1.6;
   --fs-small: 14px; /* home text */
-  --fs-h2: 26px; /* section titles */
+  --fs-h2: 24px; /* section titles */
   --fs-h1: 38px; /* case-study title */
   --fs-h3: 18px;
   --fs-sub: 17px;
@@ -55,7 +55,7 @@
     --header-h: calc(88 * var(--u));
     --fs-body: max(14px, calc(15.8 * var(--u)));
     --fs-small: max(13px, calc(13.7 * var(--u)));
-    --fs-h2: max(26px, calc(33.8 * var(--u)));
+    --fs-h2: max(24px, calc(28 * var(--u)));
     --fs-h1: calc(73.2 * var(--u));
     --fs-h3: max(16px, calc(20.5 * var(--u)));
     --fs-sub: max(15px, calc(17.1 * var(--u)));
@@ -359,6 +359,26 @@ mark.todo {
   flex-wrap: wrap;
   gap: 0 2.6em;
 }
+.footer-item {
+  align-items: center;
+}
+.footer-item a.footer-cv {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 6px 18px;
+  border: 1px solid var(--c-text);
+  border-radius: 999px;
+  font-size: 0.82em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.footer-item a.footer-cv:hover {
+  background: var(--c-text);
+  color: var(--c-bg);
+  text-decoration: none;
+}
 .footer-label {
   text-transform: uppercase;
 }
@@ -521,7 +541,7 @@ mark.todo {
 
 /* Project list: one row of three, each image shown whole */
 .home-more {
-  margin-top: 1.8em;
+  margin-top: 2.8em;
 }
 .projects {
   display: grid;
@@ -674,13 +694,11 @@ mark.todo {
 /* ==========================================================================
    Case study: opening section (ProjectHero)
    The same layout on every project: eyebrow and headline on the left,
-   description, disciplines and links on the right, then the real work on a
-   light measured grid with numbered markers and a legend. `--ph-accent`
-   (set per project) colours the markers.
+   description, disciplines and links on the right, then the real work with
+   black numbered markers; hovering or tapping a marker explains it.
    ========================================================================== */
 
 .ph {
-  --ph-accent: #000;
   padding-block: 40px 0;
 }
 .ph-eyebrow {
@@ -725,14 +743,9 @@ mark.todo {
   margin-top: 48px;
 }
 
-/* The board: light grid behind the real screens */
+/* The visual sits straight on the page, no background */
 .ph-board {
-  padding: 20px 14px;
-  border-radius: var(--radius);
-  background-color: #f3f5f9;
-  background-image: linear-gradient(#e4e8ef 1px, transparent 1px), linear-gradient(90deg, #e4e8ef 1px, transparent 1px);
-  background-size: 32px 32px;
-  background-position: -1px -1px;
+  padding: 0;
 }
 .ph-shot {
   position: relative;
@@ -767,50 +780,56 @@ mark.todo {
 }
 .ph-marker {
   position: absolute;
+  z-index: 2;
   display: grid;
   place-items: center;
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
-  background: var(--ph-accent);
+  background: #000;
   color: #fff;
-  font-size: 11px;
+  font: inherit;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9);
   transform: translate(-50%, -50%);
+  cursor: help;
 }
-.ph-steps {
-  display: grid;
-  gap: 12px;
-  margin: 20px 0 0;
-  padding: 16px 0 0;
-  border-top: 1px solid var(--c-text);
-  list-style: none;
-  font-size: var(--fs-small);
-  font-weight: 400;
-}
-.ph-steps li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.ph-step-n {
-  display: grid;
-  flex: none;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--ph-accent);
+/* The explanation appears on hover, focus or tap */
+.ph-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 12px);
+  width: max-content;
+  max-width: 220px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #000;
   color: #fff;
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.3;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity 180ms, transform 180ms;
 }
-@media (min-width: 700px) {
-  .ph-steps {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+.ph-marker:hover,
+.ph-marker:focus-visible {
+  z-index: 3;
+}
+.ph-marker:hover .ph-tip,
+.ph-marker:focus .ph-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.ph-marker:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 4px;
 }
 @media (min-width: 1100px) {
   .ph {
@@ -848,10 +867,6 @@ mark.todo {
   .ph-visual {
     margin-top: calc(64 * var(--u));
   }
-  .ph-board {
-    padding: calc(56 * var(--u)) calc(48 * var(--u));
-    background-size: calc(40 * var(--u)) calc(40 * var(--u));
-  }
   .ph-row {
     gap: calc(20 * var(--u));
   }
@@ -861,21 +876,16 @@ mark.todo {
     gap: calc(96 * var(--u));
     padding-inline: 0;
   }
-  .ph-marker,
-  .ph-step-n {
-    width: calc(34 * var(--u));
-    height: calc(34 * var(--u));
-    font-size: max(11px, calc(13 * var(--u)));
+  .ph-marker {
+    width: calc(36 * var(--u));
+    height: calc(36 * var(--u));
+    font-size: max(12px, calc(14 * var(--u)));
+  }
+  .ph-tip {
+    font-size: max(13px, calc(14 * var(--u)));
   }
   .ph-marker {
     box-shadow: 0 0 0 calc(5 * var(--u)) rgba(255, 255, 255, 0.9);
-  }
-  .ph-steps {
-    margin-top: calc(28 * var(--u));
-    padding-top: calc(20 * var(--u));
-  }
-  .ph-steps li {
-    gap: calc(14 * var(--u));
   }
 }
 @media (prefers-reduced-motion: no-preference) {
@@ -927,6 +937,10 @@ mark.todo {
 .cs-section > :not(h2) + .cs-text {
   margin-top: var(--space-block);
 }
+.cs-text figure + p,
+.cs-text .video + p {
+  margin-top: 28px;
+}
 .cs-text p + p,
 .cs-text ul + p,
 .cs-text p + ul {
@@ -961,7 +975,7 @@ mark.todo {
   .cs-section > h2 {
     grid-column: 1;
     grid-row: 1;
-    max-width: calc(430 * var(--u));
+    max-width: calc(600 * var(--u));
     margin: 0;
   }
   .cs-section > .cs-text {
@@ -1013,7 +1027,6 @@ mark.todo {
 /* Spacing rhythm: every wide block sits the same distance from what's above it */
 .cs-section > .process,
 .cs-section > .flow,
-.cs-section > .persona,
 .cs-section > .screens,
 .cs-section > .pairs,
 .cs-section > ol.decisions,
@@ -1054,6 +1067,36 @@ figcaption {
   width: 100%;
   height: 100%;
   cursor: pointer;
+}
+/* Whole video is the play/pause button; a play icon shows while paused */
+.video-toggle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.video-toggle::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.62) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5.5v13l11-6.5z' fill='white'/%3E%3C/svg%3E") 54% 50% / 26px no-repeat;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 200ms;
+}
+.video.is-paused .video-toggle::after {
+  opacity: 1;
+}
+.video-toggle:focus-visible {
+  outline-offset: -4px;
 }
 /* Rounded corners on every screenshot and screen recording */
 .shot img,
@@ -1165,8 +1208,8 @@ ol.process li:not(:last-child)::after {
     padding-right: 0;
   }
   ol.process li:not(:last-child)::after {
-    width: calc(34 * var(--u));
-    margin-top: 0.65em;
+    width: calc(30 * var(--u));
+    margin: 0.65em calc(10 * var(--u)) 0 0;
   }
   ol.process li span {
     max-width: calc(171 * var(--u));
@@ -1221,15 +1264,16 @@ ol.flow {
   }
 }
 
-/* ---------- Persona ---------- */
+/* ---------- Persona: sits in the text column, like every other section ---------- */
 
 .persona-head {
   display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
   gap: 20px;
   align-items: center;
 }
 .persona-photo {
-  width: 160px;
+  width: 96px;
   aspect-ratio: 1;
   border-radius: 50%;
   overflow: hidden;
@@ -1241,38 +1285,48 @@ ol.flow {
   object-fit: cover;
 }
 .persona-name {
+  margin: 0 0 2px !important;
   font-size: var(--fs-sub);
   font-weight: 700;
-  line-height: 1.6;
+  line-height: 1.4;
+}
+.persona-head p {
+  margin: 0;
 }
 .persona-lists {
   display: grid;
   gap: 24px;
   margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--c-line);
 }
 .persona-label {
-  font-size: var(--fs-sub);
+  margin: 0 0 6px;
+  font-size: var(--fs-body);
   font-weight: 700;
 }
-.persona-lists ul {
+.cs-text .persona-lists ul {
+  margin: 0;
   padding-left: 1.2em;
+}
+@media (min-width: 640px) {
+  .persona-lists {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
+  }
 }
 @media (min-width: 1100px) {
   .persona-head {
-    grid-template-columns: calc(271 * var(--u)) calc(545 * var(--u));
-    gap: calc(36 * var(--u));
-    margin-left: calc(173 * var(--u));
+    grid-template-columns: calc(140 * var(--u)) minmax(0, 1fr);
+    gap: calc(28 * var(--u));
   }
   .persona-photo {
-    width: calc(271 * var(--u));
+    width: calc(140 * var(--u));
   }
   .persona-lists {
-    grid-template-columns: calc(450 * var(--u)) calc(545 * var(--u));
-    gap: 0;
-    margin: calc(80 * var(--u)) 0 0 calc(186 * var(--u));
-  }
-  .persona-lists ul {
-    padding-left: calc(19 * var(--u));
+    margin-top: calc(40 * var(--u));
+    padding-top: calc(32 * var(--u));
+    column-gap: calc(40 * var(--u));
   }
 }
 
@@ -1533,6 +1587,7 @@ ol.flow {
   text-transform: uppercase;
 }
 .cs-meta dd {
+  white-space: pre-line; /* tools: one per line */
   margin-top: 6px;
   font-size: var(--fs-small);
   line-height: 1.55;

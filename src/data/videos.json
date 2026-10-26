@@ -33,18 +33,24 @@
     "width": 390,
     "height": 850,
     "duration": 86.9,
-    "audio": true
+    "audio": false
   },
   "calcalist-next/website-walkthrough": {
     "width": 1430,
     "height": 902,
     "duration": 24.7,
-    "audio": true
+    "audio": false
   },
-  "dark-pattern-detection/flow-2-session-impact": {
+  "dark-pattern-detection/flow-1-dashboard": {
     "width": 1600,
     "height": 900,
     "duration": 34.4,
+    "audio": false
+  },
+  "dark-pattern-detection/flow-2-session-impact": {
+    "width": 1600,
+    "height": 898,
+    "duration": 22.0,
     "audio": false
   },
   "dark-pattern-detection/flow-3-quick-access": {
@@ -78,15 +84,15 @@
     "audio": false
   },
   "dark-pattern-detection/iteration-3-centralized": {
-    "width": 1440,
-    "height": 994,
+    "width": 1508,
+    "height": 1040,
     "duration": 15.9,
     "audio": false
   },
   "dark-pattern-detection/iteration-4-session-impact": {
     "width": 1600,
-    "height": 898,
-    "duration": 22.0,
+    "height": 1200,
+    "duration": 32.7,
     "audio": false
   }
 }

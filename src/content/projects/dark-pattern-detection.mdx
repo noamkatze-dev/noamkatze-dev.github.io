@@ -7,7 +7,7 @@ teaser: Flagging manipulative UI patterns in Clarity's behavioral data, so analy
 context: Academic team project, University of Haifa
 year: 2025
 duration: Oct 2024 – Jan 2025
-role: "I independently analyzed the entire Microsoft Clarity platform before and during design: how it works, its features and workflows, where a dark-pattern feature could fit, and which existing capabilities could support it. I shared these findings with the team to inform our research and design decisions. I also contributed to user research, data analysis and product design."
+role: "I independently analyzed the entire Microsoft Clarity platform before and during design: how it works, its features and workflows, where a dark-pattern feature could fit, and which existing capabilities could support it. I shared these findings with the team to inform our research and design decisions. I was actively involved in decision-making, user research, data analysis, feature specification and product design, and I worked hands-on in Base44, where the interactive prototype was built."
 team: "Team project [TODO: team size and each member's discipline]"
 tools:
   - Figma
@@ -58,9 +58,24 @@ Before designing anything new, I wanted to understand the product we were adding
 
 I shared the findings with my teammates to inform our collective research, design decisions and feature development.
 
+## Work process
+
+<Steps
+  items={[
+    "Platform analysis",
+    "User interviews",
+    "Literature review",
+    "Persona & JTBD",
+    "Wireframing",
+    "Usability test",
+    "Iteration",
+    "Base44 prototype",
+  ]}
+/>
+
 ## The problem
 
-Optimizing on behavioral data can push teams toward experiences that exploit users' emotional or cognitive patterns, often without meaning to.
+Optimizing on behavioral data can push teams toward experiences that exploit users' emotional or cognitive patterns.
 
 Spotting this today means combing through session recordings by hand for rage clicks, repeated interactions and abandoned flows, across fragmented tools.
 
@@ -114,15 +129,15 @@ A new feature in Clarity that detects potential dark patterns in existing behavi
 <Flow>
   <FlowStep
     title="Dark Patterns dashboard"
-    file="dark-pattern-detection/flow-1-dashboard.png"
-    alt="Clarity dashboard with the Dark Patterns widget: 1,960 sessions affected, a critical versus non-critical bar, and a list of detected patterns."
+    video="dark-pattern-detection/flow-1-dashboard"
+    alt="Screen recording: the Dark Patterns widget in the Clarity dashboard, sorting and filtering the detected patterns and hovering the severity bar."
   >
     A widget in Clarity's dashboard shows total sessions, affected sessions and critical cases at a glance.
   </FlowStep>
   <FlowStep
     title="Session impact overview"
     video="dark-pattern-detection/flow-2-session-impact"
-    alt="Screen recording: sorting and filtering the Dark Patterns widget, hovering the severity bar and pattern info tooltips."
+    alt="Screen recording: the affected-sessions-over-time chart beside the Dark Patterns widget, comparing how each pattern affects sessions."
   >
     Detected patterns are classified by severity and impact, with their effect on sessions visualized.
   </FlowStep>

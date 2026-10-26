@@ -47,7 +47,7 @@ const showOutcome = shown(d.outcome);
 const meta = [
   { label: 'Team', value: d.team },
   { label: 'Timeframe', value: d.duration },
-  { label: 'Tools', value: tools.join(', ') },
+  { label: 'Tools', value: tools.join('\n') }, // one tool per line
   { label: 'Context', value: d.context },
 ].filter((m) => shown(m.value));
 const ordered = d.links.filter((l) => l.primary).concat(d.links.filter((l) => !l.primary));

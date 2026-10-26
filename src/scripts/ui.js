@@ -49,9 +49,34 @@
     });
   }
 
-  /* ---------- Autoplay videos (muted loops while on screen) ---------- */
-  // Videos marked data-autoplay play only while visible. With reduced motion
-  // (or no IntersectionObserver) they keep their controls and wait for a click.
+  /* ---------- Videos: silent, no browser controls ---------- */
+  // Every video is muted and has no sound track. Videos marked data-autoplay
+  // play while on screen (unless the visitor prefers reduced motion).
+  // Clicking a video, or its play button, pauses or plays it.
+  var videoBoxes = Array.prototype.slice.call(document.querySelectorAll('.video'));
+  function syncState(box, v) {
+    box.classList.toggle('is-paused', v.paused);
+  }
+  videoBoxes.forEach(function (box) {
+    var v = box.querySelector('video');
+    var btn = box.querySelector('.video-toggle');
+    if (!v) return;
+    v.muted = true;
+    v.removeAttribute('controls');
+    function toggle() {
+      if (v.paused) {
+        if (v.preload !== 'auto') v.preload = 'auto';
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      } else {
+        v.pause();
+      }
+    }
+    if (btn) btn.addEventListener('click', toggle);
+    v.addEventListener('play', function () { syncState(box, v); });
+    v.addEventListener('pause', function () { syncState(box, v); });
+  });
+
   var autoVideos = Array.prototype.slice.call(document.querySelectorAll('video[data-autoplay]'));
   if (autoVideos.length && !reduceMotion && 'IntersectionObserver' in window) {
     var vio = new IntersectionObserver(
@@ -59,13 +84,10 @@
         entries.forEach(function (entry) {
           var v = entry.target;
           if (entry.isIntersecting) {
+            if (v.dataset.userPaused === '1') return;
             if (v.preload !== 'auto') v.preload = 'auto';
             var p = v.play();
-            if (p && p.catch) {
-              p.catch(function () {
-                v.controls = true;
-              });
-            }
+            if (p && p.catch) p.catch(function () {});
           } else if (!v.paused) {
             v.pause();
           }
@@ -74,20 +96,11 @@
       { rootMargin: '150px 0px', threshold: 0.25 }
     );
     autoVideos.forEach(function (v) {
-      v.controls = false;
-      v.muted = true;
-      v.addEventListener('click', function () {
-        if (v.paused) v.play();
-        else v.pause();
-      });
-      var sound = v.parentNode.querySelector('[data-sound]');
-      if (sound) {
-        sound.hidden = false;
-        sound.addEventListener('click', function () {
-          v.muted = !v.muted;
-          sound.setAttribute('aria-pressed', v.muted ? 'false' : 'true');
-          sound.textContent = v.muted ? 'Sound on' : 'Sound off';
-          if (!v.muted && v.paused) v.play();
+      var btn = v.parentNode.querySelector('.video-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          // Remember a deliberate pause so scrolling doesn't restart it
+          v.dataset.userPaused = v.paused ? '1' : '0';
         });
       }
       vio.observe(v);

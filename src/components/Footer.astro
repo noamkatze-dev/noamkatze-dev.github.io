@@ -14,17 +14,15 @@ const cvHref = url(site.cv);
 <footer class="site-footer" id="contact">
   <div class="wrap footer-row">
     <h2 class="visually-hidden">Contact</h2>
-    {
-      hasCv && (
-        <p class="footer-item footer-cv">
-          <span class="footer-label">CV</span>
-          <a href={cvHref} download>Download (PDF)</a>
-        </p>
-      )
-    }
     <p class="footer-item footer-email">
-      <span class="footer-label">Email</span>
       <a href={mailto}>{site.email}</a>
+      {
+        hasCv && (
+          <a class="footer-cv" href={cvHref} download>
+            Download CV
+          </a>
+        )
+      }
     </p>
     <a class="footer-icon" href={site.linkedin} rel="me noopener" target="_blank" aria-label="LinkedIn (opens in a new tab)">
       <svg width="27" height="27" viewBox="0 0 24 24" aria-hidden="true">

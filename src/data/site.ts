@@ -31,13 +31,13 @@ export const aboutTeaser = [
 /** Full bio on /about. One string per paragraph. */
 export const about = [
   "I'm a Product Designer (UX/UI) with a background in Visual Communication and a user-centered approach to design. I graduated in 2026 with a B.Des. in Visual Communication from the University of Haifa and hold a professional UX certification from BEX College.",
-  "I'm drawn to products where the problem is hard: data-heavy tools, multi-role workflows, and anything where clarity is the whole point. I work end to end, from research and flows to interface and prototype, and I build working prototypes in code when it helps. For my thesis I designed and built a browser-based eye-tracking system from scratch.",
+  "I'm drawn to products where the problem is hard: data-heavy tools, multi-role workflows, and anything where clarity is the whole point. I work end to end, from research and flows to interface and prototype, and I build working prototypes in code with the help of AI tools when it makes the idea clearer. For my final undergraduate project, I designed and built a browser-based eye-tracking experience from scratch.",
 ];
 
 /** Design achievements, newest first. */
 export const achievements: { year: string; title: string; detail?: string }[] = [
   {
-    year: '2025',
+    year: '2026',
     title: '3rd place, MANARA Coexistence Competition',
     detail: "Abu Dhabi. A children's educational game, designed in a team of four.",
   },
@@ -64,7 +64,7 @@ export const skills: { name: string; proof: string; project: string; slug: strin
   },
   {
     name: 'Prototyping',
-    proof: 'A working, live eye-tracking experience, designed and built in JavaScript.',
+    proof: 'A working, live eye-tracking experience, designed by me and built in JavaScript with AI tools.',
     project: '250ms',
     slug: '250ms',
   },
@@ -86,7 +86,7 @@ export const skills: { name: string; proof: string; project: string; slug: strin
 export const tools: { group: string; items: string[] }[] = [
   { group: 'Design', items: ['Figma', 'Photoshop', 'Illustrator', 'InDesign'] },
   { group: 'Motion & video', items: ['After Effects', 'Premiere Pro', 'Animate'] },
-  { group: 'Prototyping & code', items: ['Base44', 'JavaScript & Canvas', 'HTML & CSS', 'MediaPipe', 'Vibe coding'] },
+  { group: 'Prototyping & AI-assisted code', items: ['Base44', 'Vibe coding', 'JavaScript & Canvas, with AI', 'HTML & CSS, with AI', 'MediaPipe'] },
   { group: 'AI', items: ['AI tools'] },
 ];
 

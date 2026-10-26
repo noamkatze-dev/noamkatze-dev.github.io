@@ -32,7 +32,6 @@ const projects = defineCollection({
         description: z.string(),
         tags: z.array(z.string()).default([]),
         phones: z.boolean().default(false), // several images shown as a row of phone screens
-        accent: z.string().optional(), // marker colour, e.g. "#0039aa"
         images: z.array(z.object({ file: z.string(), alt: z.string() })).default([]),
         // numbered markers: one image → x/y in % of that image; several images → step N sits on image N
         steps: z.array(z.object({ label: z.string(), x: z.number(), y: z.number() })).default([]),
