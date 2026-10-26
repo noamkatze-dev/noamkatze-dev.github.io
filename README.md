@@ -43,7 +43,7 @@ Each case study is one file in `src/content/projects/`. The file name becomes th
 
 **Body**: write normal Markdown. Each `## Heading` becomes a section: title on the left, text on the right. Omit any section that doesn't apply.
 
-**Frontmatter extras:** `teaser` (one line on the Home card), `card` (Home card image).
+**Frontmatter extras:** `role` and `outcome` (shown as "My role" and "Outcome" at the top of the page), `teaser` (one line on the Home card), `card` (Home card image).
 
 **For the page top:** `shortTitle` (big title and Home card name), `heroTitle: false` (open with media only), and `hero: { file | video, alt, width, radius }` (defaults to the cover, 888px wide).
 
@@ -79,7 +79,7 @@ Each case study is one file in `src/content/projects/`. The file name becomes th
 
 Older components (`FigureGrid`, `Gallery`, `Embed`, `Swatches`, `Callout`) still work but are not used in the current layout.
 
-Every video plays muted and looped while it's on screen; clips with sound get a "Sound on" button. Screens and videos get rounded corners automatically. Images are always shown whole (never cropped or stretched).
+Every video plays silently and loops while it is on screen (the files have no sound track; strip audio with `-an` when adding new ones). Screens and videos get rounded corners automatically. Images are always shown whole (never cropped or stretched).
 
 Each case study ends with a link to the next project (the last one links back to the first), following `order`. Home cards use `shortTitle`, `teaser` and `card` (image) when set.
 
