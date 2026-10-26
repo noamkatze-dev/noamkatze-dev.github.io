@@ -672,6 +672,403 @@ mark.todo {
 }
 
 /* ==========================================================================
+   Case study: opening section (ProjectHero)
+   One type system for all three projects: eyebrow, headline, one or two
+   sentences, a discipline line, links, then a large visual of the real work.
+   Each layout gives its project its own character.
+   ========================================================================== */
+
+.ph {
+  --ph-red: #e80000; /* 250ms accent, large text and lines only */
+  --ph-red-text: #c40000; /* 250ms accent for small text (5.9:1 on white) */
+  padding-block: 40px 0;
+}
+.ph-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+.ph-headline {
+  margin-top: 14px;
+  max-width: 14ch;
+  font-size: clamp(36px, 10vw, 54px);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  text-wrap: balance;
+}
+.ph-side {
+  margin-top: 20px;
+}
+.ph-desc {
+  max-width: 34em;
+  font-size: max(17px, calc(20 * var(--u)));
+  font-weight: 300;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+.ph-tags {
+  margin-top: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+.ph-buttons {
+  margin-top: 28px;
+}
+.ph-visual {
+  margin-top: 48px;
+}
+@media (min-width: 1100px) {
+  .ph {
+    padding-block: calc(96 * var(--u)) 0;
+  }
+  .ph-eyebrow {
+    font-size: max(11px, calc(12.5 * var(--u)));
+  }
+  .ph-headline {
+    margin-top: calc(20 * var(--u));
+    font-size: calc(76 * var(--u));
+  }
+  .ph-side {
+    margin-top: 0;
+  }
+  .ph-tags {
+    margin-top: calc(20 * var(--u));
+    font-size: max(11px, calc(12 * var(--u)));
+  }
+  .ph-buttons {
+    margin-top: calc(32 * var(--u));
+  }
+  .ph-visual {
+    margin-top: calc(64 * var(--u));
+  }
+  /* Text: headline on the left, description column on the right */
+  .ph--screen .ph-text,
+  .ph--editorial .ph-text {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) calc(470 * var(--u));
+    column-gap: calc(64 * var(--u));
+    align-items: end;
+  }
+  .ph--screen .ph-eyebrow,
+  .ph--editorial .ph-eyebrow {
+    grid-column: 1;
+  }
+  .ph--screen .ph-headline,
+  .ph--editorial .ph-headline {
+    grid-column: 1;
+  }
+  .ph--screen .ph-side,
+  .ph--editorial .ph-side {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .ph--editorial .ph-side {
+    grid-row: 2 / span 2;
+  }
+}
+
+/* ---------- Calcalist Next: the brand's blue, phone screens around a bubble ---------- */
+
+.ph--phones {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 56px;
+  background:
+    radial-gradient(110% 80% at 78% 42%, #1a4fe0 0%, #0a33b4 28%, #021f6e 58%, #011a4a 78%, #0e0d17 100%);
+  color: #fff;
+}
+.ph--phones .btn {
+  border-color: #fff;
+  background: #fff;
+  color: #011a4a;
+}
+.ph--phones .btn:hover {
+  background: transparent;
+  color: #fff;
+}
+.ph--phones .btn-outline {
+  background: transparent;
+  color: #fff;
+}
+.ph--phones .btn-outline:hover {
+  background: #fff;
+  color: #011a4a;
+}
+.ph--phones :focus-visible {
+  outline-color: #fff;
+}
+.ph-phones {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4%;
+}
+.ph-phone {
+  position: relative;
+  z-index: 1;
+  width: 29%;
+}
+.ph-phone--2 {
+  z-index: 2;
+  width: 36%;
+}
+.ph-phone img {
+  width: 100%;
+  border-radius: 9% / 4.2%;
+  box-shadow: 0 24px 48px rgba(0, 4, 30, 0.5);
+}
+.ph-bubble {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 92%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, rgba(120, 160, 255, 0.4), rgba(40, 80, 220, 0.12) 52%, rgba(0, 0, 0, 0) 70%);
+  transform: translate(-50%, -50%);
+}
+@media (min-width: 1100px) {
+  .ph--phones {
+    padding-block: calc(72 * var(--u));
+  }
+  .ph--phones .ph-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 11fr) minmax(0, 13fr);
+    align-items: center;
+    column-gap: calc(40 * var(--u));
+    min-height: calc(100svh - var(--header-h) - 2 * 72 * var(--u));
+  }
+  .ph--phones .ph-headline {
+    max-width: none;
+    font-size: calc(66 * var(--u));
+  }
+  .ph--phones .ph-side {
+    margin-top: calc(28 * var(--u));
+  }
+  .ph--phones .ph-visual {
+    margin-top: 0;
+  }
+  .ph-phones {
+    display: block;
+    height: calc(620 * var(--u));
+  }
+  .ph-phone {
+    position: absolute;
+    width: calc(212 * var(--u));
+  }
+  .ph-phone--1 {
+    left: 8%;
+    top: 19%;
+  }
+  .ph-phone--2 {
+    left: 50%;
+    top: 0;
+    width: calc(262 * var(--u));
+    transform: translateX(-50%);
+  }
+  .ph-phone--3 {
+    right: 8%;
+    top: 11%;
+  }
+  .ph-bubble {
+    width: calc(560 * var(--u));
+  }
+}
+
+/* ---------- Clarity: one large interface shot on a measured grid ---------- */
+
+.ph-board {
+  padding: 20px 14px;
+  border-radius: var(--radius);
+  background-color: #f3f5f9;
+  background-image: linear-gradient(#e4e8ef 1px, transparent 1px), linear-gradient(90deg, #e4e8ef 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: -1px -1px;
+}
+.ph-shot {
+  position: relative;
+}
+.ph-shot img {
+  width: 100%;
+}
+.ph-marker {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9);
+  transform: translate(-50%, -50%);
+}
+.ph-steps {
+  display: grid;
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--c-text);
+  list-style: none;
+  font-size: var(--fs-small);
+  font-weight: 400;
+}
+.ph-steps li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ph-step-n {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+}
+@media (min-width: 700px) {
+  .ph-steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  .ph-board {
+    padding: calc(56 * var(--u)) calc(48 * var(--u));
+    background-size: calc(40 * var(--u)) calc(40 * var(--u));
+  }
+  .ph-marker,
+  .ph-step-n {
+    width: calc(34 * var(--u));
+    height: calc(34 * var(--u));
+    font-size: max(11px, calc(13 * var(--u)));
+  }
+  .ph-marker {
+    box-shadow: 0 0 0 calc(5 * var(--u)) rgba(255, 255, 255, 0.9);
+  }
+  .ph-steps {
+    margin-top: calc(28 * var(--u));
+    padding-top: calc(20 * var(--u));
+  }
+  .ph-steps li {
+    gap: calc(14 * var(--u));
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ph-marker {
+    animation: ph-pulse 2.8s ease-out infinite;
+  }
+  .ph-marker:nth-of-type(2) {
+    animation-delay: 0.4s;
+  }
+  .ph-marker:nth-of-type(3) {
+    animation-delay: 0.8s;
+  }
+}
+@keyframes ph-pulse {
+  0% {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 0 3px rgba(0, 0, 0, 0.35);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 0 16px rgba(0, 0, 0, 0);
+  }
+}
+
+/* ---------- 250ms: wordmark, red type, gaze data framed by a thin red grid ---------- */
+
+.ph-logo {
+  width: 100%;
+  margin-bottom: 32px;
+}
+.ph-logo img {
+  width: 100%;
+}
+.ph--editorial .ph-headline {
+  color: var(--ph-red);
+}
+.ph-editorial {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  padding-block: 18px;
+  border-top: 1px solid var(--ph-red);
+  border-bottom: 1px solid var(--ph-red);
+}
+.ph-editorial::before,
+.ph-editorial::after {
+  content: '+';
+  position: absolute;
+  color: var(--ph-red);
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1;
+}
+.ph-editorial::before {
+  left: -5px;
+  top: -10px;
+}
+.ph-editorial::after {
+  right: -5px;
+  bottom: -10px;
+}
+.ph-stills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.ph-stills img {
+  width: 100%;
+  border-radius: var(--radius);
+}
+.ph-stills figcaption {
+  margin-top: 8px;
+  color: var(--ph-red-text);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+@media (min-width: 1100px) {
+  .ph-logo {
+    grid-column: 1 / -1;
+    margin-bottom: calc(64 * var(--u));
+  }
+  .ph--editorial .ph-headline {
+    font-size: calc(64 * var(--u));
+  }
+  .ph-editorial {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: calc(24 * var(--u));
+    padding-block: calc(28 * var(--u));
+  }
+  .ph-stills {
+    grid-template-columns: 1fr;
+    align-content: space-between;
+    gap: calc(16 * var(--u));
+  }
+  .ph-stills figcaption {
+    margin-top: calc(8 * var(--u));
+    font-size: max(10px, calc(11.5 * var(--u)));
+  }
+}
+
+/* ==========================================================================
    Case study: sections
    Each "## Title" becomes <section class="cs-section">: the title sits in the
    left column, text (.cs-text) in the right column from x788. Wide blocks

@@ -4,8 +4,8 @@ import { getCollection, render } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Media from '../../components/Media.astro';
-import VideoMedia from '../../components/VideoMedia.astro';
 import TodoText from '../../components/TodoText.astro';
+import ProjectHero from '../../components/ProjectHero.astro';
 import { mdxComponents } from '../../components/mdx';
 import { findImage } from '../../lib/images';
 import { url } from '../../lib/url';
@@ -33,17 +33,8 @@ if (coverImg) {
   ogImage = og.src;
 }
 
-// Hero: big centred title (optional), chevron, then an image or video.
+// Page title (used by the fallback header and for screen readers)
 const heading = d.shortTitle ?? d.title;
-const showTitle = d.heroTitle;
-const heroFile = d.hero?.file ?? (d.hero?.video ? '' : d.cover);
-const heroVideo = d.hero?.video ?? '';
-const heroAlt = d.hero?.alt ?? d.coverAlt;
-const heroWidth = d.hero?.width ?? 888;
-const heroStyle = '--w: ' + heroWidth;
-const heroClass = showTitle ? 'cs-hero wrap' : 'cs-hero cs-hero--media wrap';
-const titleClass = showTitle ? 'cs-title' : 'visually-hidden';
-const heroSizes = '(min-width: 1100px) ' + Math.round((heroWidth / 1425) * 100) + 'vw, 100vw';
 
 // Overview row: role, team, timeframe, tools. TODO-only values are hidden on the live site.
 function shown(v?: string) {
@@ -69,34 +60,26 @@ const nextHref = url('/work/' + next.id + '/');
 const nextName = next.data.shortTitle ?? next.data.title;
 const nextImage = next.data.card ?? next.data.cover;
 const showNext = next.id !== project.id;
+
+// New opening section (eyebrow, headline, visual). Without it, the older hero is used.
+const opening = d.opening;
+const hasOpening = Boolean(opening);
+const overviewLinks = hasOpening ? [] : links;
 ---
 
 <Base title={d.title} description={d.summary} image={ogImage} imageAlt={d.coverAlt} type="article">
   <article>
-    <header class={heroClass}>
-      <h1 class={titleClass}>{heading}</h1>
-      {
-        !showTitle && (
-          <div class="cs-hero-media" style={heroStyle}>
-            {heroVideo ? <VideoMedia src={heroVideo} label={heroAlt} /> : <Media file={heroFile} alt={heroAlt} sizes={heroSizes} eager />}
-          </div>
-        )
-      }
-      <a class="scroll-cue" href="#content">
-        <span class="visually-hidden">Scroll to the case study</span>
-        <svg width="37" height="20" viewBox="0 0 37 20" fill="none" aria-hidden="true"><path d="M1 1.5l17.5 17L36 1.5" stroke="currentColor" stroke-width="1.3"></path></svg>
-      </a>
-      {
-        showTitle && (
-          <div class="cs-hero-media" style={heroStyle}>
-            {heroVideo ? <VideoMedia src={heroVideo} label={heroAlt} /> : <Media file={heroFile} alt={heroAlt} sizes={heroSizes} eager zoom />}
-          </div>
-        )
-      }
-    </header>
+    {opening && <ProjectHero opening={opening} name={heading} links={links} />}
+    {
+      !hasOpening && (
+        <header class="cs-hero wrap">
+          <h1 class="cs-title">{heading}</h1>
+        </header>
+      )
+    }
 
     <section class="wrap cs-overview" id="content" aria-label="Project overview">
-      <p class="cs-summary">{d.summary}</p>
+      {!hasOpening && <p class="cs-summary">{d.summary}</p>}
       {
         (showRole || showOutcome) && (
           <dl class="cs-key">
@@ -132,9 +115,9 @@ const showNext = next.id !== project.id;
         }
       </dl>
       {
-        links.length > 0 && (
+        overviewLinks.length > 0 && (
           <div class="buttons">
-            {links.map((l) =>
+            {overviewLinks.map((l) =>
               l.todo ? (
                 <span class="btn btn-outline" aria-disabled="true">
                   {l.label}: <mark class="todo">{l.url}</mark>
