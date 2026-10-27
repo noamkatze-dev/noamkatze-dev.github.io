@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { site } from '../data/site';
 import { url } from '../lib/url';
 
-// The CV link appears only once public/cv.pdf is a real CV (the placeholder is tiny).
+// The CV opens as a PDF in a new tab. The link appears only once public/cv.pdf is a real CV (the placeholder is tiny).
 const cvPath = join(process.cwd(), 'public', 'cv.pdf');
 const hasCv = existsSync(cvPath) && statSync(cvPath).size > 5000;
 const mailto = 'mailto:' + site.email;
@@ -15,11 +15,17 @@ const cvHref = url(site.cv);
   <div class="wrap footer-row">
     <h2 class="visually-hidden">Contact</h2>
     <p class="footer-item footer-email">
-      <a href={mailto}>{site.email}</a>
+      <a class="footer-mail" href={mailto}>
+        <svg class="mail-icon" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5.5" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"></rect>
+          <path d="M3.8 7l8.2 6 8.2-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <span>{site.email}</span>
+      </a>
       {
         hasCv && (
-          <a class="footer-cv" href={cvHref} download>
-            Download CV
+          <a class="footer-cv" href={cvHref} target="_blank" rel="noopener">
+            View CV<span class="visually-hidden"> (PDF, opens in a new tab)</span>
           </a>
         )
       }

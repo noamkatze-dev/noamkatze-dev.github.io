@@ -66,8 +66,10 @@ const pageDescription = 'About ' + site.name + ': product designer, B.Des. Visua
         <div class="buttons">
           {
             hasCv && (
-              <a class="btn" href={cvHref} download>
-                Download CV <span class="arrow" aria-hidden="true">↓</span>
+              <a class="btn" href={cvHref} target="_blank" rel="noopener">
+                View CV
+                <span class="visually-hidden"> (PDF, opens in a new tab)</span>
+                <span class="arrow" aria-hidden="true">↗</span>
               </a>
             )
           }

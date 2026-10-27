@@ -392,6 +392,23 @@ mark.todo {
 .footer-item {
   align-items: center;
 }
+.footer-item a.footer-mail {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.mail-icon {
+  flex: none;
+  width: 1.15em;
+  height: 1.15em;
+}
+.footer-item a.footer-mail:hover {
+  text-decoration: none;
+}
+.footer-item a.footer-mail:hover span {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
 .footer-item a.footer-cv {
   display: inline-flex;
   align-items: center;
