@@ -40,9 +40,20 @@ const single = o.images.length === 1;
 const main = o.images[0];
 const mainFile = main ? main.file : '';
 const mainAlt = main ? main.alt : '';
+// Tooltips open towards the middle of the page, so they never leave the screen.
+// One image: decided by the marker's x. Several images: by the image's place in the row.
+const lastIndex = o.steps.length - 1;
+function tipSide(x: number, i: number) {
+  let pos = x;
+  if (!single) pos = lastIndex > 0 ? (i / lastIndex) * 100 : 50;
+  if (pos < 25) return 'ph-marker tip-start';
+  if (pos > 75) return 'ph-marker tip-end';
+  return 'ph-marker';
+}
 const markers = o.steps.map((st, i) => ({
   n: i + 1,
   label: st.label,
+  cls: tipSide(st.x, i),
   style: 'left: ' + st.x + '%; top: ' + st.y + '%',
 }));
 
@@ -94,7 +105,7 @@ const rowSizes = o.phones ? '(min-width: 1100px) 18vw, 30vw' : '(min-width: 1100
             <div class="ph-shot">
               <Media file={mainFile} alt={mainAlt} sizes="(min-width: 1100px) 84vw, 100vw" eager />
               {markers.map((m) => (
-                <button type="button" class="ph-marker" style={m.style} aria-label={m.n + '. ' + m.label}>
+                <button type="button" class={m.cls} style={m.style} aria-label={m.n + '. ' + m.label}>
                   <span aria-hidden="true">{m.n}</span>
                   <span class="ph-tip" aria-hidden="true">{m.label}</span>
                 </button>
@@ -109,7 +120,7 @@ const rowSizes = o.phones ? '(min-width: 1100px) 18vw, 30vw' : '(min-width: 1100
                 <div class="ph-shot">
                   <Media file={it.file} alt={it.alt} sizes={rowSizes} eager />
                   {it.marker && (
-                    <button type="button" class="ph-marker" style={it.marker.style} aria-label={it.marker.n + '. ' + it.marker.label}>
+                    <button type="button" class={it.marker.cls} style={it.marker.style} aria-label={it.marker.n + '. ' + it.marker.label}>
                       <span aria-hidden="true">{it.marker.n}</span>
                       <span class="ph-tip" aria-hidden="true">{it.marker.label}</span>
                     </button>
