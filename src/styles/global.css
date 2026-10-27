@@ -564,10 +564,10 @@ mark.todo {
     align-items: flex-end;
     padding-block: 0 calc(84 * var(--u));
   }
-  /* Email, CV and LinkedIn in one centered row, with equal gaps between them */
+  /* Email, CV and LinkedIn in one row from the left edge, with equal gaps between them */
   .footer-row {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: calc(56 * var(--u));
   }
