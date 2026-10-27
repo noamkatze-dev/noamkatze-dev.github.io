@@ -371,6 +371,106 @@ mark.todo {
   }
 }
 
+/* Phone menu (below 700px, only when ui.js runs): name left, Menu button right,
+   links open as a full-screen list. Without JS the three links stay inline. */
+.menu-toggle {
+  display: none;
+}
+@media (max-width: 699px) {
+  .has-menu .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    margin-right: -6px;
+    padding: 0 6px;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .menu-icon {
+    position: relative;
+    width: 20px;
+    height: 10px;
+  }
+  .menu-icon::before,
+  .menu-icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 250ms var(--ease), top 250ms var(--ease);
+  }
+  .menu-icon::before {
+    top: 0;
+  }
+  .menu-icon::after {
+    top: calc(100% - 1.5px);
+  }
+  .menu-open .menu-icon::before {
+    top: calc(50% - 0.75px);
+    transform: rotate(45deg);
+  }
+  .menu-open .menu-icon::after {
+    top: calc(50% - 0.75px);
+    transform: rotate(-45deg);
+  }
+  .has-menu nav {
+    position: fixed;
+    inset: var(--header-h) 0 0 0;
+    z-index: 49;
+    display: none;
+    padding: 24px 20px 40px;
+    background: var(--c-bg);
+    border-top: 1px solid var(--c-text);
+    overflow-y: auto;
+  }
+  .has-menu.menu-open nav {
+    display: block;
+  }
+  .has-menu nav ul {
+    display: grid;
+    gap: 0;
+  }
+  .has-menu nav li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  }
+  .has-menu nav a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 20px;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-transform: none;
+  }
+  .has-menu nav a::after {
+    content: '→';
+    font-size: 20px;
+    font-weight: 400;
+  }
+  .has-menu nav a:hover,
+  .has-menu nav a[aria-current='page'] {
+    text-decoration: none;
+  }
+  .has-menu nav a[aria-current='page'] {
+    color: rgba(0, 0, 0, 0.45);
+  }
+  .menu-lock,
+  .menu-lock body {
+    overflow: hidden;
+  }
+}
+
 /* ==========================================================================
    Footer (296u tall, email in the middle column, icon on the right)
    ========================================================================== */
@@ -439,6 +539,23 @@ mark.todo {
 .footer-icon svg {
   width: 26px;
   height: 26px;
+}
+@media (max-width: 1099px) {
+  .site-footer {
+    padding-block: 56px 48px;
+  }
+  .footer-row {
+    justify-items: center;
+    gap: 20px;
+    padding-top: 40px;
+    border-top: 1px solid var(--c-text);
+    text-align: center;
+  }
+  .footer-item {
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+  }
 }
 @media (min-width: 1100px) {
   .site-footer {
@@ -583,6 +700,18 @@ mark.todo {
   }
   .home-text {
     max-width: calc(586 * var(--u));
+  }
+}
+
+/* Phones and tablets: the home page stays centered, like the hero */
+@media (max-width: 1099px) {
+  .home-work,
+  #about.home-section {
+    text-align: center;
+  }
+  #about .home-text {
+    max-width: 36em;
+    margin-inline: auto;
   }
 }
 
@@ -820,8 +949,8 @@ mark.todo {
   }
 }
 .ph-row--phones {
-  gap: 4%;
-  padding-inline: 4%;
+  gap: 3%;
+  padding-inline: 0;
 }
 .ph-row--phones .ph-shot img {
   border-radius: 9% / 4.2%;
@@ -1269,6 +1398,42 @@ ol.process li:not(:last-child)::after {
   width: 24px;
   height: 0.8px;
   background: currentColor;
+}
+@media (max-width: 1099px) {
+  ol.process {
+    display: grid;
+    gap: 0;
+    padding-left: 5px;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+  ol.process li {
+    position: relative;
+    display: block;
+    padding: 0 0 18px 24px;
+  }
+  ol.process li:last-child {
+    padding-bottom: 0;
+  }
+  ol.process li::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 0.3em;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  ol.process li:not(:last-child)::after {
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    bottom: -0.3em;
+    width: 1px;
+    height: auto;
+  }
 }
 @media (min-width: 1100px) {
   ol.process {
@@ -1863,7 +2028,7 @@ ul.stats {
   gap: 12px;
 }
 .next-title {
-  font-size: max(30px, calc(56 * var(--u)));
+  font-size: clamp(26px, 7.5vw, 36px);
   font-weight: 600;
   line-height: 1.1;
   text-transform: uppercase;
@@ -1900,6 +2065,9 @@ ul.stats {
   .next {
     padding-top: calc(60 * var(--u));
   }
+  .next-title {
+    font-size: max(30px, calc(56 * var(--u)));
+  }
   .next-link {
     gap: calc(80 * var(--u));
   }
@@ -1929,6 +2097,7 @@ ul.stats {
   overflow: hidden;
 }
 .about-photo img {
+  display: block;
   width: 100%;
   height: 100%;
 }
@@ -1953,6 +2122,21 @@ ul.stats {
 }
 .page .buttons {
   margin-top: 32px;
+}
+@media (max-width: 1099px) {
+  .about-hero {
+    justify-items: center;
+    text-align: center;
+  }
+  .about-photo {
+    width: min(220px, 60vw);
+  }
+  .about-intro {
+    max-width: 36em;
+  }
+  .about-intro .buttons {
+    justify-content: center;
+  }
 }
 @media (min-width: 1100px) {
   .about-hero {

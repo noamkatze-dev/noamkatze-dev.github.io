@@ -20,6 +20,36 @@
   window.addEventListener('resize', onScroll);
   onScroll();
 
+  /* ---------- Phone menu: the links fold behind a Menu button ---------- */
+  var menuBtn = document.querySelector('.menu-toggle');
+  var siteNav = document.getElementById('site-nav');
+  if (header && menuBtn && siteNav) {
+    var menuLabel = menuBtn.querySelector('.menu-label');
+    header.classList.add('has-menu');
+    menuBtn.hidden = false;
+    var setMenu = function (open) {
+      header.classList.toggle('menu-open', open);
+      document.documentElement.classList.toggle('menu-lock', open);
+      menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (menuLabel) menuLabel.textContent = open ? 'Close' : 'Menu';
+    };
+    menuBtn.addEventListener('click', function () {
+      setMenu(!header.classList.contains('menu-open'));
+    });
+    siteNav.addEventListener('click', function (e) {
+      if (e.target && e.target.closest && e.target.closest('a')) setMenu(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && header.classList.contains('menu-open')) {
+        setMenu(false);
+        menuBtn.focus();
+      }
+    });
+    window.matchMedia('(min-width: 700px)').addEventListener('change', function (mq) {
+      if (mq.matches) setMenu(false);
+    });
+  }
+
   /* ---------- Scroll reveal (once; only for content below the fold) ---------- */
   if (!reduceMotion && 'IntersectionObserver' in window) {
     var selector = '.projects > li, .home-section, .cs-section > .cs-text, .flow-item, .screens, .pairs, .persona, .process, .cta, .side-media, .cs-intro-media, .decision, .stats, .next, .about-block';

@@ -19,7 +19,12 @@ const nav = [
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="name" href={url('/')}>{site.name}</a>
-    <nav aria-label="Main">
+    <!-- Phones: the links fold into a full-screen menu. Shown only when ui.js runs. -->
+    <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="site-nav" hidden>
+      <span class="menu-label">Menu</span>
+      <span class="menu-icon" aria-hidden="true"></span>
+    </button>
+    <nav id="site-nav" aria-label="Main">
       <ul>
         {
           nav.map((item) => (
