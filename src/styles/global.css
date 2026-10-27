@@ -564,17 +564,18 @@ mark.todo {
     align-items: flex-end;
     padding-block: 0 calc(84 * var(--u));
   }
+  /* Email, CV and LinkedIn in one centered row, with equal gaps between them */
   .footer-row {
-    grid-template-columns: calc(526 * var(--u)) 1fr auto;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 0;
+    gap: calc(56 * var(--u));
   }
   .footer-row .footer-email {
-    grid-column: 2;
+    display: contents;
   }
   .footer-row .footer-icon {
-    grid-column: 3;
-    width: calc(39 * var(--u));
+    width: calc(27 * var(--u)); /* same as the icon, so the gap before it looks equal */
     height: calc(39 * var(--u));
   }
   .footer-icon svg {
