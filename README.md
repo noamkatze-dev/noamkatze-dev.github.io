@@ -94,7 +94,7 @@ Anything you don't know yet is written as `[TODO: what I need]`. In `npm run dev
 Edit `src/data/site.ts`: hero headline, support line, the short About text on Home (`aboutTeaser`), the About page bio, achievements, design skills (each linked to a project), tools, experience, education, email, LinkedIn.
 
 ### CV
-Replace `public/cv.pdf` with your real CV and keep the same file name.
+Replace `public/cv.pdf` with your real CV and keep the same file name. The "View CV" buttons (footer and About page) appear automatically once the file is a real PDF (over 5 KB), and open it in a new browser tab.
 
 ## 3. Add images
 
