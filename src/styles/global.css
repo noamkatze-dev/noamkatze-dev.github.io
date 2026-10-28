@@ -40,6 +40,10 @@
   --fs-sub: 17px;
   --fs-cap: 12px;
   --fs-footer: 15px;
+  /* Spacing system (visible gaps, the same on every page):
+     --section  between sections, and from the last section to the footer line
+     --space-block  title -> a wide block (grid, list with rules, flow, cards)
+     16px / 16u  title -> its text   ·   32px / 96u  header -> first content */
   --section: 72px; /* between sections */
   --space-block: 32px; /* title or text -> a wide block (grid, flow, stats) */
   --space-inline: 12px; /* title -> a short intro line under it */
@@ -553,12 +557,12 @@ mark.todo {
 }
 @media (max-width: 1099px) {
   .site-footer {
-    padding-block: 56px 48px;
+    padding-block: var(--section) 48px; /* last section -> footer line = --section */
   }
   .footer-row {
     justify-items: start;
     gap: 12px;
-    padding-top: 32px;
+    padding-top: 22px; /* + the links' 10px tap padding = 32px to the email line */
     /* a hairline inside the page margins, lined up with the text */
     background: linear-gradient(var(--c-text), var(--c-text)) var(--pad) 0 / calc(100% - 2 * var(--pad)) 1px no-repeat;
   }
@@ -647,8 +651,9 @@ mark.todo {
     justify-content: center;
     align-items: flex-start;
     gap: calc(67 * var(--u));
-    height: calc(663 * var(--u));
-    padding: calc(145 * var(--u)) 0 0;
+    /* header -> photo 96u (same as every page); chevron -> Projects title = --section */
+    height: calc(562 * var(--u));
+    padding: calc(96 * var(--u)) 0 0;
     text-align: left;
   }
   .hero-photo {
@@ -670,7 +675,7 @@ mark.todo {
   .hero .scroll-cue {
     position: absolute;
     left: 50%;
-    top: calc(510 * var(--u));
+    top: calc(461 * var(--u));
     transform: translateX(-50%);
   }
 }
@@ -678,8 +683,8 @@ mark.todo {
 /* Home sections: title left, content from x720 */
 .home-section {
   display: grid;
-  gap: 20px;
-  padding-block: calc(var(--section) / 2);
+  gap: 16px; /* title -> text */
+  padding-block: var(--section) 0;
 }
 .home-section > h1,
 .home-section > h2 {
@@ -724,7 +729,7 @@ mark.todo {
   .hero {
     justify-items: start;
     gap: 24px;
-    padding-block: 32px 48px;
+    padding-block: 32px 0;
     text-align: left;
   }
   .hero-photo {
@@ -737,7 +742,7 @@ mark.todo {
     display: none;
   }
   .home-work > h2 {
-    margin-bottom: 8px;
+    margin-bottom: calc(var(--space-block) - 16px); /* title -> cards = --space-block */
   }
 }
 
@@ -902,7 +907,7 @@ mark.todo {
    ========================================================================== */
 
 .ph {
-  padding-block: 40px 0;
+  padding-block: 32px 0;
 }
 .ph-eyebrow {
   font-size: 12px;
@@ -1263,6 +1268,18 @@ mark.todo {
 .cs-section > ul.stats,
 .cs-section > .cta {
   margin-top: var(--space-block);
+}
+
+@media (max-width: 1099px) {
+  .cs-section > h2 + .process,
+  .cs-section > h2 + .flow,
+  .cs-section > h2 + .screens,
+  .cs-section > h2 + .pairs,
+  .cs-section > h2 + ol.decisions,
+  .cs-section > h2 + ul.stats,
+  .cs-section > h2 + .cta {
+    margin-top: calc(var(--space-block) - 16px);
+  }
 }
 
 /* ---------- Media ---------- */
@@ -1635,7 +1652,7 @@ ol.flow {
 /* Black band (Wireframes): the whole section turns black, edge to edge */
 .cs-section:has(> .screens--dark) {
   position: relative;
-  padding-block: 48px;
+  padding-block: var(--section);
   background: var(--c-ink);
   color: var(--c-on-ink);
   box-shadow: 0 0 0 100vmax var(--c-ink);
@@ -1643,15 +1660,11 @@ ol.flow {
 }
 @media (min-width: 1100px) {
   .cs-section:has(> .screens--dark) {
-    padding-block: calc(110 * var(--u));
+    padding-block: var(--section);
   }
 }
 
-/* A black band's own edge separates it, so the white gaps around it are shorter */
-.cs-section:has(> .screens--dark),
-.cs-section:has(> .screens--dark) + .cs-section {
-  margin-top: calc(var(--section) * 0.6);
-}
+/* Black bands use the same --section gap outside and inside, like every other section */
 
 /* ---------- Usability findings: check / cross list ---------- */
 
@@ -1813,6 +1826,8 @@ ol.flow {
 .cs-key {
   display: grid;
   gap: 24px;
+}
+.cs-summary + .cs-key {
   margin-top: var(--space-block);
 }
 .cs-key dt {
@@ -2013,7 +2028,7 @@ ul.stats {
 }
 .cs-section:has(> .pairs.screens--dark) {
   position: relative;
-  padding-block: 48px;
+  padding-block: var(--section);
   background: var(--c-ink);
   color: var(--c-on-ink);
   box-shadow: 0 0 0 100vmax var(--c-ink);
@@ -2033,7 +2048,7 @@ ul.stats {
     gap: calc(18 * var(--u));
   }
   .cs-section:has(> .pairs.screens--dark) {
-    padding-block: calc(110 * var(--u));
+    padding-block: var(--section);
   }
 }
 
@@ -2156,7 +2171,7 @@ ul.stats {
     column-gap: 18px;
     row-gap: 0;
     align-items: center;
-    padding-block: 32px 24px;
+    padding-block: 32px 0;
   }
   .about-photo {
     grid-row: 1 / span 3;
@@ -2196,7 +2211,7 @@ ul.stats {
     justify-content: center;
     align-items: center;
     gap: calc(100 * var(--u));
-    padding-block: calc(120 * var(--u)) calc(40 * var(--u));
+    padding-block: calc(96 * var(--u)) 0; /* header -> content, same as the case studies */
   }
   .about-photo {
     width: calc(380 * var(--u));
@@ -2210,6 +2225,11 @@ ul.stats {
 }
 
 /* Achievements: large year, title and one line */
+@media (max-width: 1099px) {
+  .home-section > h2 + .achievements {
+    margin-top: calc(var(--space-block) - 16px); /* a ruled list is a block: title -> list = --space-block */
+  }
+}
 .achievements {
   margin: 0;
   padding: 0;
@@ -2256,7 +2276,7 @@ ul.stats {
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8px 24px;
+  gap: 16px 24px; /* title -> note = 16px, like every title -> text */
   margin-bottom: var(--space-block);
 }
 .block-head h2 {
