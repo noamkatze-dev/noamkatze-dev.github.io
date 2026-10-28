@@ -7,7 +7,9 @@
  *
  *   one image      → a large interface shot, markers placed in % of the image (x, y)
  *   several images → a row of screens (phones: true for phone screens),
- *                    step N is placed on image N, again in % (x, y)
+ *                    step N sits on image N, always at the same spot: centred on
+ *                    its top-left corner, like Calcalist's (x and y are not used),
+ *                    so every project with a row looks the same
  *
  * Content lives in each project's frontmatter under `opening:`.
  */
@@ -53,8 +55,8 @@ function tipSide(x: number, i: number) {
 const markers = o.steps.map((st, i) => ({
   n: i + 1,
   label: st.label,
-  cls: tipSide(st.x, i),
-  style: 'left: ' + st.x + '%; top: ' + st.y + '%',
+  cls: single ? tipSide(st.x, i) : tipSide(st.x, i) + ' ph-marker--corner',
+  style: single ? 'left: ' + st.x + '%; top: ' + st.y + '%' : undefined,
 }));
 
 // Several images: step i belongs to image i

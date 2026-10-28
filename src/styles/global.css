@@ -1007,6 +1007,19 @@ mark.todo {
   transform: translate(-50%, -50%);
   cursor: help;
 }
+/* In a row of screens every number sits where Calcalist's do: centred on the
+   image's top-left corner (the same offset Calcalist's 1% / 1% gives its phones),
+   so 250ms and Calcalist match exactly */
+.ph-marker--corner {
+  left: 1px;
+  top: 2px;
+}
+@media (min-width: 1100px) {
+  .ph-marker--corner {
+    left: calc(2.3 * var(--u));
+    top: calc(5 * var(--u));
+  }
+}
 /* The explanation appears on hover, focus or tap */
 .ph-tip {
   position: absolute;
