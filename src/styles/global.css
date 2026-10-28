@@ -381,9 +381,11 @@ mark.todo {
     display: inline-flex;
     align-items: center;
     gap: 10px;
+    justify-content: center;
+    width: 44px;
     min-height: 44px;
-    margin-right: -6px;
-    padding: 0 6px;
+    margin-right: -12px;
+    padding: 0;
     border: 0;
     background: none;
     color: inherit;
@@ -394,9 +396,18 @@ mark.todo {
     text-transform: uppercase;
     cursor: pointer;
   }
+  /* Icon only: the Menu / Close word stays for screen readers */
+  .menu-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
   .menu-icon {
     position: relative;
-    width: 20px;
+    width: 22px;
     height: 10px;
   }
   .menu-icon::before,
@@ -707,8 +718,8 @@ mark.todo {
   }
 }
 
-/* Phones and tablets: everything reads from the left.
-   The photo is small and sits above the headline. */
+/* Phones and tablets: everything reads from the left, except the project
+   cards, which stay centered at every size. The photo is small and sits above the headline. */
 @media (max-width: 1099px) {
   .hero {
     justify-items: start;
@@ -744,11 +755,11 @@ mark.todo {
 }
 .project {
   display: grid;
-  justify-items: start;
+  justify-items: center;
   align-content: start;
   height: 100%;
   text-decoration: none;
-  text-align: left;
+  text-align: center;
 }
 .project-media {
   width: 100%;
@@ -763,7 +774,6 @@ mark.todo {
 /* Shown whole: letterboxed, never cropped or stretched */
 .project-media img {
   object-fit: contain;
-  object-position: left center; /* lines the image up with the left-aligned text */
 }
 .project-media img {
   transition: transform 600ms var(--ease);
