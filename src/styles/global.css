@@ -545,16 +545,19 @@ mark.todo {
     padding-block: 56px 48px;
   }
   .footer-row {
-    justify-items: center;
-    gap: 20px;
-    padding-top: 40px;
-    border-top: 1px solid var(--c-text);
-    text-align: center;
+    justify-items: start;
+    gap: 12px;
+    padding-top: 32px;
+    /* a hairline inside the page margins, lined up with the text */
+    background: linear-gradient(var(--c-text), var(--c-text)) var(--pad) 0 / calc(100% - 2 * var(--pad)) 1px no-repeat;
   }
   .footer-item {
     flex-direction: column;
-    justify-content: center;
-    gap: 16px;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .footer-icon {
+    margin-left: -3px; /* lines the icon up with the text edge */
   }
 }
 @media (min-width: 1100px) {
@@ -704,15 +707,26 @@ mark.todo {
   }
 }
 
-/* Phones and tablets: the home page stays centered, like the hero */
+/* Phones and tablets: everything reads from the left.
+   The photo is small and sits above the headline. */
 @media (max-width: 1099px) {
-  .home-work,
-  #about.home-section {
-    text-align: center;
+  .hero {
+    justify-items: start;
+    gap: 24px;
+    padding-block: 32px 48px;
+    text-align: left;
   }
-  #about .home-text {
-    max-width: 36em;
-    margin-inline: auto;
+  .hero-photo {
+    width: clamp(88px, 26vw, 120px);
+  }
+  .hero-buttons {
+    justify-content: flex-start;
+  }
+  .hero .scroll-cue {
+    display: none;
+  }
+  .home-work > h2 {
+    margin-bottom: 8px;
   }
 }
 
@@ -730,11 +744,11 @@ mark.todo {
 }
 .project {
   display: grid;
-  justify-items: center;
+  justify-items: start;
   align-content: start;
   height: 100%;
   text-decoration: none;
-  text-align: center;
+  text-align: left;
 }
 .project-media {
   width: 100%;
@@ -749,6 +763,7 @@ mark.todo {
 /* Shown whole: letterboxed, never cropped or stretched */
 .project-media img {
   object-fit: contain;
+  object-position: left center; /* lines the image up with the left-aligned text */
 }
 .project-media img {
   transition: transform 600ms var(--ease);
@@ -2124,19 +2139,45 @@ ul.stats {
 .page .buttons {
   margin-top: 32px;
 }
+/* Phones and tablets: a small photo beside the name and role, then the bio */
 @media (max-width: 1099px) {
   .about-hero {
-    justify-items: center;
-    text-align: center;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 18px;
+    row-gap: 0;
+    align-items: center;
+    padding-block: 32px 24px;
   }
   .about-photo {
-    width: min(220px, 60vw);
+    grid-row: 1 / span 3;
+    width: clamp(76px, 24vw, 112px);
   }
   .about-intro {
-    max-width: 36em;
+    display: contents;
   }
-  .about-intro .buttons {
-    justify-content: center;
+  .about-intro > .eyebrow,
+  .about-intro > h1,
+  .about-intro > .about-role {
+    grid-column: 2;
+  }
+  .about-intro > .eyebrow {
+    align-self: end;
+  }
+  .about-intro > .about-role {
+    align-self: start;
+  }
+  .about-intro h1 {
+    margin-top: 6px;
+    font-size: clamp(20px, 6vw, 32px);
+    line-height: 1.1;
+  }
+  .about-role {
+    margin-top: 6px;
+    font-size: 13px;
+  }
+  .about-intro > .bio,
+  .about-intro > .buttons {
+    grid-column: 1 / -1;
   }
 }
 @media (min-width: 1100px) {
