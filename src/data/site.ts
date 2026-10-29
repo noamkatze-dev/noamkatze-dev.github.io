@@ -42,6 +42,14 @@ export const achievements: { year: string; title: string; detail?: string }[] = 
     detail: "Abu Dhabi. A children's educational game, designed in a team of four.",
   },
   {
+    year: '2026',
+    title: 'Selected for an Outstanding Students Program',
+  },
+  {
+    year: '2026',
+    title: 'Selected for an Excellence Incubator for Female Students',
+  },
+  {
     year: '2023',
     title: 'Department Excellence',
     detail: 'Visual Communication, University of Haifa.',
@@ -64,7 +72,7 @@ export const skills: { name: string; proof: string; project: string; slug: strin
   },
   {
     name: 'Prototyping',
-    proof: 'A working, live eye-tracking experience, designed by me and built in JavaScript with AI tools.',
+    proof: 'A working eye-tracking experience, designed by me and built in JavaScript with AI tools.',
     project: '250ms',
     slug: '250ms',
   },
