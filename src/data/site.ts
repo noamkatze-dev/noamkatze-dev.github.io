@@ -44,10 +44,12 @@ export const achievements: { year: string; title: string; detail?: string }[] = 
   {
     year: '2026',
     title: 'Selected for an Outstanding Students Program',
+    detail: 'Visual Communication, University of Haifa.',
   },
   {
     year: '2026',
     title: 'Selected for an Excellence Incubator for Female Students',
+    detail: 'Visual Communication, University of Haifa.',
   },
   {
     year: '2023',
